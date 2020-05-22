@@ -26,8 +26,8 @@ public class KeystrokePlugin {
         Bundle paramList = new Bundle();
         paramList.putString(KEYSTROKE_OUTPUT_ENABLED_KEY, builder.enabled ? "true" : "false");
         paramList.putString(KEYSTROKE_ACTION_CHAR_KEY, builder.actionChar.name());
-        paramList.putInt(KEYSTROKE_DELAY_CONTROL_KEY, builder.delayControlChar);
-        paramList.putInt(KEYSTROKE_CHARACTER_DELAY_KEY, builder.characterDelay);
+        paramList.putString(KEYSTROKE_DELAY_CONTROL_KEY, String.valueOf(builder.delayControlChar));
+        paramList.putString(KEYSTROKE_CHARACTER_DELAY_KEY, String.valueOf(builder.characterDelay));
         paramList.putString(KEYSTROKE_DELAY_MULTIBYTE_CHARS_ONLY_KEY,
                 builder.delayMultiByteCharsOnly ? "true" : "false");
         paramList.putString(KEYSTROKE_SEND_CHARS_AS_EVENTS_KEY,
