@@ -11,6 +11,7 @@ import com.zebra.jamesswinton.datawedgewrapperlib.DataWedgeWrapper;
 import com.zebra.jamesswinton.datawedgewrapperlib.configuration.AppAssociations;
 import com.zebra.jamesswinton.datawedgewrapperlib.configuration.MainBundle;
 import com.zebra.jamesswinton.datawedgewrapperlib.configuration.plugins.BDFPlugin;
+import com.zebra.jamesswinton.datawedgewrapperlib.configuration.plugins.BarcodePlugin;
 import com.zebra.jamesswinton.datawedgewrapperlib.configuration.plugins.EKBPlugin;
 import com.zebra.jamesswinton.datawedgewrapperlib.configuration.plugins.KeystrokePlugin;
 import com.zebra.jamesswinton.datawedgewrapperlib.interfaces.OnIntentResultListener;
@@ -29,12 +30,17 @@ public class TestActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         // Test Set Config
-        // testSetConfig();
-
+        testSetConfig();
     }
 
     private void testSetConfig() {
         // Create Plugin Bundles
+        Bundle barcodeBundle = new BarcodePlugin.Builder()
+                .setEnabled(true)
+                .setScannerIdentifier(BarcodePlugin.ScannerIdentifier.AUTO)
+                .setDecodeHapticFeedback(true)
+                .create();
+
         Bundle ekbPlugin = new EKBPlugin.Builder()
                 .setEnabled(true)
                 .create();
@@ -58,6 +64,7 @@ public class TestActivity extends AppCompatActivity {
         Bundle mainBundle = new MainBundle.Builder()
                 .setProfileName("Profile0 (default)")
                 .setProfileEnabled(true)
+                .addPluginBundle(barcodeBundle)
                 .addPluginBundle(bdfPlugin)
                 .addPluginBundle(keystrokePlugin)
                 .create();
