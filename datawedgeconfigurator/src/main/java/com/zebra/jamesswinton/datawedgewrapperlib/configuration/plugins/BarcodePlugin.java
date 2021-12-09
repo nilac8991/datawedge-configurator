@@ -11,10 +11,17 @@ public class BarcodePlugin {
         SERIAL_SSI, BLUETOOTH_SSI, BLUETOOTH_RS6000, BLUETOOTH_DS2278, BLUETOOTH_DS3678,
         PLUGABLE_SSI, PLUGABLE_SSI_RS5000, USB_SSI_DS3608, }
 
+    // Illumination Mode Enum
+    public enum ScannerIlluminationMode { OFF, TORCH }
+
     // Plugin Parameter Names
     private static final String PLUGIN_NAME = "BARCODE";
     private static final String SCANNER_ENABLED_KEY = "scanner_input_enabled";
     private static final String SCANNER_SELECTION_KEY = "scanner_selection_by_identifier";
+
+    // Other Scanner Input Parameters
+    private static final String SCANNER_ILLUMINATION_MODE = "illumination_mode";
+    private static final String SCANNER_ILLUMINATION_BRIGHTNESS = "illumination_brightness";
 
     // TODO: DECODERS
 
@@ -33,6 +40,8 @@ public class BarcodePlugin {
         Bundle paramList = new Bundle();
         paramList.putString(SCANNER_ENABLED_KEY, builder.enabled ? "true" : "false");
         paramList.putString(SCANNER_SELECTION_KEY, builder.scannerIdentifier.name());
+        paramList.putString(SCANNER_ILLUMINATION_MODE, builder.scannerIlluminationMode.name());
+        paramList.putString(SCANNER_ILLUMINATION_BRIGHTNESS, String.valueOf(builder.scannerIlluminationBrightness));
 
         // Other
         paramList.putString(DECODE_HAPTIC_FEEDBACK_KEY, builder.decodeHapticFeedback
@@ -59,6 +68,8 @@ public class BarcodePlugin {
 
         // Other
         private boolean decodeHapticFeedback = false;
+        private ScannerIlluminationMode scannerIlluminationMode = ScannerIlluminationMode.OFF;
+        private int scannerIlluminationBrightness = 0;
 
         public Builder resetConfig(boolean resetConfig) {
             this.resetConfig = resetConfig;
@@ -78,6 +89,17 @@ public class BarcodePlugin {
         public Builder setDecodeHapticFeedback(boolean decodeHapticFeedback) {
             this.decodeHapticFeedback = decodeHapticFeedback;
             return this;
+        }
+
+        public void setScannerIlluminationMode(
+            ScannerIlluminationMode scannerIlluminationMode) {
+            this.scannerIlluminationMode = scannerIlluminationMode;
+        }
+
+        public void setScannerIlluminationBrightness(int scannerIlluminationBrightness) {
+            if (scannerIlluminationBrightness < 0) scannerIlluminationBrightness = 0;
+            if (scannerIlluminationBrightness > 10) scannerIlluminationBrightness = 10;
+            this.scannerIlluminationBrightness = scannerIlluminationBrightness;
         }
 
         public Bundle create() {
