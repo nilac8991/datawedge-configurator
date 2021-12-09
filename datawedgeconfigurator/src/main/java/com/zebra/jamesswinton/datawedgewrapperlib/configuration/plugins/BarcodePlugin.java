@@ -91,15 +91,17 @@ public class BarcodePlugin {
             return this;
         }
 
-        public void setScannerIlluminationMode(
+        public Builder setScannerIlluminationMode(
             ScannerIlluminationMode scannerIlluminationMode) {
             this.scannerIlluminationMode = scannerIlluminationMode;
+            return this;
         }
 
-        public void setScannerIlluminationBrightness(int scannerIlluminationBrightness) {
+        public Builder setScannerIlluminationBrightness(int scannerIlluminationBrightness) {
             if (scannerIlluminationBrightness < 0) scannerIlluminationBrightness = 0;
             if (scannerIlluminationBrightness > 10) scannerIlluminationBrightness = 10;
             this.scannerIlluminationBrightness = scannerIlluminationBrightness;
+            return this;
         }
 
         public Bundle create() {
