@@ -4,15 +4,25 @@ import android.os.Bundle;
 
 import com.zebra.jamesswinton.datawedgewrapperlib.utilities.Constants;
 
+import java.io.Reader;
+import java.util.Locale;
+
 public class BarcodePlugin {
 
     // Scanner Enum
-    public enum ScannerIdentifier { AUTO, INTERNAL_IMAGER, INTERNAL_LASER, INTERNAL_CAMERA,
+    public enum ScannerIdentifier {
+        AUTO, INTERNAL_IMAGER, INTERNAL_LASER, INTERNAL_CAMERA,
         SERIAL_SSI, BLUETOOTH_SSI, BLUETOOTH_RS6000, BLUETOOTH_DS2278, BLUETOOTH_DS3678,
-        PLUGABLE_SSI, PLUGABLE_SSI_RS5000, USB_SSI_DS3608, }
+        PLUGABLE_SSI, PLUGABLE_SSI_RS5000, USB_SSI_DS3608,
+    }
+
+    public enum ReaderAimType {
+        TRIGGER, TIMED_HOLD, TIMED_RELEASE, PRESS_AND_RELEASE,
+        PRESENTATION, CONTINUOUS_READ, PRESS_AND_SUSTAIN, PRESS_AND_CONTINUE
+    }
 
     // Illumination Mode Enum
-    public enum ScannerIlluminationMode { OFF, TORCH }
+    public enum ScannerIlluminationMode {OFF, TORCH}
 
     // Plugin Parameter Names
     private static final String PLUGIN_NAME = "BARCODE";
@@ -22,6 +32,9 @@ public class BarcodePlugin {
     // Other Scanner Input Parameters
     private static final String SCANNER_ILLUMINATION_MODE = "illumination_mode";
     private static final String SCANNER_ILLUMINATION_BRIGHTNESS = "illumination_brightness";
+
+    // Reader Parameters
+    private static final String READER_AIM_TYPE = "aim_type";
 
     // TODO: DECODERS
 
@@ -42,6 +55,8 @@ public class BarcodePlugin {
         paramList.putString(SCANNER_SELECTION_KEY, builder.scannerIdentifier.name());
         paramList.putString(SCANNER_ILLUMINATION_MODE, builder.scannerIlluminationMode.name());
         paramList.putString(SCANNER_ILLUMINATION_BRIGHTNESS, String.valueOf(builder.scannerIlluminationBrightness));
+
+        paramList.putString(READER_AIM_TYPE, String.format(Locale.getDefault(), "%d", builder.readerAimType.ordinal()));
 
         // Other
         paramList.putString(DECODE_HAPTIC_FEEDBACK_KEY, builder.decodeHapticFeedback
@@ -66,6 +81,9 @@ public class BarcodePlugin {
         private boolean enabled = false;
         private ScannerIdentifier scannerIdentifier = ScannerIdentifier.AUTO;
 
+        // Reader Params
+        private ReaderAimType readerAimType = ReaderAimType.TRIGGER;
+
         // Other
         private boolean decodeHapticFeedback = false;
         private ScannerIlluminationMode scannerIlluminationMode = ScannerIlluminationMode.OFF;
@@ -86,13 +104,18 @@ public class BarcodePlugin {
             return this;
         }
 
+        public Builder setReaderAimType(ReaderAimType readerAimType) {
+            this.readerAimType = readerAimType;
+            return this;
+        }
+
         public Builder setDecodeHapticFeedback(boolean decodeHapticFeedback) {
             this.decodeHapticFeedback = decodeHapticFeedback;
             return this;
         }
 
         public Builder setScannerIlluminationMode(
-            ScannerIlluminationMode scannerIlluminationMode) {
+                ScannerIlluminationMode scannerIlluminationMode) {
             this.scannerIlluminationMode = scannerIlluminationMode;
             return this;
         }
