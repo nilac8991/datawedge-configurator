@@ -156,8 +156,7 @@ public class DataWedgeWrapper {
                 // Get COMPLETE_RESULT
                 if (intent.hasExtra("RESULT_LIST")) {
                     // Get Result List
-                    ArrayList<Bundle> resultList = (ArrayList) intent
-                            .getSerializableExtra("RESULT_LIST");
+                    final ArrayList<Bundle> resultList = (ArrayList) intent.getSerializableExtra("RESULT_LIST");
 
                     String resultInfo = "";
                     for (Bundle bundleResult : resultList) {
@@ -182,8 +181,9 @@ public class DataWedgeWrapper {
                     }
 
                     // Pass Results Up
-                    mOnCompleteResultIntentListener.onResult(resultList, resultInfo, command,
-                            profileName);
+                    if (mOnCompleteResultIntentListener != null) {
+                        mOnCompleteResultIntentListener.onResult(resultList, resultInfo, command, profileName);
+                    }
 
                 } else if (intent.hasExtra("RESULT_INFO")) {
                     // Get Result
