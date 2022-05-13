@@ -11,9 +11,9 @@ data class BarcodeHighlightRuleCriteria(
         MIN_LENGTH("min_length"),
         MAX_LENGTH("max_length"),
         CONTAINS("contains"),
-        IGNORE_CASE("contains");
+        IGNORE_CASE("ignore_case");
 
-        companion object {
+        companion object {  
             fun forCriteria(criteria: String) = values().find { it.criteria == criteria }
         }
     }
