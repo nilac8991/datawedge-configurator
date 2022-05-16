@@ -1,12 +1,7 @@
 package com.zebra.jamesswinton.datawedgewrapperlib.configuration.plugins
 
 import android.os.Bundle
-import com.zebra.jamesswinton.datawedgewrapperlib.configuration.plugins.BarcodePlugin.ScannerIdentifier
-import com.zebra.jamesswinton.datawedgewrapperlib.configuration.plugins.BarcodePlugin.ReaderAimType
-import com.zebra.jamesswinton.datawedgewrapperlib.configuration.plugins.BarcodePlugin.ScannerIlluminationMode
-import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.BarcodeHighlightOverlayRule
-import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.BarcodeHighlightReportDataRule
-import com.zebra.jamesswinton.datawedgewrapperlib.configuration.plugins.BarcodePlugin
+import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.BarcodeHighlightGenericRule
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -63,6 +58,7 @@ class BarcodePlugin private constructor(builder: Builder) {
                 putString("rule_name", overlayRule.name)
                 putBundle("criteria", Bundle().apply {
                     putParcelableArrayList("identifier", overlayRule.getCriteriaListBundle())
+                    putStringArray("symbology", overlayRule.getSymbologiesArray())
                 })
                 putParcelableArrayList("actions", overlayRule.getActionListBundle())
             }
@@ -76,6 +72,7 @@ class BarcodePlugin private constructor(builder: Builder) {
                 putString("rule_name", reportDataRule.name)
                 putBundle("criteria", Bundle().apply {
                     putParcelableArrayList("identifier", reportDataRule.getCriteriaListBundle())
+                    putStringArray("symbology", reportDataRule.getSymbologiesArray())
                 })
                 putParcelableArrayList("actions", reportDataRule.getActionListBundle())
             }
@@ -122,8 +119,8 @@ class BarcodePlugin private constructor(builder: Builder) {
 
         //Highlight
         var enableBarcodeHighlight = false
-        val overlayRules = ArrayList<BarcodeHighlightOverlayRule>()
-        val reportDataRules = ArrayList<BarcodeHighlightReportDataRule>()
+        val overlayRules = ArrayList<BarcodeHighlightGenericRule>()
+        val reportDataRules = ArrayList<BarcodeHighlightGenericRule>()
 
         fun resetConfig(resetConfig: Boolean): Builder {
             this.resetConfig = resetConfig
@@ -162,12 +159,12 @@ class BarcodePlugin private constructor(builder: Builder) {
             return this
         }
 
-        fun addNewBarcodeHighlightOverlayRule(rule: BarcodeHighlightOverlayRule): Builder {
+        fun addNewBarcodeHighlightOverlayRule(rule: BarcodeHighlightGenericRule): Builder {
             overlayRules.add(rule)
             return this
         }
 
-        fun addNewBarcodeHighlightReportDataRule(rule: BarcodeHighlightReportDataRule): Builder {
+        fun addNewBarcodeHighlightReportDataRule(rule: BarcodeHighlightGenericRule): Builder {
             reportDataRules.add(rule)
             return this
         }

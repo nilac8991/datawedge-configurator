@@ -13,7 +13,7 @@ data class BarcodeHighlightRuleCriteria(
         CONTAINS("contains"),
         IGNORE_CASE("ignore_case");
 
-        companion object {  
+        companion object {
             fun forCriteria(criteria: String) = values().find { it.criteria == criteria }
         }
     }

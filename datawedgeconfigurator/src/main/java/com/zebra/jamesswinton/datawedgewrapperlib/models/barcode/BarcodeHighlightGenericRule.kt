@@ -2,13 +2,14 @@ package com.zebra.jamesswinton.datawedgewrapperlib.models.barcode
 
 import android.os.Bundle
 
-data class BarcodeHighlightReportDataRule(
+data class BarcodeHighlightGenericRule(
     var name: String,
     var criteriaList: ArrayList<BarcodeHighlightRuleCriteria>,
-    var actionList: ArrayList<BarcodeHighlightRuleAction>
+    var actionList: ArrayList<BarcodeHighlightRuleAction>,
+    var symbologies: ArrayList<BarcodeHighlightSymbology>
 ) {
 
-    constructor(name: String) : this(name, ArrayList(), ArrayList())
+    constructor(name: String) : this(name, ArrayList(), ArrayList(), ArrayList())
 
     fun getCriteriaListBundle(): ArrayList<Bundle> {
         val bundleList: ArrayList<Bundle> = ArrayList()
@@ -24,5 +25,15 @@ data class BarcodeHighlightReportDataRule(
             bundleList.add(action.transformToBundle())
         }
         return bundleList
+    }
+
+    fun getSymbologiesArray(): Array<String?> {
+        val stringArray: Array<String?> = arrayOfNulls<String>(symbologies.size)
+        if (symbologies.isNotEmpty()) {
+            for (i in 0 until symbologies.size) {
+                stringArray[i] = symbologies[i].symbology
+            }
+        }
+        return stringArray
     }
 }
