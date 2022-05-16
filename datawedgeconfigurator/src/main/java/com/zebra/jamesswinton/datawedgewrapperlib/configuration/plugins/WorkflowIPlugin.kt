@@ -1,6 +1,5 @@
 package com.zebra.jamesswinton.datawedgewrapperlib.configuration.plugins
 
-import android.os.Build
 import android.os.Bundle
 import com.zebra.jamesswinton.datawedgewrapperlib.models.workflow.WorkflowInputMode
 import com.zebra.jamesswinton.datawedgewrapperlib.models.workflow.WorkflowMode
@@ -47,11 +46,12 @@ open class WorkflowIPlugin private constructor(builder: Builder) {
         //License Module
         private var licenseDecoderModuleBundle: Bundle = Bundle()
         private var mLicenseDecoderModule: WorkflowLicenseDecoderModule =
-                WorkflowLicenseDecoderModule()
+            WorkflowLicenseDecoderModule()
 
         //Identification
         private var identificationDecoderModuleBundle: Bundle = Bundle()
-        private var mIdentificationDecoderModule: WorkflowIdentificationDecoderModule = WorkflowIdentificationDecoderModule()
+        private var mIdentificationDecoderModule: WorkflowIdentificationDecoderModule =
+            WorkflowIdentificationDecoderModule()
 
         //VIN
         private var vinDecoderModuleBundle: Bundle = Bundle()
@@ -65,6 +65,10 @@ open class WorkflowIPlugin private constructor(builder: Builder) {
         private var meterDecoderModuleBundle: Bundle = Bundle()
         private var mMeterDecoderModule: WorkflowMeterDecoderModule = WorkflowMeterDecoderModule()
 
+        //Free Form Capture
+        private var freeFormCaptureDecoderModuleBundle: Bundle = Bundle()
+        private var mFreeFormCaptureDecoderModule: WorkflowFreeFormCaptureDecoderModule =
+            WorkflowFreeFormCaptureDecoderModule()
 
         fun resetConfig(resetConfig: Boolean): Builder {
             this.resetConfig = resetConfig
@@ -121,6 +125,11 @@ open class WorkflowIPlugin private constructor(builder: Builder) {
             return this
         }
 
+        fun setFreeFormCaptureModule(freeFormCaptureDecoderModule: WorkflowFreeFormCaptureDecoderModule): Builder {
+            this.mFreeFormCaptureDecoderModule = freeFormCaptureDecoderModule
+            return this
+        }
+
         fun create(): Bundle {
             licenseDecoderModuleBundle.apply {
                 putString("module", mLicenseDecoderModule.name)
@@ -134,7 +143,10 @@ open class WorkflowIPlugin private constructor(builder: Builder) {
             identificationDecoderModuleBundle.apply {
                 putString("module", mIdentificationDecoderModule.name)
                 putBundle("module_params", Bundle().apply {
-                    putString("session_timeout", mIdentificationDecoderModule.sessionTimeOut.toString())
+                    putString(
+                        "session_timeout",
+                        mIdentificationDecoderModule.sessionTimeOut.toString()
+                    )
                     putString("output_image", mIdentificationDecoderModule.outputImage.mode)
                 })
             }
@@ -164,6 +176,20 @@ open class WorkflowIPlugin private constructor(builder: Builder) {
                 })
             }
 
+            freeFormCaptureDecoderModuleBundle.apply {
+                putString("module", mFreeFormCaptureDecoderModule.name)
+                putBundle("module_params", Bundle().apply {
+                    putString(
+                        "session_timeout",
+                        mFreeFormCaptureDecoderModule.sessionTimeOut.toString()
+                    )
+                    putString(
+                        "decode_and_highlight_barcodes",
+                        (mFreeFormCaptureDecoderModule.mode.ordinal + 1).toString()
+                    )
+                })
+            }
+
             mCameraModuleBundle.apply {
                 putString("module", "CameraModule")
                 putBundle("module_params", Bundle().apply {
@@ -174,9 +200,15 @@ open class WorkflowIPlugin private constructor(builder: Builder) {
             mFeedbackModuleBundle.apply {
                 putString("module", "FeedbackModule")
                 putBundle("module_params", Bundle().apply {
-                    putString("decode_haptic_feedback", mFeedbackModule.decodeHapticFeedback.toString())
+                    putString(
+                        "decode_haptic_feedback",
+                        mFeedbackModule.decodeHapticFeedback.toString()
+                    )
                     putString("decode_audio_feedback_uri", mFeedbackModule.decodeAudioFeedbackUri)
-                    putString("volume_slider_type", mFeedbackModule.volumeSliderType.ordinal.toString())
+                    putString(
+                        "volume_slider_type",
+                        mFeedbackModule.volumeSliderType.ordinal.toString()
+                    )
                 })
             }
 
@@ -196,6 +228,9 @@ open class WorkflowIPlugin private constructor(builder: Builder) {
                     }
                     WorkflowMode.METER -> {
                         add(meterDecoderModuleBundle)
+                    }
+                    WorkflowMode.FREE_FORM_CAPTURE -> {
+                        add(freeFormCaptureDecoderModuleBundle)
                     }
                     else -> {}
                 }
