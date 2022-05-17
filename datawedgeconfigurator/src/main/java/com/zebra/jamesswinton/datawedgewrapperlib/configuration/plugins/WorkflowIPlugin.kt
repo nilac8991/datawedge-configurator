@@ -13,7 +13,10 @@ open class WorkflowIPlugin private constructor(builder: Builder) {
         // Build Params
         val paramList = Bundle()
         paramList.putString(WORKFLOW_NAME, builder.mWorkflowMode.mode)
-        paramList.putString(WORKFLOW_INPUT_MODE, builder.mWorkflowInputMode.ordinal.toString())
+        paramList.putString(
+            WORKFLOW_INPUT_SOURCE,
+            (builder.mWorkflowInputMode.ordinal + 1).toString()
+        )
         paramList.putParcelableArrayList(WORKFLOW_PARAMS, builder.workflowParams)
 
         // Build Plugin
@@ -21,7 +24,7 @@ open class WorkflowIPlugin private constructor(builder: Builder) {
         plugin.putString("RESET_CONFIG", if (builder.resetConfig) "true" else "false")
         plugin.putString(WORKFLOW_ENABLED_KEY, if (builder.pluginEnabled) "true" else "false")
         plugin.putString(WORKFLOW_SELECTED_MODE, builder.mWorkflowMode.mode)
-        plugin.putString(WORKFLOW_INPUT_MODE, builder.mWorkflowInputMode.ordinal.toString())
+        plugin.putString(WORKFLOW_INPUT_SOURCE, (builder.mWorkflowInputMode.ordinal + 1).toString())
         plugin.putParcelableArrayList("PARAM_LIST", arrayListOf(paramList))
     }
 
@@ -250,7 +253,7 @@ open class WorkflowIPlugin private constructor(builder: Builder) {
         const val WORKFLOW_ENABLED_KEY = "workflow_input_enabled"
         const val WORKFLOW_NAME = "workflow_name"
         const val WORKFLOW_SELECTED_MODE = "selected_workflow_name"
-        const val WORKFLOW_INPUT_MODE = "workflow_input_source"
+        const val WORKFLOW_INPUT_SOURCE = "workflow_input_source"
         const val WORKFLOW_PARAMS = "workflow_params"
     }
 }
