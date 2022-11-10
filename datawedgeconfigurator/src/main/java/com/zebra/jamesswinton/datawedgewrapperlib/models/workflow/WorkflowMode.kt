@@ -6,6 +6,7 @@ enum class WorkflowMode(val mode: String = "") {
     VIN("vin_number"),
     TIN("tin_number"),
     METER("meter_reading"),
+    CONTAINER("container_scanning"),
     FREE_FORM_CAPTURE("free_form_capture");
 
     companion object {

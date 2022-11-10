@@ -68,6 +68,11 @@ open class WorkflowIPlugin private constructor(builder: Builder) {
         private var meterDecoderModuleBundle: Bundle = Bundle()
         private var mMeterDecoderModule: WorkflowMeterDecoderModule = WorkflowMeterDecoderModule()
 
+        //Container
+        private var containerDecoderModuleBundle: Bundle = Bundle()
+        private var mContainerDecoderModule: WorkflowContainerDecoderModule =
+            WorkflowContainerDecoderModule()
+
         //Free Form Capture
         private var freeFormCaptureDecoderModuleBundle: Bundle = Bundle()
         private var mFreeFormCaptureDecoderModule: WorkflowFreeFormCaptureDecoderModule =
@@ -128,6 +133,11 @@ open class WorkflowIPlugin private constructor(builder: Builder) {
             return this
         }
 
+        fun setContainerDecoderModule(containerDecoderModule: WorkflowContainerDecoderModule): Builder {
+            this.mContainerDecoderModule = containerDecoderModule
+            return this
+        }
+
         fun setFreeFormCaptureModule(freeFormCaptureDecoderModule: WorkflowFreeFormCaptureDecoderModule): Builder {
             this.mFreeFormCaptureDecoderModule = freeFormCaptureDecoderModule
             return this
@@ -179,6 +189,14 @@ open class WorkflowIPlugin private constructor(builder: Builder) {
                 })
             }
 
+            containerDecoderModuleBundle.apply {
+                putString("module", mContainerDecoderModule.name)
+                putBundle("module_params", Bundle().apply {
+                    putString("orientation", mContainerDecoderModule.orientation.type)
+                    putString("output_image", mMeterDecoderModule.outputImage.mode)
+                })
+            }
+
             freeFormCaptureDecoderModuleBundle.apply {
                 putString("module", mFreeFormCaptureDecoderModule.name)
                 putBundle("module_params", Bundle().apply {
@@ -197,6 +215,7 @@ open class WorkflowIPlugin private constructor(builder: Builder) {
                 putString("module", "CameraModule")
                 putBundle("module_params", Bundle().apply {
                     putString("illumination", mCameraModule.illumination.mode)
+                    putString("zoom", mCameraModule.zoom.toString())
                 })
             }
 
@@ -231,6 +250,9 @@ open class WorkflowIPlugin private constructor(builder: Builder) {
                     }
                     WorkflowMode.METER -> {
                         add(meterDecoderModuleBundle)
+                    }
+                    WorkflowMode.CONTAINER -> {
+                        add(containerDecoderModuleBundle)
                     }
                     WorkflowMode.FREE_FORM_CAPTURE -> {
                         add(freeFormCaptureDecoderModuleBundle)
