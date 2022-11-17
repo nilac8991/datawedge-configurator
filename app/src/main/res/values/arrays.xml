@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="demos">
+        <item>Barcode Highlight Capabilities</item>
+        <item>OCR Workflow - License Plate</item>
+        <item>OCR Workflow - Identification</item>
+        <item>OCR Workflow - VIN</item>
+        <item>OCR Workflow - TIN</item>
+        <item>OCR Workflow - Analog - Digital</item>
+        <item>OCR Workflow - Dial</item>
+        <item>OCR Workflow - Shipping Container</item>
+        <item>Free-Form Image Capture</item>
+    </string-array>
+
+</resources>
