@@ -1,13 +1,13 @@
 package com.zebra.jamesswinton.datawedgewrapperlib.configuration;
 
+import static com.zebra.jamesswinton.datawedgewrapperlib.utilities.Constants.ACTIVITY_LIST_KEY;
+import static com.zebra.jamesswinton.datawedgewrapperlib.utilities.Constants.PACKAGE_NAME_KEY;
+
 import android.os.Bundle;
 
 import com.zebra.jamesswinton.datawedgewrapperlib.utilities.Constants;
 
 import java.util.ArrayList;
-
-import static com.zebra.jamesswinton.datawedgewrapperlib.utilities.Constants.ACTIVITY_LIST_KEY;
-import static com.zebra.jamesswinton.datawedgewrapperlib.utilities.Constants.PACKAGE_NAME_KEY;
 
 public class MainBundle {
 
@@ -19,7 +19,7 @@ public class MainBundle {
     private static final String APP_LIST_KEY  = "APP_LIST";
 
     // Plugin
-    private Bundle plugin = new Bundle();
+    private final Bundle plugin = new Bundle();
 
     private MainBundle(Builder builder) {
         plugin.putString(PROFILE_NAME_KEY, builder.profileName);
@@ -89,6 +89,18 @@ public class MainBundle {
             newAppAssociation.putString(PACKAGE_NAME_KEY, packageName);
             newAppAssociation.putStringArray(ACTIVITY_LIST_KEY, activities);
             appAssociationsList[appAssociationsList.length -1] = newAppAssociation;
+            this.appList = appAssociationsList;
+            return this;
+        }
+
+        public Builder addAppAssociation(String packageName) {
+            Bundle[] appAssociationsList = new Bundle[appList.length + 1];
+            System.arraycopy(appList, 0, appAssociationsList, 0,
+                    appAssociationsList.length - 1);
+            Bundle newAppAssociation = new Bundle();
+            newAppAssociation.putString(PACKAGE_NAME_KEY, packageName);
+            newAppAssociation.putStringArray(ACTIVITY_LIST_KEY, new String[]{"*"});
+            appAssociationsList[appAssociationsList.length - 1] = newAppAssociation;
             this.appList = appAssociationsList;
             return this;
         }
