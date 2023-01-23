@@ -15,8 +15,9 @@ public class MainBundle {
     private static final String PROFILE_NAME_KEY = "PROFILE_NAME";
     private static final String CONFIG_MODE_KEY = "CONFIG_MODE";
     private static final String PROFILE_ENABLED_KEY = "PROFILE_ENABLED";
-    private static final String PLUGIN_CONFIG_KEY  = "PLUGIN_CONFIG";
-    private static final String APP_LIST_KEY  = "APP_LIST";
+    private static final String PLUGIN_CONFIG_KEY = "PLUGIN_CONFIG";
+    private static final String APP_LIST_KEY = "APP_LIST";
+    private static final String DCP_SUPPORT = "DCP";
 
     // Plugin
     private final Bundle plugin = new Bundle();
@@ -28,6 +29,9 @@ public class MainBundle {
         plugin.putParcelableArrayList(PLUGIN_CONFIG_KEY, builder.pluginBundles);
         if (builder.appList.length > 0) {
             plugin.putParcelableArray(APP_LIST_KEY, builder.appList);
+        }
+        if (builder.dcpPlugin != null) {
+            plugin.putBundle(DCP_SUPPORT, builder.dcpPlugin);
         }
     }
 
@@ -42,6 +46,7 @@ public class MainBundle {
         private boolean profileEnabled = true;
         private ArrayList<Bundle> pluginBundles = new ArrayList<>();
         private Bundle[] appList = new Bundle[0];
+        private Bundle dcpPlugin = null;
 
         public Builder setProfileName(String profileName) {
             this.profileName = profileName;
@@ -88,7 +93,7 @@ public class MainBundle {
             Bundle newAppAssociation = new Bundle();
             newAppAssociation.putString(PACKAGE_NAME_KEY, packageName);
             newAppAssociation.putStringArray(ACTIVITY_LIST_KEY, activities);
-            appAssociationsList[appAssociationsList.length -1] = newAppAssociation;
+            appAssociationsList[appAssociationsList.length - 1] = newAppAssociation;
             this.appList = appAssociationsList;
             return this;
         }
@@ -102,6 +107,11 @@ public class MainBundle {
             newAppAssociation.putStringArray(ACTIVITY_LIST_KEY, new String[]{"*"});
             appAssociationsList[appAssociationsList.length - 1] = newAppAssociation;
             this.appList = appAssociationsList;
+            return this;
+        }
+
+        public Builder setDataCapturePlus(Bundle dcpPlugin) {
+            this.dcpPlugin = dcpPlugin;
             return this;
         }
 
