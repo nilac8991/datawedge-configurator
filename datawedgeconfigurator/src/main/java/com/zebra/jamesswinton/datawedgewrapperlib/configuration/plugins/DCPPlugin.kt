@@ -39,12 +39,12 @@ class DCPPlugin private constructor(builder: Builder) {
         var resetConfig = true
 
         //Params
-        var pluginEnabled: Boolean = false
-        var buttonAnchorPosition: DCPButtonAnchorPosition = DCPButtonAnchorPosition.BOTH
-        var launchMode: DCPLaunchMode = DCPLaunchMode.BUTTON
-        var highestPositionValue = 100 //Of screen height
-        var lowestPositionValue = 100 //Of screen height
-        var touchWaitTime = 100 //In ms prior to scanner activation
+        internal var pluginEnabled: Boolean = false
+        internal var buttonAnchorPosition: DCPButtonAnchorPosition = DCPButtonAnchorPosition.BOTH
+        internal var launchMode: DCPLaunchMode = DCPLaunchMode.BUTTON
+        internal var highestPositionValue = 100 //Of screen height
+        internal var lowestPositionValue = 100 //Of screen height
+        internal var touchWaitTime = 100 //In ms prior to scanner activation
 
         fun resetConfig(resetConfig: Boolean): Builder {
             this.resetConfig = resetConfig

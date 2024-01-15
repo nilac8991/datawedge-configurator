@@ -106,25 +106,25 @@ class BarcodePlugin private constructor(builder: Builder) {
 
     class Builder {
         // Config
-        var resetConfig = true
+        internal var resetConfig = true
 
         // Params
-        var mEnabled = false
-        var scannerIdentifier = ScannerIdentifier.AUTO
+        internal var mEnabled = false
+        internal var scannerIdentifier = ScannerIdentifier.AUTO
 
         // Reader Params
-        var readerAimType = ReaderAimType.TRIGGER
+        internal var readerAimType = ReaderAimType.TRIGGER
 
         // Other
-        var decodeHapticFeedback = false
-        var scannerIlluminationMode = ScannerIlluminationMode.OFF
-        var scannerIlluminationBrightness = 0
-        var hardwareTrigger = true
+        internal var decodeHapticFeedback = false
+        internal var scannerIlluminationMode = ScannerIlluminationMode.OFF
+        internal var scannerIlluminationBrightness = 0
+        internal var hardwareTrigger = true
 
         //Highlight
-        var enableBarcodeHighlight = false
-        val overlayRules = ArrayList<BarcodeHighlightGenericRule>()
-        val reportDataRules = ArrayList<BarcodeHighlightGenericRule>()
+        internal var enableBarcodeHighlight = false
+        internal val overlayRules = ArrayList<BarcodeHighlightGenericRule>()
+        internal val reportDataRules = ArrayList<BarcodeHighlightGenericRule>()
 
         fun resetConfig(resetConfig: Boolean): Builder {
             this.resetConfig = resetConfig

@@ -3,7 +3,15 @@ package com.zebra.jamesswinton.datawedgewrapperlib.configuration.plugins
 import android.os.Bundle
 import com.zebra.jamesswinton.datawedgewrapperlib.models.workflow.WorkflowInputMode
 import com.zebra.jamesswinton.datawedgewrapperlib.models.workflow.WorkflowMode
-import com.zebra.jamesswinton.datawedgewrapperlib.models.workflow.modules.*
+import com.zebra.jamesswinton.datawedgewrapperlib.models.workflow.modules.WorkflowCameraModule
+import com.zebra.jamesswinton.datawedgewrapperlib.models.workflow.modules.WorkflowContainerDecoderModule
+import com.zebra.jamesswinton.datawedgewrapperlib.models.workflow.modules.WorkflowFeedbackModule
+import com.zebra.jamesswinton.datawedgewrapperlib.models.workflow.modules.WorkflowFreeFormCaptureDecoderModule
+import com.zebra.jamesswinton.datawedgewrapperlib.models.workflow.modules.WorkflowIdentificationDecoderModule
+import com.zebra.jamesswinton.datawedgewrapperlib.models.workflow.modules.WorkflowLicenseDecoderModule
+import com.zebra.jamesswinton.datawedgewrapperlib.models.workflow.modules.WorkflowMeterDecoderModule
+import com.zebra.jamesswinton.datawedgewrapperlib.models.workflow.modules.WorkflowTINDecoderModule
+import com.zebra.jamesswinton.datawedgewrapperlib.models.workflow.modules.WorkflowVINDecoderModule
 
 open class WorkflowIPlugin private constructor(builder: Builder) {
 
@@ -31,13 +39,13 @@ open class WorkflowIPlugin private constructor(builder: Builder) {
     class Builder {
 
         // Config
-        var resetConfig = true
-        var workflowParams: ArrayList<Bundle> = ArrayList()
+        internal var resetConfig = true
+        internal var workflowParams: ArrayList<Bundle> = ArrayList()
 
         //Params
-        var pluginEnabled: Boolean = false
-        var mWorkflowMode: WorkflowMode = WorkflowMode.LICENSE_PLATE
-        var mWorkflowInputMode: WorkflowInputMode = WorkflowInputMode.CAMERA
+        internal var pluginEnabled: Boolean = false
+        internal var mWorkflowMode: WorkflowMode = WorkflowMode.LICENSE_PLATE
+        internal var mWorkflowInputMode: WorkflowInputMode = WorkflowInputMode.CAMERA
 
         //Generic Modules
         private var mCameraModule: WorkflowCameraModule = WorkflowCameraModule()
