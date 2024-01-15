@@ -2,8 +2,7 @@ package com.zebra.jamesswinton.datawedgewrapperlib.configuration.plugins
 
 import android.os.Bundle
 import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.BarcodeHighlightGenericRule
-import java.util.*
-import kotlin.collections.ArrayList
+import java.util.Locale
 
 class BarcodePlugin private constructor(builder: Builder) {
 
@@ -43,6 +42,10 @@ class BarcodePlugin private constructor(builder: Builder) {
         paramList.putString(
             DECODE_HAPTIC_FEEDBACK_KEY,
             if (builder.decodeHapticFeedback) "true" else "false"
+        )
+        paramList.putString(
+            SCAN_HARDWARE_TRIGGER,
+            if (builder.hardwareTrigger) "1" else "0"
         )
 
         //Highlight
@@ -116,6 +119,7 @@ class BarcodePlugin private constructor(builder: Builder) {
         var decodeHapticFeedback = false
         var scannerIlluminationMode = ScannerIlluminationMode.OFF
         var scannerIlluminationBrightness = 0
+        var hardwareTrigger = true
 
         //Highlight
         var enableBarcodeHighlight = false
@@ -151,6 +155,16 @@ class BarcodePlugin private constructor(builder: Builder) {
             scannerIlluminationMode: ScannerIlluminationMode
         ): Builder {
             this.scannerIlluminationMode = scannerIlluminationMode
+            return this
+        }
+
+        fun enableScanHardwareTrigger(): Builder {
+            this.hardwareTrigger = true
+            return this
+        }
+
+        fun disableScanHardwareTrigger(): Builder {
+            this.hardwareTrigger = false
             return this
         }
 
@@ -202,6 +216,7 @@ class BarcodePlugin private constructor(builder: Builder) {
 
         // Other
         private const val DECODE_HAPTIC_FEEDBACK_KEY = "decode_haptic_feedback"
+        private const val SCAN_HARDWARE_TRIGGER = "barcode_trigger_mode"
 
         // Highlight
         private const val HIGHLIGHT_ENABLE_KEY = "barcode_highlighting_enabled"
