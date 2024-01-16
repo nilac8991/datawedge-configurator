@@ -2,7 +2,7 @@ package com.zebra.jamesswinton.datawedgewrapperlib.configuration.plugins
 
 import android.os.Bundle
 import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.BarcodeAutoSwitchEventMode
-import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.BarcodeHighlightGenericRule
+import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.highlight.BarcodeHighlightGenericRule
 import java.util.Locale
 
 class BarcodePlugin private constructor(builder: Builder) {
@@ -52,9 +52,27 @@ class BarcodePlugin private constructor(builder: Builder) {
         if (builder.autoSwitchToDefaultOnEvent != null) {
             paramList.putString(
                 AUTO_SWITCH_TO_DEFAULT_ON_EVENT,
-                String.format(Locale.getDefault(), "%d", builder.autoSwitchToDefaultOnEvent!!.ordinal)
+                String.format(
+                    Locale.getDefault(),
+                    "%d",
+                    builder.autoSwitchToDefaultOnEvent!!.ordinal
+                )
             )
         }
+
+        //QRCode Launch Options
+        paramList.putString(
+            QR_CODE_LAUNCH_OPTIONS_ENABLE,
+            if (builder.qrCodeLaunchOptionsEnable) "true" else "false"
+        )
+        paramList.putString(
+            QR_CODE_LAUNCH_OPTIONS_ENABLE_DECODER,
+            if (builder.qrCodeLaunchOptionsEnableDecoder) "true" else "false"
+        )
+        paramList.putString(
+            QR_CODE_LAUNCH_OPTIONS_SHOW_CONFIRMATION,
+            if (builder.qrCodeLaunchOptionsShowConfirmation) "true" else "false"
+        )
 
         //Barcode Highlight
         if (builder.enableBarcodeHighlight) {
@@ -135,6 +153,11 @@ class BarcodePlugin private constructor(builder: Builder) {
         //FIXME Weird issue when listening for DW responses returning wrongly results after setting this param even if the value is being set correctly. Keep it null unless it's being used.
         internal var autoSwitchToDefaultOnEvent: BarcodeAutoSwitchEventMode? = null
 
+        //QRCode Launch Options
+        internal var qrCodeLaunchOptionsEnable = false
+        internal var qrCodeLaunchOptionsEnableDecoder = false
+        internal var qrCodeLaunchOptionsShowConfirmation = true
+
         //Highlight
         internal var enableBarcodeHighlight = false
         internal val overlayRules = ArrayList<BarcodeHighlightGenericRule>()
@@ -184,6 +207,21 @@ class BarcodePlugin private constructor(builder: Builder) {
 
         fun setAutoSwitchToDefaultOnEvent(autoSwitchEventMode: BarcodeAutoSwitchEventMode): Builder {
             this.autoSwitchToDefaultOnEvent = autoSwitchEventMode
+            return this
+        }
+
+        fun setQRCodeLaunchState(state: Boolean): Builder {
+            qrCodeLaunchOptionsEnable = state
+            return this
+        }
+
+        fun setQRCodeForceDecoderState(state: Boolean): Builder {
+            qrCodeLaunchOptionsEnableDecoder = state
+            return this
+        }
+
+        fun setQRCodeLaunchConfirmationState(state: Boolean): Builder {
+            qrCodeLaunchOptionsShowConfirmation = state
             return this
         }
 
@@ -237,6 +275,12 @@ class BarcodePlugin private constructor(builder: Builder) {
         private const val DECODE_HAPTIC_FEEDBACK_KEY = "decode_haptic_feedback"
         private const val SCAN_HARDWARE_TRIGGER = "barcode_trigger_mode"
         private const val AUTO_SWITCH_TO_DEFAULT_ON_EVENT = "auto_switch_to_default_on_event"
+
+        //QRCode Launch Options
+        private const val QR_CODE_LAUNCH_OPTIONS_ENABLE = "qr_launch_enable"
+        private const val QR_CODE_LAUNCH_OPTIONS_ENABLE_DECODER = "qr_launch_enable_qr_decoder"
+        private const val QR_CODE_LAUNCH_OPTIONS_SHOW_CONFIRMATION =
+            "qr_launch_show_confirmation_dialog"
 
         // Highlight
         private const val HIGHLIGHT_ENABLE_KEY = "barcode_highlighting_enabled"

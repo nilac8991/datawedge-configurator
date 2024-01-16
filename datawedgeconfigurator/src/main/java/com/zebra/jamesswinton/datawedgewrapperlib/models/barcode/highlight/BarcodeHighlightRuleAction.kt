@@ -1,4 +1,4 @@
-package com.zebra.jamesswinton.datawedgewrapperlib.models.barcode
+package com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.highlight
 
 import android.os.Bundle
 

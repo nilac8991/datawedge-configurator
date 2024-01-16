@@ -1,6 +1,4 @@
-package com.zebra.jamesswinton.datawedgewrapperlib.models.barcode
-
-import com.zebra.jamesswinton.datawedgewrapperlib.models.workflow.WorkflowOutputImageMode
+package com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.highlight
 
 enum class BarcodeHighlightSymbology(val symbology: String = "") {
     UPC_A("decoder_upca"),
