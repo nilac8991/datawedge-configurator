@@ -1,6 +1,7 @@
 package com.zebra.jamesswinton.datawedgewrapperlib.configuration.plugins
 
 import android.os.Bundle
+import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.BarcodeAutoSwitchEventMode
 import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.BarcodeHighlightGenericRule
 import java.util.Locale
 
@@ -48,55 +49,65 @@ class BarcodePlugin private constructor(builder: Builder) {
             if (builder.hardwareTrigger) "1" else "0"
         )
 
-        //Highlight
-        paramList.putString(
-            HIGHLIGHT_ENABLE_KEY,
-            if (builder.enableBarcodeHighlight) "true" else "false"
-        )
-
-        //Highlight Overlay Part
-        val barcodeOverlayRuleList: ArrayList<Bundle> = ArrayList()
-        for (overlayRule in builder.overlayRules) {
-            val ruleBundle = Bundle().apply {
-                putString("rule_name", overlayRule.name)
-                putBundle("criteria", Bundle().apply {
-                    putParcelableArrayList("identifier", overlayRule.getCriteriaListBundle())
-                    putStringArray("symbology", overlayRule.getSymbologiesArray())
-                })
-                putParcelableArrayList("actions", overlayRule.getActionListBundle())
-            }
-            barcodeOverlayRuleList.add(ruleBundle)
-        }
-
-        //Highlight Report Part
-        val reportDataRuleList: ArrayList<Bundle> = ArrayList()
-        for (reportDataRule in builder.reportDataRules) {
-            val ruleBundle = Bundle().apply {
-                putString("rule_name", reportDataRule.name)
-                putBundle("criteria", Bundle().apply {
-                    putParcelableArrayList("identifier", reportDataRule.getCriteriaListBundle())
-                    putStringArray("symbology", reportDataRule.getSymbologiesArray())
-                })
-                putParcelableArrayList("actions", reportDataRule.getActionListBundle())
-            }
-            reportDataRuleList.add(ruleBundle)
-        }
-
-        val highlightingRules: ArrayList<Bundle> = ArrayList<Bundle>().apply {
-            add(
-                Bundle().apply {
-                    putString("rule_param_id", "barcode_overlay")
-                    putParcelableArrayList("rule_list", barcodeOverlayRuleList)
-                }
-            )
-            add(
-                Bundle().apply {
-                    putString("rule_param_id", "report_data")
-                    putParcelableArrayList("rule_list", reportDataRuleList)
-                }
+        if (builder.autoSwitchToDefaultOnEvent != null) {
+            paramList.putString(
+                AUTO_SWITCH_TO_DEFAULT_ON_EVENT,
+                String.format(Locale.getDefault(), "%d", builder.autoSwitchToDefaultOnEvent!!.ordinal)
             )
         }
-        paramList.putParcelableArrayList("barcode_highlighting_rules", highlightingRules)
+
+        //Barcode Highlight
+        if (builder.enableBarcodeHighlight) {
+            paramList.putString(HIGHLIGHT_ENABLE_KEY, "false")
+
+            val barcodeOverlayRuleList: ArrayList<Bundle> = ArrayList()
+            for (overlayRule in builder.overlayRules) {
+                val ruleBundle = Bundle().apply {
+                    putString("rule_name", overlayRule.name)
+                    putBundle("criteria", Bundle().apply {
+                        putParcelableArrayList("identifier", overlayRule.getCriteriaListBundle())
+                        putStringArray("symbology", overlayRule.getSymbologiesArray())
+                    })
+                    putParcelableArrayList("actions", overlayRule.getActionListBundle())
+                }
+                barcodeOverlayRuleList.add(ruleBundle)
+            }
+
+            //Highlight Report Part
+            val reportDataRuleList: ArrayList<Bundle> = ArrayList()
+            for (reportDataRule in builder.reportDataRules) {
+                val ruleBundle = Bundle().apply {
+                    putString("rule_name", reportDataRule.name)
+                    putBundle("criteria", Bundle().apply {
+                        putParcelableArrayList(
+                            "identifier",
+                            reportDataRule.getCriteriaListBundle()
+                        )
+                        putStringArray("symbology", reportDataRule.getSymbologiesArray())
+                    })
+                    putParcelableArrayList("actions", reportDataRule.getActionListBundle())
+                }
+                reportDataRuleList.add(ruleBundle)
+            }
+
+            val highlightingRules: ArrayList<Bundle> = ArrayList<Bundle>().apply {
+                add(
+                    Bundle().apply {
+                        putString("rule_param_id", "barcode_overlay")
+                        putParcelableArrayList("rule_list", barcodeOverlayRuleList)
+                    }
+                )
+                add(
+                    Bundle().apply {
+                        putString("rule_param_id", "report_data")
+                        putParcelableArrayList("rule_list", reportDataRuleList)
+                    }
+                )
+            }
+            paramList.putParcelableArrayList("barcode_highlighting_rules", highlightingRules)
+        } else {
+            paramList.putString(HIGHLIGHT_ENABLE_KEY, "false")
+        }
 
         // Build Plugin
         plugin.putString("PLUGIN_NAME", PLUGIN_NAME)
@@ -120,6 +131,9 @@ class BarcodePlugin private constructor(builder: Builder) {
         internal var scannerIlluminationMode = ScannerIlluminationMode.OFF
         internal var scannerIlluminationBrightness = 0
         internal var hardwareTrigger = true
+
+        //FIXME Weird issue when listening for DW responses returning wrongly results after setting this param even if the value is being set correctly. Keep it null unless it's being used.
+        internal var autoSwitchToDefaultOnEvent: BarcodeAutoSwitchEventMode? = null
 
         //Highlight
         internal var enableBarcodeHighlight = false
@@ -165,6 +179,11 @@ class BarcodePlugin private constructor(builder: Builder) {
 
         fun disableScanHardwareTrigger(): Builder {
             this.hardwareTrigger = false
+            return this
+        }
+
+        fun setAutoSwitchToDefaultOnEvent(autoSwitchEventMode: BarcodeAutoSwitchEventMode): Builder {
+            this.autoSwitchToDefaultOnEvent = autoSwitchEventMode
             return this
         }
 
@@ -217,6 +236,7 @@ class BarcodePlugin private constructor(builder: Builder) {
         // Other
         private const val DECODE_HAPTIC_FEEDBACK_KEY = "decode_haptic_feedback"
         private const val SCAN_HARDWARE_TRIGGER = "barcode_trigger_mode"
+        private const val AUTO_SWITCH_TO_DEFAULT_ON_EVENT = "auto_switch_to_default_on_event"
 
         // Highlight
         private const val HIGHLIGHT_ENABLE_KEY = "barcode_highlighting_enabled"
