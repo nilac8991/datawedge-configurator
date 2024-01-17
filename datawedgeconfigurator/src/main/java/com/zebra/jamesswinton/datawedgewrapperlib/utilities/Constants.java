@@ -3,7 +3,6 @@ package com.zebra.jamesswinton.datawedgewrapperlib.utilities;
 public class Constants {
 
     // Config Enums
-    public enum ConfigMode { CREATE_IF_NOT_EXIST, OVERWRITE, UPDATE }
     public enum PluginName { BARCODE, MSR, RFID, SERIAL, SIMULSCAN, VOICE, BDF, ADF, TOKENS, INTENT, KEYSTROKE, IP, DCP, EKB }
 
     // Intent Enums
