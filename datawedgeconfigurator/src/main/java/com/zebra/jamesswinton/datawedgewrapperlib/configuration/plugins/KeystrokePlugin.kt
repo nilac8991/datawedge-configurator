@@ -4,6 +4,7 @@ import android.os.Bundle
 import com.zebra.jamesswinton.datawedgewrapperlib.models.keystroke.KeystrokeActionChar
 
 class KeystrokePlugin private constructor(builder: Builder) {
+
     private val plugin = Bundle()
 
     init {

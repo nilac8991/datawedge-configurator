@@ -2,26 +2,14 @@ package com.zebra.jamesswinton.datawedgewrapperlib.configuration.plugins
 
 import android.os.Bundle
 import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.BarcodeAutoSwitchEventMode
+import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.BarcodeReaderAimType
+import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.BarcodeScannerIdentifier
+import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.BarcodeScannerIlluminationMode
 import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.highlight.BarcodeHighlightGenericRule
 import java.util.Locale
 
 class BarcodePlugin private constructor(builder: Builder) {
 
-    // Scanner Enum
-    enum class ScannerIdentifier {
-        AUTO, INTERNAL_IMAGER, INTERNAL_LASER, INTERNAL_CAMERA, SERIAL_SSI, BLUETOOTH_SSI, BLUETOOTH_RS6000, BLUETOOTH_DS2278, BLUETOOTH_DS3678, PLUGABLE_SSI, PLUGABLE_SSI_RS5000, USB_SSI_DS3608
-    }
-
-    enum class ReaderAimType {
-        TRIGGER, TIMED_HOLD, TIMED_RELEASE, PRESS_AND_RELEASE, PRESENTATION, CONTINUOUS_READ, PRESS_AND_SUSTAIN, PRESS_AND_CONTINUE
-    }
-
-    // Illumination Mode Enum
-    enum class ScannerIlluminationMode {
-        OFF, TORCH
-    }
-
-    // Bundle
     private val plugin = Bundle()
 
     init {
@@ -139,14 +127,14 @@ class BarcodePlugin private constructor(builder: Builder) {
 
         // Params
         internal var mEnabled = false
-        internal var scannerIdentifier = ScannerIdentifier.AUTO
+        internal var scannerIdentifier = BarcodeScannerIdentifier.AUTO
 
         // Reader Params
-        internal var readerAimType = ReaderAimType.TRIGGER
+        internal var readerAimType = BarcodeReaderAimType.TRIGGER
 
         // Other
         internal var decodeHapticFeedback = false
-        internal var scannerIlluminationMode = ScannerIlluminationMode.OFF
+        internal var scannerIlluminationMode = BarcodeScannerIlluminationMode.OFF
         internal var scannerIlluminationBrightness = 0
         internal var hardwareTrigger = true
 
@@ -173,12 +161,12 @@ class BarcodePlugin private constructor(builder: Builder) {
             return this
         }
 
-        fun setScannerIdentifier(scannerIdentifier: ScannerIdentifier): Builder {
+        fun setScannerIdentifier(scannerIdentifier: BarcodeScannerIdentifier): Builder {
             this.scannerIdentifier = scannerIdentifier
             return this
         }
 
-        fun setReaderAimType(readerAimType: ReaderAimType): Builder {
+        fun setReaderAimType(readerAimType: BarcodeReaderAimType): Builder {
             this.readerAimType = readerAimType
             return this
         }
@@ -189,7 +177,7 @@ class BarcodePlugin private constructor(builder: Builder) {
         }
 
         fun setScannerIlluminationMode(
-            scannerIlluminationMode: ScannerIlluminationMode
+            scannerIlluminationMode: BarcodeScannerIlluminationMode
         ): Builder {
             this.scannerIlluminationMode = scannerIlluminationMode
             return this
