@@ -6,7 +6,6 @@ public class Constants {
     public enum ConfigMode { CREATE_IF_NOT_EXIST, OVERWRITE, UPDATE }
     public enum PluginName { BARCODE, MSR, RFID, SERIAL, SIMULSCAN, VOICE, BDF, ADF, TOKENS, INTENT, KEYSTROKE, IP, DCP, EKB }
     public enum OutputPluginName { INTENT, KEYSTROKE, IP }
-    public enum KeystrokeActionChar { ASCII_NO_VALUE, ASCII_TAB_VALUE, ASCII_LF_VALUE, ASCII_CR_VALUE }
 
     // Intent Enums
     public enum IntentType { SET_CONFIG }
