@@ -2,7 +2,6 @@ package com.zebra.jamesswinton.datawedgewrapperlib.configuration
 
 import android.os.Bundle
 import com.zebra.jamesswinton.datawedgewrapperlib.models.ConfigMode
-import com.zebra.jamesswinton.datawedgewrapperlib.utilities.Constants
 
 class ProfileConfigurator private constructor(builder: Builder) {
 
@@ -59,8 +58,8 @@ class ProfileConfigurator private constructor(builder: Builder) {
 
         fun addAppAssociation(packageName: String, activityPath: String): Builder {
             val newAppAssociation = Bundle().apply {
-                putString(Constants.PACKAGE_NAME_KEY, packageName)
-                putStringArray(Constants.ACTIVITY_LIST_KEY, arrayOf(activityPath))
+                putString(PACKAGE_NAME_KEY, packageName)
+                putStringArray(ACTIVITY_LIST_KEY, arrayOf(activityPath))
             }
 
             val appAssociationsList = appList.copyOf(appList.size + 1)
@@ -72,8 +71,8 @@ class ProfileConfigurator private constructor(builder: Builder) {
 
         fun addAppAssociation(packageName: String, activitiesPaths: Array<String>): Builder {
             val newAppAssociation = Bundle().apply {
-                putString(Constants.PACKAGE_NAME_KEY, packageName)
-                putStringArray(Constants.ACTIVITY_LIST_KEY, activitiesPaths)
+                putString(PACKAGE_NAME_KEY, packageName)
+                putStringArray(ACTIVITY_LIST_KEY, activitiesPaths)
             }
 
             val appAssociationsList = appList.copyOf(appList.size + 1)
@@ -85,8 +84,8 @@ class ProfileConfigurator private constructor(builder: Builder) {
 
         fun addAppAssociation(packageName: String): Builder {
             val newAppAssociation = Bundle().apply {
-                putString(Constants.PACKAGE_NAME_KEY, packageName)
-                putStringArray(Constants.ACTIVITY_LIST_KEY, arrayOf("*"))
+                putString(PACKAGE_NAME_KEY, packageName)
+                putStringArray(ACTIVITY_LIST_KEY, arrayOf("*"))
             }
 
             val appAssociationsList = appList.copyOf(appList.size + 1)
@@ -112,7 +111,12 @@ class ProfileConfigurator private constructor(builder: Builder) {
         private const val CONFIG_MODE_KEY = "CONFIG_MODE"
         private const val PROFILE_ENABLED_KEY = "PROFILE_ENABLED"
         private const val PLUGIN_CONFIG_KEY = "PLUGIN_CONFIG"
+
+        //App Associations
         private const val APP_LIST_KEY = "APP_LIST"
+        private const val PACKAGE_NAME_KEY = "PACKAGE_NAME"
+        private const val ACTIVITY_LIST_KEY = "ACTIVITY_LIST"
+
         private const val DCP_SUPPORT = "DCP"
     }
 }
