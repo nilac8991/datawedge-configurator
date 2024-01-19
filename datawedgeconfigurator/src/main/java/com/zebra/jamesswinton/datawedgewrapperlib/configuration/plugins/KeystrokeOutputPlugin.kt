@@ -3,7 +3,7 @@ package com.zebra.jamesswinton.datawedgewrapperlib.configuration.plugins
 import android.os.Bundle
 import com.zebra.jamesswinton.datawedgewrapperlib.models.keystroke.KeystrokeActionChar
 
-class KeystrokePlugin private constructor(builder: Builder) {
+class KeystrokeOutputPlugin private constructor(builder: Builder) {
 
     private val plugin = Bundle()
 
@@ -99,7 +99,7 @@ class KeystrokePlugin private constructor(builder: Builder) {
         }
 
         fun create(): Bundle {
-            return KeystrokePlugin(this).plugin
+            return KeystrokeOutputPlugin(this).plugin
         }
     }
 

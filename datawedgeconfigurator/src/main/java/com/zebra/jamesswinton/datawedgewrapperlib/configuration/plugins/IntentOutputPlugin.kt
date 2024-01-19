@@ -97,12 +97,12 @@ class IntentOutputPlugin private constructor(builder: Builder) {
     companion object {
         private const val PLUGIN_NAME = "INTENT"
 
-        const val INTENT_OUTPUT_ENABLE = "intent_output_enabled"
-        const val INTENT_OUTPUT_ACTION = "intent_action"
-        const val INTENT_OUTPUT_CATEGORY = "intent_category"
-        const val INTENT_OUTPUT_DELIVERY = "intent_delivery"
-        const val INTENT_OUTPUT_COMPONENT_INFO = "intent_component_info"
-        const val INTENT_OUTPUT_RECEIVER_FOREGROUND_FLAG = "intent_flag_receiver_foreground"
-        const val INTENT_OUTPUT_USE_CONTENT_PROVIDER = "intent_use_content_provider"
+        private const val INTENT_OUTPUT_ENABLE = "intent_output_enabled"
+        private const val INTENT_OUTPUT_ACTION = "intent_action"
+        private const val INTENT_OUTPUT_CATEGORY = "intent_category"
+        private const val INTENT_OUTPUT_DELIVERY = "intent_delivery"
+        private const val INTENT_OUTPUT_COMPONENT_INFO = "intent_component_info"
+        private const val INTENT_OUTPUT_RECEIVER_FOREGROUND_FLAG = "intent_flag_receiver_foreground"
+        private const val INTENT_OUTPUT_USE_CONTENT_PROVIDER = "intent_use_content_provider"
     }
 }

@@ -32,7 +32,7 @@ object DataWedgeWrapper {
     private var mOnCompleteResultIntentListener: OnCompleteResultIntentListener? = null
 
     // Intent Methods
-    fun sendIntent(context: Context, intentType: IntentType, data: Bundle?) {
+    fun sendIntent(context: Context, intentType: IntentType, data: Bundle) {
         // Build Intent
         val i = Intent()
         i.action = DW_ACTION_STRING
@@ -43,7 +43,7 @@ object DataWedgeWrapper {
         context.sendBroadcast(i)
     }
 
-    fun sendIntent(context: Context, intentType: IntentType, data: String?) {
+    fun sendIntent(context: Context, intentType: IntentType, data: String) {
         // Build Intent
         val i = Intent()
         i.action = DW_ACTION_STRING
@@ -54,9 +54,9 @@ object DataWedgeWrapper {
     }
 
     fun sendIntentWithLastResult(
-        context: Context, intentType: IntentType, data: Bundle?,
-        identifier: CommandIdentifier?,
-        onLastResultIntentListener: OnLastResultIntentListener?
+        context: Context, intentType: IntentType, data: Bundle,
+        identifier: CommandIdentifier,
+        onLastResultIntentListener: OnLastResultIntentListener
     ) {
         // Store Interface
         mOnLastResultIntentListener = onLastResultIntentListener
@@ -68,17 +68,17 @@ object DataWedgeWrapper {
         val i = Intent()
         i.action = DW_ACTION_STRING
         i.putExtra(INTENT_TYPE_KEY_PREFIX + intentType.name, data)
-        i.putExtra(SEND_RESULT_KEY, ResultType.LAST_RESULT)
-        i.putExtra(COMMAND_IDENTIFIER_KEY, identifier)
+        i.putExtra(SEND_RESULT_KEY, ResultType.LAST_RESULT.name)
+        i.putExtra(COMMAND_IDENTIFIER_KEY, identifier.name)
 
         // Send Intent
         context.sendBroadcast(i)
     }
 
     fun sendIntentWithLastResult(
-        context: Context, intentType: IntentType, data: String?,
-        identifier: CommandIdentifier?,
-        onLastResultIntentListener: OnLastResultIntentListener?
+        context: Context, intentType: IntentType, data: String,
+        identifier: CommandIdentifier,
+        onLastResultIntentListener: OnLastResultIntentListener
     ) {
         // Store Interface
         mOnLastResultIntentListener = onLastResultIntentListener
@@ -90,17 +90,17 @@ object DataWedgeWrapper {
         val i = Intent()
         i.action = DW_ACTION_STRING
         i.putExtra(INTENT_TYPE_KEY_PREFIX + intentType.name, data)
-        i.putExtra(SEND_RESULT_KEY, ResultType.LAST_RESULT)
-        i.putExtra(COMMAND_IDENTIFIER_KEY, identifier)
+        i.putExtra(SEND_RESULT_KEY, ResultType.LAST_RESULT.name)
+        i.putExtra(COMMAND_IDENTIFIER_KEY, identifier.name)
 
         // Send Intent
         context.sendBroadcast(i)
     }
 
     fun sendIntentWithCompleteResult(
-        context: Context, intentType: IntentType, data: Bundle?,
-        identifier: CommandIdentifier?,
-        onCompleteResultIntentListener: OnCompleteResultIntentListener?
+        context: Context, intentType: IntentType, data: Bundle,
+        identifier: CommandIdentifier,
+        onCompleteResultIntentListener: OnCompleteResultIntentListener
     ) {
         // Store Interface
         mOnCompleteResultIntentListener = onCompleteResultIntentListener
@@ -112,17 +112,17 @@ object DataWedgeWrapper {
         val i = Intent()
         i.action = DW_ACTION_STRING
         i.putExtra(INTENT_TYPE_KEY_PREFIX + intentType.name, data)
-        i.putExtra(SEND_RESULT_KEY, ResultType.COMPLETE_RESULT)
-        i.putExtra(COMMAND_IDENTIFIER_KEY, identifier)
+        i.putExtra(SEND_RESULT_KEY, ResultType.COMPLETE_RESULT.name)
+        i.putExtra(COMMAND_IDENTIFIER_KEY, identifier.name)
 
         // Send Intent
         context.sendBroadcast(i)
     }
 
     fun sendIntentWithCompleteResult(
-        context: Context, intentType: IntentType, data: String?,
-        identifier: CommandIdentifier?,
-        onCompleteResultIntentListener: OnCompleteResultIntentListener?
+        context: Context, intentType: IntentType, data: String,
+        identifier: CommandIdentifier,
+        onCompleteResultIntentListener: OnCompleteResultIntentListener
     ) {
         // Store Interface
         mOnCompleteResultIntentListener = onCompleteResultIntentListener
@@ -134,8 +134,8 @@ object DataWedgeWrapper {
         val i = Intent()
         i.action = DW_ACTION_STRING
         i.putExtra(INTENT_TYPE_KEY_PREFIX + intentType.name, data)
-        i.putExtra(SEND_RESULT_KEY, ResultType.COMPLETE_RESULT)
-        i.putExtra(COMMAND_IDENTIFIER_KEY, identifier)
+        i.putExtra(SEND_RESULT_KEY, ResultType.COMPLETE_RESULT.name)
+        i.putExtra(COMMAND_IDENTIFIER_KEY, identifier.name)
 
         // Send Intent
         context.sendBroadcast(i)

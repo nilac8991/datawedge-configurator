@@ -19,13 +19,11 @@ open class WorkflowIPlugin private constructor(builder: Builder) {
 
     init {
         // Build Params
-        val paramList = Bundle()
-        paramList.putString(WORKFLOW_NAME, builder.mWorkflowMode.mode)
-        paramList.putString(
-            WORKFLOW_INPUT_SOURCE,
-            (builder.mWorkflowInputMode.ordinal + 1).toString()
-        )
-        paramList.putParcelableArrayList(WORKFLOW_PARAMS, builder.workflowParams)
+        val paramList = Bundle().apply {
+            putString(WORKFLOW_NAME, builder.mWorkflowMode.mode)
+            putString(WORKFLOW_INPUT_SOURCE, (builder.mWorkflowInputMode.ordinal + 1).toString())
+            putParcelableArrayList(WORKFLOW_PARAMS, builder.workflowParams)
+        }
 
         // Build Plugin
         plugin.putString("PLUGIN_NAME", PLUGIN_NAME)
@@ -247,24 +245,31 @@ open class WorkflowIPlugin private constructor(builder: Builder) {
                     WorkflowMode.LICENSE_PLATE -> {
                         add(licenseDecoderModuleBundle)
                     }
+
                     WorkflowMode.ID -> {
                         add(identificationDecoderModuleBundle)
                     }
+
                     WorkflowMode.VIN -> {
                         add(vinDecoderModuleBundle)
                     }
+
                     WorkflowMode.TIN -> {
                         add(tinDecoderModuleBundle)
                     }
+
                     WorkflowMode.METER -> {
                         add(meterDecoderModuleBundle)
                     }
+
                     WorkflowMode.CONTAINER -> {
                         add(containerDecoderModuleBundle)
                     }
+
                     WorkflowMode.FREE_FORM_CAPTURE -> {
                         add(freeFormCaptureDecoderModuleBundle)
                     }
+
                     else -> {}
                 }
                 add(mCameraModuleBundle)
@@ -276,14 +281,14 @@ open class WorkflowIPlugin private constructor(builder: Builder) {
     }
 
     companion object {
-        const val TAG = "WorkflowPlugin"
+        private const val TAG = "WorkflowPlugin"
 
         //Workflow Generic Constants
-        const val PLUGIN_NAME = "WORKFLOW"
-        const val WORKFLOW_ENABLED_KEY = "workflow_input_enabled"
-        const val WORKFLOW_NAME = "workflow_name"
-        const val WORKFLOW_SELECTED_MODE = "selected_workflow_name"
-        const val WORKFLOW_INPUT_SOURCE = "workflow_input_source"
-        const val WORKFLOW_PARAMS = "workflow_params"
+        private const val PLUGIN_NAME = "WORKFLOW"
+        private const val WORKFLOW_ENABLED_KEY = "workflow_input_enabled"
+        private const val WORKFLOW_NAME = "workflow_name"
+        private const val WORKFLOW_SELECTED_MODE = "selected_workflow_name"
+        private const val WORKFLOW_INPUT_SOURCE = "workflow_input_source"
+        private const val WORKFLOW_PARAMS = "workflow_params"
     }
 }

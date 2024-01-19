@@ -22,17 +22,6 @@ class DCPPlugin private constructor(builder: Builder) {
         plugin.putBundle("PARAM_LIST", paramList)
     }
 
-    companion object {
-        const val TAG = "DCPPlugin"
-
-        const val DCP_ENABLED_KEY = "dcp_input_enabled"
-        const val DCP_BUTTON_ANCHOR_POSITION = "dcp_dock_button_on"
-        const val DCP_LAUNCH_MODE = "dcp_start_in"
-        const val DCP_HIGHEST_POSITION = "dcp_highest_pos"
-        const val DCP_LOWEST_POSITION = "dcp_lowest_pos"
-        const val DCP_TOUCH_WAIT_TIME = "dcp_drag_detect_time"
-    }
-
     class Builder {
 
         // Config
@@ -92,5 +81,16 @@ class DCPPlugin private constructor(builder: Builder) {
         fun create(): Bundle {
             return DCPPlugin(this).plugin
         }
+    }
+
+    companion object {
+        const val TAG = "DCPPlugin"
+
+        private const val DCP_ENABLED_KEY = "dcp_input_enabled"
+        private const val DCP_BUTTON_ANCHOR_POSITION = "dcp_dock_button_on"
+        private const val DCP_LAUNCH_MODE = "dcp_start_in"
+        private const val DCP_HIGHEST_POSITION = "dcp_highest_pos"
+        private const val DCP_LOWEST_POSITION = "dcp_lowest_pos"
+        private const val DCP_TOUCH_WAIT_TIME = "dcp_drag_detect_time"
     }
 }
