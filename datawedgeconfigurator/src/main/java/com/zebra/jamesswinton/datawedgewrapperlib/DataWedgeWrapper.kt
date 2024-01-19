@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.util.Log
 import com.zebra.jamesswinton.datawedgewrapperlib.interfaces.OnCompleteResultIntentListener
 import com.zebra.jamesswinton.datawedgewrapperlib.interfaces.OnLastResultIntentListener
+import com.zebra.jamesswinton.datawedgewrapperlib.interfaces.OnScanIntentListener
 import com.zebra.jamesswinton.datawedgewrapperlib.models.CommandIdentifier
 import com.zebra.jamesswinton.datawedgewrapperlib.models.ResultType
 import com.zebra.jamesswinton.datawedgewrapperlib.utilities.Constants.IntentType
@@ -30,6 +31,7 @@ object DataWedgeWrapper {
     // Interface
     private var mOnLastResultIntentListener: OnLastResultIntentListener? = null
     private var mOnCompleteResultIntentListener: OnCompleteResultIntentListener? = null
+    private var mOnScanIntentListener: OnScanIntentListener? = null
 
     // Intent Methods
     fun sendIntent(context: Context, intentType: IntentType, data: Bundle) {
@@ -62,7 +64,7 @@ object DataWedgeWrapper {
         mOnLastResultIntentListener = onLastResultIntentListener
 
         // Register Result Receiver
-        registerReceiver(context)
+        registerResultReceiver(context)
 
         // Build Intent
         val i = Intent()
@@ -84,7 +86,7 @@ object DataWedgeWrapper {
         mOnLastResultIntentListener = onLastResultIntentListener
 
         // Register Result Receiver
-        registerReceiver(context)
+        registerResultReceiver(context)
 
         // Build Intent
         val i = Intent()
@@ -106,7 +108,7 @@ object DataWedgeWrapper {
         mOnCompleteResultIntentListener = onCompleteResultIntentListener
 
         // Register Result Receiver
-        registerReceiver(context)
+        registerResultReceiver(context)
 
         // Build Intent
         val i = Intent()
@@ -128,7 +130,7 @@ object DataWedgeWrapper {
         mOnCompleteResultIntentListener = onCompleteResultIntentListener
 
         // Register Result Receiver
-        registerReceiver(context)
+        registerResultReceiver(context)
 
         // Build Intent
         val i = Intent()
@@ -141,9 +143,27 @@ object DataWedgeWrapper {
         context.sendBroadcast(i)
     }
 
-    private val intentReceiver = object : BroadcastReceiver() {
+    fun registerScanReceiver(
+        context: Context,
+        intentAction: String,
+        onScanIntentListener: OnScanIntentListener
+    ) {
+        val filter = IntentFilter()
+        filter.addAction(intentAction)
+        filter.addCategory(INTENT_CATEGORY)
+        context.registerReceiver(scanReceiver, filter)
+
+        this.mOnScanIntentListener = onScanIntentListener
+    }
+
+    fun unregisterResultReceiver(context: Context) {
+        context.unregisterReceiver(resultReceiver)
+        mOnScanIntentListener = null
+    }
+
+    private val resultReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            unregisterReceiver(context)
+            unregisterResultReceiver(context)
 
             val action = intent.action
             val command = intent.getStringExtra("COMMAND")
@@ -158,26 +178,41 @@ object DataWedgeWrapper {
                     for (bundleResult in resultList) {
                         resultInfo.append("\n\n")
                         bundleResult.keySet().forEach { key ->
-                            val valString = bundleResult.getString(key) ?: bundleResult.getStringArray(key)?.joinToString("\n") ?: ""
+                            val valString =
+                                bundleResult.getString(key) ?: bundleResult.getStringArray(key)
+                                    ?.joinToString("\n") ?: ""
                             resultInfo.append("$key: $valString\n")
                         }
                     }
 
-                    mOnCompleteResultIntentListener?.onResult(resultList, resultInfo.toString(), command, profileName)
+                    mOnCompleteResultIntentListener?.onResult(
+                        resultList,
+                        resultInfo.toString(),
+                        command,
+                        profileName
+                    )
 
                 } else if (intent.hasExtra("RESULT_INFO")) {
                     val result = intent.getStringExtra("RESULT")
                     val successful = result == "SUCCESS"
                     val resultInfo = intent.getBundleExtra("RESULT_INFO")
 
-                    val resultInfoString = StringBuilder("Result: ${resultInfo?.getString("RESULT")}\n")
+                    val resultInfoString =
+                        StringBuilder("Result: ${resultInfo?.getString("RESULT")}\n")
 
                     resultInfo?.keySet()?.forEach { key ->
-                        val valString = resultInfo.getString(key) ?: resultInfo.getStringArray(key)?.joinToString("\n") ?: ""
+                        val valString = resultInfo.getString(key) ?: resultInfo.getStringArray(key)
+                            ?.joinToString("\n") ?: ""
                         resultInfoString.append("$key: $valString\n")
                     }
 
-                    mOnLastResultIntentListener?.onResult(successful, resultInfo, resultInfoString.toString(), command, profileName)
+                    mOnLastResultIntentListener?.onResult(
+                        successful,
+                        resultInfo,
+                        resultInfoString.toString(),
+                        command,
+                        profileName
+                    )
                 }
             } else {
                 Log.w(TAG, "Ignoring received Intent that didn't have action: $INTENT_ACTION")
@@ -185,14 +220,20 @@ object DataWedgeWrapper {
         }
     }
 
-    private fun registerReceiver(context: Context) {
+    private val scanReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            mOnScanIntentListener?.onScanEvent(intent)
+        }
+    }
+
+    private fun registerResultReceiver(context: Context) {
         val filter = IntentFilter()
         filter.addAction(INTENT_ACTION)
         filter.addCategory(INTENT_CATEGORY)
-        context.registerReceiver(intentReceiver, filter)
+        context.registerReceiver(resultReceiver, filter)
     }
 
-    private fun unregisterReceiver(context: Context) {
-        context.unregisterReceiver(intentReceiver)
+    private fun unregisterScanReceiver(context: Context) {
+        context.unregisterReceiver(scanReceiver)
     }
 }
