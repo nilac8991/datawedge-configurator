@@ -156,9 +156,13 @@ object DataWedgeWrapper {
         this.mOnScanIntentListener = onScanIntentListener
     }
 
+    fun unregisterScanReceiver(context: Context) {
+        context.unregisterReceiver(scanReceiver)
+        mOnScanIntentListener = null
+    }
+
     fun unregisterResultReceiver(context: Context) {
         context.unregisterReceiver(resultReceiver)
-        mOnScanIntentListener = null
     }
 
     private val resultReceiver = object : BroadcastReceiver() {
@@ -231,9 +235,5 @@ object DataWedgeWrapper {
         filter.addAction(INTENT_ACTION)
         filter.addCategory(INTENT_CATEGORY)
         context.registerReceiver(resultReceiver, filter)
-    }
-
-    private fun unregisterScanReceiver(context: Context) {
-        context.unregisterReceiver(scanReceiver)
     }
 }
