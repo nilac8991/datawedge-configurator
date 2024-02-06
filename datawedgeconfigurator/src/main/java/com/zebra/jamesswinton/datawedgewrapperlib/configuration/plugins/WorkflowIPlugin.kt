@@ -199,8 +199,9 @@ open class WorkflowIPlugin private constructor(builder: Builder) {
             containerDecoderModuleBundle.apply {
                 putString("module", mContainerDecoderModule.name)
                 putBundle("module_params", Bundle().apply {
-                    putString("orientation", mContainerDecoderModule.orientation.type)
-                    putString("output_image", mMeterDecoderModule.outputImage.mode)
+                    putString("session_timeout", mContainerDecoderModule.sessionTimeOut.toString())
+                    putString("output_image", mContainerDecoderModule.outputImage.mode)
+                    putString("scanMode", mContainerDecoderModule.orientation.type)
                 })
             }
 

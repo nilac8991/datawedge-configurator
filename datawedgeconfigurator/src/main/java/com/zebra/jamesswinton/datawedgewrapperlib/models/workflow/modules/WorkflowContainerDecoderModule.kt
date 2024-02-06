@@ -3,7 +3,7 @@ package com.zebra.jamesswinton.datawedgewrapperlib.models.workflow.modules
 import com.zebra.jamesswinton.datawedgewrapperlib.models.workflow.WorkflowOutputImageMode
 
 data class WorkflowContainerDecoderModule(
-    var orientation: Orientation = Orientation.HORIZONTAL
+    var orientation: Orientation = Orientation.VERTICAL
 ) : WorkflowGenericModule() {
 
     init {
@@ -12,6 +12,7 @@ data class WorkflowContainerDecoderModule(
 
     constructor(orientation: Orientation, sessionTimeOut: Long) : this() {
         this.sessionTimeOut = sessionTimeOut
+        this.orientation = orientation
     }
 
     constructor(sessionTimeOut: Long, outputImage: WorkflowOutputImageMode) : this() {
@@ -26,15 +27,12 @@ data class WorkflowContainerDecoderModule(
     ) : this() {
         this.sessionTimeOut = sessionTimeOut
         this.outputImage = outputImage
-    }
-
-    constructor(sessionTimeOut: Long) : this() {
-        this.sessionTimeOut = sessionTimeOut
+        this.orientation = orientation
     }
 
     enum class Orientation(val type: String = "") {
-        HORIZONTAL("horizontal"),
-        VERTICAL("vertical");
+        HORIZONTAL("Horizontal"),
+        VERTICAL("Vertical");
 
         companion object {
             fun forType(type: String) = values().find { it.type == type }
