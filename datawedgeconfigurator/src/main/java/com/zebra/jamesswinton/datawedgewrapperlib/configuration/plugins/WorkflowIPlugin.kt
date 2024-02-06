@@ -183,6 +183,7 @@ open class WorkflowIPlugin private constructor(builder: Builder) {
                 putBundle("module_params", Bundle().apply {
                     putString("session_timeout", mTinDecoderModule.sessionTimeOut.toString())
                     putString("output_image", mTinDecoderModule.outputImage.mode)
+                    putString("scanMode", mTinDecoderModule.scanMode.mode)
                 })
             }
 
