@@ -1,6 +1,6 @@
 package com.zebra.jamesswinton.datawedgewrapperlib.models.barcode
 
-enum class BarcodeHighlightSymbology(val symbology: String = "") {
+enum class BarcodeSymbology(val symbology: String = "") {
     AUSTRALIAN_POST("decoder_australian_postal"),
     AZTEC("decoder_aztec"),
     CANADIAN_POST("decoder_canadian_postal"),

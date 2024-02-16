@@ -1,13 +1,13 @@
 package com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.highlight
 
 import android.os.Bundle
-import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.BarcodeHighlightSymbology
+import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.BarcodeSymbology
 
 data class BarcodeHighlightGenericRule(
     var name: String,
     var criteriaList: ArrayList<BarcodeHighlightRuleCriteria>,
     var actionList: ArrayList<BarcodeHighlightRuleAction>,
-    var symbologies: ArrayList<BarcodeHighlightSymbology>
+    var symbologies: ArrayList<BarcodeSymbology>
 ) {
 
     constructor(name: String) : this(name, ArrayList(), ArrayList(), ArrayList())

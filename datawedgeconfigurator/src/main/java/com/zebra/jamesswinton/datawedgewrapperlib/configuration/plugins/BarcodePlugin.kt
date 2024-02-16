@@ -5,6 +5,7 @@ import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.BarcodeAutoSwit
 import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.BarcodeReaderAimType
 import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.BarcodeScannerIdentifier
 import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.BarcodeScannerIlluminationMode
+import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.BarcodeSymbology
 import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.highlight.BarcodeHighlightGenericRule
 import java.util.Locale
 
@@ -61,6 +62,18 @@ class BarcodePlugin private constructor(builder: Builder) {
             QR_CODE_LAUNCH_OPTIONS_SHOW_CONFIRMATION,
             if (builder.qrCodeLaunchOptionsShowConfirmation) "true" else "false"
         )
+
+        if (builder.symbologiesToEnable.size > 0) {
+            for (barcodeSymbology in builder.symbologiesToEnable) {
+                paramList.putString(barcodeSymbology.symbology, "true")
+            }
+        }
+
+        if (builder.symbologiesToDisable.size > 0) {
+            for (barcodeSymbology in builder.symbologiesToDisable) {
+                paramList.putString(barcodeSymbology.symbology, "false")
+            }
+        }
 
         //Barcode Highlight
         if (builder.enableBarcodeHighlight) {
@@ -151,6 +164,10 @@ class BarcodePlugin private constructor(builder: Builder) {
         internal val overlayRules = ArrayList<BarcodeHighlightGenericRule>()
         internal val reportDataRules = ArrayList<BarcodeHighlightGenericRule>()
 
+        //Symbologies
+        internal var symbologiesToEnable = ArrayList<BarcodeSymbology>()
+        internal var symbologiesToDisable = ArrayList<BarcodeSymbology>()
+
         fun resetConfig(resetConfig: Boolean): Builder {
             this.resetConfig = resetConfig
             return this
@@ -210,6 +227,26 @@ class BarcodePlugin private constructor(builder: Builder) {
 
         fun setQRCodeLaunchConfirmationState(state: Boolean): Builder {
             qrCodeLaunchOptionsShowConfirmation = state
+            return this
+        }
+
+        fun enableSymbology(symbology: BarcodeSymbology): Builder {
+            symbologiesToEnable.add(symbology)
+            return this
+        }
+
+        fun enableSymbologies(symbologies: Array<BarcodeSymbology>): Builder {
+            symbologiesToEnable.addAll(symbologies)
+            return this
+        }
+
+        fun disableSymbology(symbology: BarcodeSymbology): Builder {
+            symbologiesToDisable.add(symbology)
+            return this
+        }
+
+        fun disableSymbologies(symbologies: Array<BarcodeSymbology>): Builder {
+            symbologiesToDisable.addAll(symbologies)
             return this
         }
 
