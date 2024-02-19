@@ -1,10 +1,10 @@
 package com.zebra.jamesswinton.datawedgewrapperlib.configuration
 
 import android.content.Context
+import com.zebra.jamesswinton.datawedgewrapperlib.Constants.IntentType
 import com.zebra.jamesswinton.datawedgewrapperlib.DataWedgeWrapper
 import com.zebra.jamesswinton.datawedgewrapperlib.interfaces.OnLastResultIntentListener
 import com.zebra.jamesswinton.datawedgewrapperlib.models.CommandIdentifier
-import com.zebra.jamesswinton.datawedgewrapperlib.utilities.Constants.IntentType
 
 object ScannerConfigurator {
 

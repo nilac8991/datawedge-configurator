@@ -6,12 +6,12 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
 import android.util.Log
+import com.zebra.jamesswinton.datawedgewrapperlib.Constants.IntentType
 import com.zebra.jamesswinton.datawedgewrapperlib.interfaces.OnCompleteResultIntentListener
 import com.zebra.jamesswinton.datawedgewrapperlib.interfaces.OnLastResultIntentListener
 import com.zebra.jamesswinton.datawedgewrapperlib.interfaces.OnScanIntentListener
 import com.zebra.jamesswinton.datawedgewrapperlib.models.CommandIdentifier
 import com.zebra.jamesswinton.datawedgewrapperlib.models.ResultType
-import com.zebra.jamesswinton.datawedgewrapperlib.utilities.Constants.IntentType
 
 object DataWedgeWrapper {
 

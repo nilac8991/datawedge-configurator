@@ -1,12 +1,12 @@
 package com.zebra.jamesswinton.datawedgewrapperlib.configuration.plugins
 
 import android.os.Bundle
+import com.zebra.jamesswinton.datawedgewrapperlib.configuration.params.BarcodeHighlightingParams
 import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.BarcodeAutoSwitchEventMode
 import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.BarcodeReaderAimType
 import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.BarcodeScannerIdentifier
 import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.BarcodeScannerIlluminationMode
 import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.BarcodeSymbology
-import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.highlight.BarcodeHighlightGenericRule
 import java.util.Locale
 
 class BarcodePlugin private constructor(builder: Builder) {
@@ -76,57 +76,14 @@ class BarcodePlugin private constructor(builder: Builder) {
         }
 
         //Barcode Highlight
-        if (builder.enableBarcodeHighlight) {
-            paramList.putString(HIGHLIGHT_ENABLE_KEY, "false")
-
-            val barcodeOverlayRuleList: ArrayList<Bundle> = ArrayList()
-            for (overlayRule in builder.overlayRules) {
-                val ruleBundle = Bundle().apply {
-                    putString("rule_name", overlayRule.name)
-                    putBundle("criteria", Bundle().apply {
-                        putParcelableArrayList("identifier", overlayRule.getCriteriaListBundle())
-                        putStringArray("symbology", overlayRule.getSymbologiesArray())
-                    })
-                    putParcelableArrayList("actions", overlayRule.getActionListBundle())
-                }
-                barcodeOverlayRuleList.add(ruleBundle)
-            }
-
-            //Highlight Report Part
-            val reportDataRuleList: ArrayList<Bundle> = ArrayList()
-            for (reportDataRule in builder.reportDataRules) {
-                val ruleBundle = Bundle().apply {
-                    putString("rule_name", reportDataRule.name)
-                    putBundle("criteria", Bundle().apply {
-                        putParcelableArrayList(
-                            "identifier",
-                            reportDataRule.getCriteriaListBundle()
-                        )
-                        putStringArray("symbology", reportDataRule.getSymbologiesArray())
-                    })
-                    putParcelableArrayList("actions", reportDataRule.getActionListBundle())
-                }
-                reportDataRuleList.add(ruleBundle)
-            }
-
-            val highlightingRules: ArrayList<Bundle> = ArrayList<Bundle>().apply {
-                add(
-                    Bundle().apply {
-                        putString("rule_param_id", "barcode_overlay")
-                        putParcelableArrayList("rule_list", barcodeOverlayRuleList)
-                    }
-                )
-                add(
-                    Bundle().apply {
-                        putString("rule_param_id", "report_data")
-                        putParcelableArrayList("rule_list", reportDataRuleList)
-                    }
-                )
-            }
-            paramList.putParcelableArrayList("barcode_highlighting_rules", highlightingRules)
-        } else {
-            paramList.putString(HIGHLIGHT_ENABLE_KEY, "false")
-        }
+        paramList.putString(
+            BarcodeHighlightingParams.HIGHLIGHT_ENABLE_KEY,
+            builder.barcodeHighlightingParams.getString(BarcodeHighlightingParams.HIGHLIGHT_ENABLE_KEY)
+        )
+        paramList.putParcelableArrayList(
+            BarcodeHighlightingParams.HIGHLIGHT_RULES_KEY,
+            builder.barcodeHighlightingParams.getParcelableArrayList(BarcodeHighlightingParams.HIGHLIGHT_RULES_KEY)
+        )
 
         // Build Plugin
         plugin.putString("PLUGIN_NAME", PLUGIN_NAME)
@@ -159,14 +116,12 @@ class BarcodePlugin private constructor(builder: Builder) {
         internal var qrCodeLaunchOptionsEnableDecoder = false
         internal var qrCodeLaunchOptionsShowConfirmation = true
 
-        //Highlight
-        internal var enableBarcodeHighlight = false
-        internal val overlayRules = ArrayList<BarcodeHighlightGenericRule>()
-        internal val reportDataRules = ArrayList<BarcodeHighlightGenericRule>()
-
         //Symbologies
         internal var symbologiesToEnable = ArrayList<BarcodeSymbology>()
         internal var symbologiesToDisable = ArrayList<BarcodeSymbology>()
+
+        //Highlight
+        internal var barcodeHighlightingParams = BarcodeHighlightingParams.Builder().create()
 
         fun resetConfig(resetConfig: Boolean): Builder {
             this.resetConfig = resetConfig
@@ -250,27 +205,17 @@ class BarcodePlugin private constructor(builder: Builder) {
             return this
         }
 
-        fun setEnableBarcodeHighlight(): Builder {
-            enableBarcodeHighlight = true
-            return this
-        }
-
-        fun addNewBarcodeHighlightOverlayRule(rule: BarcodeHighlightGenericRule): Builder {
-            overlayRules.add(rule)
-            return this
-        }
-
-        fun addNewBarcodeHighlightReportDataRule(rule: BarcodeHighlightGenericRule): Builder {
-            reportDataRules.add(rule)
-            return this
-        }
-
         fun setScannerIlluminationBrightness(illuminationBrightness: Int): Builder {
             var scannerIlluminationBrightness = illuminationBrightness
             if (scannerIlluminationBrightness < 0) scannerIlluminationBrightness = 0
             if (scannerIlluminationBrightness > 10) scannerIlluminationBrightness = 10
             this.scannerIlluminationBrightness = scannerIlluminationBrightness
 
+            return this
+        }
+
+        fun addBarcodeHighlightingParams(params: Bundle): Builder {
+            this.barcodeHighlightingParams = params
             return this
         }
 
@@ -306,8 +251,5 @@ class BarcodePlugin private constructor(builder: Builder) {
         private const val QR_CODE_LAUNCH_OPTIONS_ENABLE_DECODER = "qr_launch_enable_qr_decoder"
         private const val QR_CODE_LAUNCH_OPTIONS_SHOW_CONFIRMATION =
             "qr_launch_show_confirmation_dialog"
-
-        // Highlight
-        private const val HIGHLIGHT_ENABLE_KEY = "barcode_highlighting_enabled"
     }
 }
