@@ -2,6 +2,7 @@ package com.zebra.jamesswinton.datawedgewrapperlib.configuration.plugins
 
 import android.os.Bundle
 import com.zebra.jamesswinton.datawedgewrapperlib.configuration.params.BarcodeHighlightingParams
+import com.zebra.jamesswinton.datawedgewrapperlib.configuration.params.UPCEANParams
 import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.BarcodeAutoSwitchEventMode
 import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.BarcodeReaderAimType
 import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.BarcodeScannerIdentifier
@@ -85,6 +86,12 @@ class BarcodePlugin private constructor(builder: Builder) {
             builder.barcodeHighlightingParams.getParcelableArrayList(BarcodeHighlightingParams.HIGHLIGHT_RULES_KEY)
         )
 
+        //UPC EAN Params
+        for (key in builder.upcEanParams.keySet()) {
+            val value: String = builder.upcEanParams.getString(key)!!
+            paramList.putString(key, value)
+        }
+
         // Build Plugin
         plugin.putString("PLUGIN_NAME", PLUGIN_NAME)
         plugin.putString("RESET_CONFIG", if (builder.resetConfig) "true" else "false")
@@ -122,6 +129,9 @@ class BarcodePlugin private constructor(builder: Builder) {
 
         //Highlight
         internal var barcodeHighlightingParams = BarcodeHighlightingParams.Builder().create()
+
+        //UPC EAN Params
+        internal var upcEanParams = UPCEANParams.Builder().create()
 
         fun resetConfig(resetConfig: Boolean): Builder {
             this.resetConfig = resetConfig
@@ -216,6 +226,11 @@ class BarcodePlugin private constructor(builder: Builder) {
 
         fun addBarcodeHighlightingParams(params: Bundle): Builder {
             this.barcodeHighlightingParams = params
+            return this
+        }
+
+        fun addUpcEanParams(params: Bundle): Builder {
+            this.upcEanParams = params
             return this
         }
 
