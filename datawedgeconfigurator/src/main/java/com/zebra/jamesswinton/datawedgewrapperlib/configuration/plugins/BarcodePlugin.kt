@@ -11,6 +11,7 @@ import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.BarcodeScannerI
 import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.BarcodeScannerIlluminationMode
 import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.BarcodeScanningMode
 import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.BarcodeSymbology
+import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.Inverse1DMode
 import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.QuietZone1DLevel
 import java.util.Locale
 
@@ -79,8 +80,8 @@ class BarcodePlugin private constructor(builder: Builder) {
             builder.presentationModeSensitivity.mode.toString()
         )
         paramList.putString(
-            DECODE_HAPTIC_FEEDBACK_KEY,
-            if (builder.decodeHapticFeedback) "true" else "false"
+            QUIET_ZONE_LEVEL_1D_KEY,
+            String.format(Locale.getDefault(), "%d", builder.quietZone1DLevel.ordinal)
         )
 
         paramList.putString(READER_AIM_ENABLED_KEY, if (builder.aimModeEnabled) "on" else "off")
@@ -104,9 +105,14 @@ class BarcodePlugin private constructor(builder: Builder) {
             SCANNER_ILLUMINATION_BRIGHTNESS_KEY,
             builder.scannerIlluminationBrightness.toString()
         )
+
         paramList.putString(
-            QUIET_ZONE_LEVEL_1D_KEY,
-            String.format(Locale.getDefault(), "%d", builder.quietZone1DLevel.ordinal)
+            INVERSE_1D_MODE_KEY,
+            String.format(Locale.getDefault(), "%d", builder.inverse1DMode.ordinal)
+        )
+        paramList.putString(
+            DECODE_HAPTIC_FEEDBACK_KEY,
+            if (builder.decodeHapticFeedback) "true" else "false"
         )
 
         //Symbologies
@@ -182,8 +188,11 @@ class BarcodePlugin private constructor(builder: Builder) {
         internal var sameSymbolTimeout = 500
 
         internal var digimarcDecodingEnabled = true
+
         internal var scannerIlluminationMode = BarcodeScannerIlluminationMode.OFF
         internal var scannerIlluminationBrightness = 0
+
+        internal var inverse1DMode = Inverse1DMode.DISABLE
         internal var decodeHapticFeedback = false
 
         //Symbologies
@@ -322,6 +331,11 @@ class BarcodePlugin private constructor(builder: Builder) {
             return this
         }
 
+        fun setInverse1DMode(mode: Inverse1DMode): Builder {
+            this.inverse1DMode = mode
+            return this
+        }
+
         fun setSameSymbolBarcodeTimeout(value: Int): Builder {
             if (value < 0) this.sameSymbolTimeout = 0
             if (value > 5000) this.sameSymbolTimeout = 5000
@@ -410,8 +424,11 @@ class BarcodePlugin private constructor(builder: Builder) {
         private const val SAME_SYMBOL_TIMEOUT_KEY = "same_barcode_timeout"
 
         private const val DIGIMARC_DECODING_KEY = "digimarc_decoding"
+
         private const val SCANNER_ILLUMINATION_MODE_KEY = "illumination_mode"
         private const val SCANNER_ILLUMINATION_BRIGHTNESS_KEY = "illumination_brightness"
+
+        private const val INVERSE_1D_MODE_KEY = "inverse_1d_mode"
 
         // Other
         private const val DECODE_HAPTIC_FEEDBACK_KEY = "decode_haptic_feedback"
