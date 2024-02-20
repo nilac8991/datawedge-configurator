@@ -91,6 +91,10 @@ class BarcodePlugin private constructor(builder: Builder) {
         paramList.putString(READER_AIM_TIMER_KEY, builder.aimTimer.toString())
 
         paramList.putString(BEAM_TIMER_KEY, builder.beamTimer.toString())
+
+        paramList.putString(DIFFERENT_SYMBOL_TIMEOUT_KEY, builder.differentSymbolTimeout.toString())
+        paramList.putString(SAME_SYMBOL_TIMEOUT_KEY, builder.sameSymbolTimeout.toString())
+
         paramList.putString(SCANNER_ILLUMINATION_MODE_KEY, builder.scannerIlluminationMode.name)
         paramList.putString(
             SCANNER_ILLUMINATION_BRIGHTNESS_KEY,
@@ -169,6 +173,10 @@ class BarcodePlugin private constructor(builder: Builder) {
         internal var aimTimer = 500
 
         internal var beamTimer = 5000
+
+        internal var differentSymbolTimeout = 500
+        internal var sameSymbolTimeout = 500
+
         internal var scannerIlluminationMode = BarcodeScannerIlluminationMode.OFF
         internal var scannerIlluminationBrightness = 0
         internal var decodeHapticFeedback = false
@@ -296,6 +304,22 @@ class BarcodePlugin private constructor(builder: Builder) {
             return this
         }
 
+        fun setDifferentSymbolBarcodeTimeout(value: Int): Builder {
+            if (value < 0) this.differentSymbolTimeout = 0
+            if (value > 5000) this.differentSymbolTimeout = 5000
+            this.differentSymbolTimeout = value
+
+            return this
+        }
+
+        fun setSameSymbolBarcodeTimeout(value: Int): Builder {
+            if (value < 0) this.sameSymbolTimeout = 0
+            if (value > 5000) this.sameSymbolTimeout = 5000
+            this.sameSymbolTimeout = value
+
+            return this
+        }
+
         fun setScannerIlluminationBrightness(illuminationBrightness: Int): Builder {
             var scannerIlluminationBrightness = illuminationBrightness
             if (scannerIlluminationBrightness < 0) scannerIlluminationBrightness = 0
@@ -371,6 +395,10 @@ class BarcodePlugin private constructor(builder: Builder) {
         private const val READER_AIM_TIMER_KEY = "aim_timer"
 
         private const val BEAM_TIMER_KEY = "beam_timer"
+
+        private const val DIFFERENT_SYMBOL_TIMEOUT_KEY = "different_barcode_timeout"
+        private const val SAME_SYMBOL_TIMEOUT_KEY = "same_barcode_timeout"
+
         private const val SCANNER_ILLUMINATION_MODE_KEY = "illumination_mode"
         private const val SCANNER_ILLUMINATION_BRIGHTNESS_KEY = "illumination_brightness"
 
