@@ -5,6 +5,7 @@ import com.zebra.jamesswinton.datawedgewrapperlib.configuration.params.BarcodeHi
 import com.zebra.jamesswinton.datawedgewrapperlib.configuration.params.UPCEANParams
 import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.BarcodeAutoSwitchEventMode
 import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.BarcodeCharsetName
+import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.BarcodePresentationModeSensitivity
 import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.BarcodeReaderAimType
 import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.BarcodeScannerIdentifier
 import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.BarcodeScannerIlluminationMode
@@ -23,29 +24,10 @@ class BarcodePlugin private constructor(builder: Builder) {
         val paramList = Bundle()
         paramList.putString(SCANNER_ENABLED_KEY, if (builder.mEnabled) "true" else "false")
         paramList.putString(SCANNER_SELECTION_KEY, builder.scannerIdentifier.name)
-        paramList.putString(SCANNER_ILLUMINATION_MODE, builder.scannerIlluminationMode.name)
-        paramList.putString(
-            SCANNER_ILLUMINATION_BRIGHTNESS,
-            builder.scannerIlluminationBrightness.toString()
-        )
-        paramList.putString(
-            READER_AIM_TYPE,
-            String.format(Locale.getDefault(), "%d", builder.readerAimType.ordinal)
-        )
-
-        // Other
-        paramList.putString(
-            DECODE_HAPTIC_FEEDBACK_KEY,
-            if (builder.decodeHapticFeedback) "true" else "false"
-        )
-        paramList.putString(
-            SCAN_HARDWARE_TRIGGER,
-            if (builder.hardwareTrigger) "1" else "0"
-        )
 
         if (builder.autoSwitchToDefaultOnEvent != null) {
             paramList.putString(
-                AUTO_SWITCH_TO_DEFAULT_ON_EVENT,
+                AUTO_SWITCH_TO_DEFAULT_ON_EVENT_KEY,
                 String.format(
                     Locale.getDefault(),
                     "%d",
@@ -54,17 +36,22 @@ class BarcodePlugin private constructor(builder: Builder) {
             )
         }
 
+        paramList.putString(
+            SCAN_HARDWARE_TRIGGER_KEY,
+            if (builder.hardwareTrigger) "1" else "0"
+        )
+
         //QRCode Launch Options
         paramList.putString(
-            QR_CODE_LAUNCH_OPTIONS_ENABLE,
+            QR_CODE_LAUNCH_OPTIONS_ENABLE_KEY,
             if (builder.qrCodeLaunchOptionsEnable) "true" else "false"
         )
         paramList.putString(
-            QR_CODE_LAUNCH_OPTIONS_ENABLE_DECODER,
+            QR_CODE_LAUNCH_OPTIONS_ENABLE_DECODER_KEY,
             if (builder.qrCodeLaunchOptionsEnableDecoder) "true" else "false"
         )
         paramList.putString(
-            QR_CODE_LAUNCH_OPTIONS_SHOW_CONFIRMATION,
+            QR_CODE_LAUNCH_OPTIONS_SHOW_CONFIRMATION_KEY,
             if (builder.qrCodeLaunchOptionsShowConfirmation) "true" else "false"
         )
 
@@ -85,12 +72,31 @@ class BarcodePlugin private constructor(builder: Builder) {
             builder.autoCharsetFailureOption.charset
         )
 
+        //Misc Reader Parameters
+        paramList.putString(
+            PRESENTATION_MODE_SENSITIVITY_KEY,
+            builder.presentationModeSensitivity.mode.toString()
+        )
+        paramList.putString(
+            DECODE_HAPTIC_FEEDBACK_KEY,
+            if (builder.decodeHapticFeedback) "true" else "false"
+        )
+        paramList.putString(
+            READER_AIM_TYPE_KEY,
+            String.format(Locale.getDefault(), "%d", builder.readerAimType.ordinal)
+        )
+        paramList.putString(SCANNER_ILLUMINATION_MODE_KEY, builder.scannerIlluminationMode.name)
+        paramList.putString(
+            SCANNER_ILLUMINATION_BRIGHTNESS_KEY,
+            builder.scannerIlluminationBrightness.toString()
+        )
+
+        //Symbologies
         if (builder.symbologiesToEnable.size > 0) {
             for (barcodeSymbology in builder.symbologiesToEnable) {
                 paramList.putString(barcodeSymbology.symbology, "true")
             }
         }
-
         if (builder.symbologiesToDisable.size > 0) {
             for (barcodeSymbology in builder.symbologiesToDisable) {
                 paramList.putString(barcodeSymbology.symbology, "false")
@@ -149,6 +155,7 @@ class BarcodePlugin private constructor(builder: Builder) {
         internal var autoCharsetFailureOption = BarcodeCharsetName.UTF_8
 
         //Misc Reader Params
+        internal var presentationModeSensitivity = BarcodePresentationModeSensitivity.MEDIUM
         internal var readerAimType = BarcodeReaderAimType.TRIGGER
 
         //Symbologies
@@ -248,6 +255,11 @@ class BarcodePlugin private constructor(builder: Builder) {
             return this
         }
 
+        fun setPresentationModeSensitivity(sensitivity: BarcodePresentationModeSensitivity): Builder {
+            this.presentationModeSensitivity = sensitivity
+            return this
+        }
+
         fun enableSymbologies(symbologies: Array<BarcodeSymbology>): Builder {
             symbologiesToEnable.addAll(symbologies)
             return this
@@ -292,13 +304,13 @@ class BarcodePlugin private constructor(builder: Builder) {
 
         private const val SCANNER_ENABLED_KEY = "scanner_input_enabled"
         private const val SCANNER_SELECTION_KEY = "scanner_selection_by_identifier"
-        private const val AUTO_SWITCH_TO_DEFAULT_ON_EVENT = "auto_switch_to_default_on_event"
-        private const val SCAN_HARDWARE_TRIGGER = "barcode_trigger_mode"
+        private const val AUTO_SWITCH_TO_DEFAULT_ON_EVENT_KEY = "auto_switch_to_default_on_event"
+        private const val SCAN_HARDWARE_TRIGGER_KEY = "barcode_trigger_mode"
 
         //QRCode Launch Options
-        private const val QR_CODE_LAUNCH_OPTIONS_ENABLE = "qr_launch_enable"
-        private const val QR_CODE_LAUNCH_OPTIONS_ENABLE_DECODER = "qr_launch_enable_qr_decoder"
-        private const val QR_CODE_LAUNCH_OPTIONS_SHOW_CONFIRMATION =
+        private const val QR_CODE_LAUNCH_OPTIONS_ENABLE_KEY = "qr_launch_enable"
+        private const val QR_CODE_LAUNCH_OPTIONS_ENABLE_DECODER_KEY = "qr_launch_enable_qr_decoder"
+        private const val QR_CODE_LAUNCH_OPTIONS_SHOW_CONFIRMATION_KEY =
             "qr_launch_show_confirmation_dialog"
 
         //Scanning Mode
@@ -310,9 +322,10 @@ class BarcodePlugin private constructor(builder: Builder) {
         private const val AUTO_CHARSET_FAILURE_OPTION_KEY = "auto_charset_failure_option"
 
         // Misc Reader Parameters
-        private const val READER_AIM_TYPE = "aim_type"
-        private const val SCANNER_ILLUMINATION_MODE = "illumination_mode"
-        private const val SCANNER_ILLUMINATION_BRIGHTNESS = "illumination_brightness"
+        private const val PRESENTATION_MODE_SENSITIVITY_KEY = "presentation_mode_sensitivity"
+        private const val READER_AIM_TYPE_KEY = "aim_type"
+        private const val SCANNER_ILLUMINATION_MODE_KEY = "illumination_mode"
+        private const val SCANNER_ILLUMINATION_BRIGHTNESS_KEY = "illumination_brightness"
 
         // Other
         private const val DECODE_HAPTIC_FEEDBACK_KEY = "decode_haptic_feedback"
