@@ -95,6 +95,10 @@ class BarcodePlugin private constructor(builder: Builder) {
         paramList.putString(DIFFERENT_SYMBOL_TIMEOUT_KEY, builder.differentSymbolTimeout.toString())
         paramList.putString(SAME_SYMBOL_TIMEOUT_KEY, builder.sameSymbolTimeout.toString())
 
+        paramList.putString(
+            DIGIMARC_DECODING_KEY,
+            if (builder.digimarcDecodingEnabled) "true" else "false"
+        )
         paramList.putString(SCANNER_ILLUMINATION_MODE_KEY, builder.scannerIlluminationMode.name)
         paramList.putString(
             SCANNER_ILLUMINATION_BRIGHTNESS_KEY,
@@ -177,6 +181,7 @@ class BarcodePlugin private constructor(builder: Builder) {
         internal var differentSymbolTimeout = 500
         internal var sameSymbolTimeout = 500
 
+        internal var digimarcDecodingEnabled = true
         internal var scannerIlluminationMode = BarcodeScannerIlluminationMode.OFF
         internal var scannerIlluminationBrightness = 0
         internal var decodeHapticFeedback = false
@@ -312,6 +317,11 @@ class BarcodePlugin private constructor(builder: Builder) {
             return this
         }
 
+        fun setDigimarcDecodingEnabled(state: Boolean): Builder {
+            this.digimarcDecodingEnabled = state
+            return this
+        }
+
         fun setSameSymbolBarcodeTimeout(value: Int): Builder {
             if (value < 0) this.sameSymbolTimeout = 0
             if (value > 5000) this.sameSymbolTimeout = 5000
@@ -399,6 +409,7 @@ class BarcodePlugin private constructor(builder: Builder) {
         private const val DIFFERENT_SYMBOL_TIMEOUT_KEY = "different_barcode_timeout"
         private const val SAME_SYMBOL_TIMEOUT_KEY = "same_barcode_timeout"
 
+        private const val DIGIMARC_DECODING_KEY = "digimarc_decoding"
         private const val SCANNER_ILLUMINATION_MODE_KEY = "illumination_mode"
         private const val SCANNER_ILLUMINATION_BRIGHTNESS_KEY = "illumination_brightness"
 
