@@ -13,6 +13,7 @@ import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.BarcodeScanning
 import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.BarcodeSymbology
 import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.Inverse1DMode
 import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.QuietZone1DLevel
+import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.ReaderLCDMode
 import java.util.Locale
 
 // TODO: OCR
@@ -111,6 +112,10 @@ class BarcodePlugin private constructor(builder: Builder) {
             String.format(Locale.getDefault(), "%d", builder.inverse1DMode.ordinal)
         )
         paramList.putString(
+            LCD_MODE_KEY,
+            builder.lcdMode.mode.toString()
+        )
+        paramList.putString(
             DECODE_HAPTIC_FEEDBACK_KEY,
             if (builder.decodeHapticFeedback) "true" else "false"
         )
@@ -193,6 +198,7 @@ class BarcodePlugin private constructor(builder: Builder) {
         internal var scannerIlluminationBrightness = 0
 
         internal var inverse1DMode = Inverse1DMode.DISABLE
+        internal var lcdMode = ReaderLCDMode.DISABLED
         internal var decodeHapticFeedback = false
 
         //Symbologies
@@ -331,11 +337,6 @@ class BarcodePlugin private constructor(builder: Builder) {
             return this
         }
 
-        fun setInverse1DMode(mode: Inverse1DMode): Builder {
-            this.inverse1DMode = mode
-            return this
-        }
-
         fun setSameSymbolBarcodeTimeout(value: Int): Builder {
             if (value < 0) this.sameSymbolTimeout = 0
             if (value > 5000) this.sameSymbolTimeout = 5000
@@ -350,6 +351,16 @@ class BarcodePlugin private constructor(builder: Builder) {
             if (scannerIlluminationBrightness > 10) scannerIlluminationBrightness = 10
             this.scannerIlluminationBrightness = scannerIlluminationBrightness
 
+            return this
+        }
+
+        fun setInverse1DMode(mode: Inverse1DMode): Builder {
+            this.inverse1DMode = mode
+            return this
+        }
+
+        fun setLCDMode(mode: ReaderLCDMode): Builder {
+            this.lcdMode = mode
             return this
         }
 
@@ -429,6 +440,7 @@ class BarcodePlugin private constructor(builder: Builder) {
         private const val SCANNER_ILLUMINATION_BRIGHTNESS_KEY = "illumination_brightness"
 
         private const val INVERSE_1D_MODE_KEY = "inverse_1d_mode"
+        private const val LCD_MODE_KEY = "lcd_mode"
 
         // Other
         private const val DECODE_HAPTIC_FEEDBACK_KEY = "decode_haptic_feedback"
