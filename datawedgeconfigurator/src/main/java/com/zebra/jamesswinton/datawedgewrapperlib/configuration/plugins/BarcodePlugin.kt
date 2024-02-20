@@ -11,6 +11,7 @@ import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.BarcodeScannerI
 import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.BarcodeScannerIlluminationMode
 import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.BarcodeScanningMode
 import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.BarcodeSymbology
+import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.QuietZone1DLevel
 import java.util.Locale
 
 // TODO: OCR
@@ -90,6 +91,10 @@ class BarcodePlugin private constructor(builder: Builder) {
             SCANNER_ILLUMINATION_BRIGHTNESS_KEY,
             builder.scannerIlluminationBrightness.toString()
         )
+        paramList.putString(
+            QUIET_ZONE_LEVEL_1D_KEY,
+            String.format(Locale.getDefault(), "%d", builder.quietZone1DLevel.ordinal)
+        )
 
         //Symbologies
         if (builder.symbologiesToEnable.size > 0) {
@@ -131,15 +136,11 @@ class BarcodePlugin private constructor(builder: Builder) {
 
         internal var mEnabled = false
         internal var scannerIdentifier = BarcodeScannerIdentifier.AUTO
-        internal var hardwareTrigger = true
 
         //FIXME Weird issue when listening for DW responses returning wrongly results after setting this param even if the value is being set correctly. Keep it null unless it's being used.
         internal var autoSwitchToDefaultOnEvent: BarcodeAutoSwitchEventMode? = null
 
-        // Other
-        internal var decodeHapticFeedback = false
-        internal var scannerIlluminationMode = BarcodeScannerIlluminationMode.OFF
-        internal var scannerIlluminationBrightness = 0
+        internal var hardwareTrigger = true
 
         //QRCode Launch Options
         internal var qrCodeLaunchOptionsEnable = false
@@ -156,7 +157,11 @@ class BarcodePlugin private constructor(builder: Builder) {
 
         //Misc Reader Params
         internal var presentationModeSensitivity = BarcodePresentationModeSensitivity.MEDIUM
+        internal var quietZone1DLevel = QuietZone1DLevel.LEVEL_1
         internal var readerAimType = BarcodeReaderAimType.TRIGGER
+        internal var scannerIlluminationMode = BarcodeScannerIlluminationMode.OFF
+        internal var scannerIlluminationBrightness = 0
+        internal var decodeHapticFeedback = false
 
         //Symbologies
         internal var symbologiesToEnable = ArrayList<BarcodeSymbology>()
@@ -250,13 +255,18 @@ class BarcodePlugin private constructor(builder: Builder) {
             return this
         }
 
-        fun enableSymbology(symbology: BarcodeSymbology): Builder {
-            symbologiesToEnable.add(symbology)
+        fun setPresentationModeSensitivity(sensitivity: BarcodePresentationModeSensitivity): Builder {
+            this.presentationModeSensitivity = sensitivity
             return this
         }
 
-        fun setPresentationModeSensitivity(sensitivity: BarcodePresentationModeSensitivity): Builder {
-            this.presentationModeSensitivity = sensitivity
+        fun set1DQuietZoneLevel(level: QuietZone1DLevel): Builder {
+            this.quietZone1DLevel = level
+            return this
+        }
+
+        fun enableSymbology(symbology: BarcodeSymbology): Builder {
+            symbologiesToEnable.add(symbology)
             return this
         }
 
@@ -323,6 +333,7 @@ class BarcodePlugin private constructor(builder: Builder) {
 
         // Misc Reader Parameters
         private const val PRESENTATION_MODE_SENSITIVITY_KEY = "presentation_mode_sensitivity"
+        private const val QUIET_ZONE_LEVEL_1D_KEY = "1d_marginless_decode_effort_level"
         private const val READER_AIM_TYPE_KEY = "aim_type"
         private const val SCANNER_ILLUMINATION_MODE_KEY = "illumination_mode"
         private const val SCANNER_ILLUMINATION_BRIGHTNESS_KEY = "illumination_brightness"
