@@ -82,10 +82,14 @@ class BarcodePlugin private constructor(builder: Builder) {
             DECODE_HAPTIC_FEEDBACK_KEY,
             if (builder.decodeHapticFeedback) "true" else "false"
         )
+
+        paramList.putString(READER_AIM_ENABLED_KEY, if (builder.aimModeEnabled) "on" else "off")
         paramList.putString(
             READER_AIM_TYPE_KEY,
             String.format(Locale.getDefault(), "%d", builder.readerAimType.ordinal)
         )
+        paramList.putString(READER_AIM_TIMER_KEY, builder.aimTimer.toString())
+
         paramList.putString(SCANNER_ILLUMINATION_MODE_KEY, builder.scannerIlluminationMode.name)
         paramList.putString(
             SCANNER_ILLUMINATION_BRIGHTNESS_KEY,
@@ -158,7 +162,11 @@ class BarcodePlugin private constructor(builder: Builder) {
         //Misc Reader Params
         internal var presentationModeSensitivity = BarcodePresentationModeSensitivity.MEDIUM
         internal var quietZone1DLevel = QuietZone1DLevel.LEVEL_1
+
+        internal var aimModeEnabled = true
         internal var readerAimType = BarcodeReaderAimType.TRIGGER
+        internal var aimTimer = 500
+
         internal var scannerIlluminationMode = BarcodeScannerIlluminationMode.OFF
         internal var scannerIlluminationBrightness = 0
         internal var decodeHapticFeedback = false
@@ -185,11 +193,6 @@ class BarcodePlugin private constructor(builder: Builder) {
 
         fun setScannerIdentifier(scannerIdentifier: BarcodeScannerIdentifier): Builder {
             this.scannerIdentifier = scannerIdentifier
-            return this
-        }
-
-        fun setReaderAimType(readerAimType: BarcodeReaderAimType): Builder {
-            this.readerAimType = readerAimType
             return this
         }
 
@@ -265,6 +268,24 @@ class BarcodePlugin private constructor(builder: Builder) {
             return this
         }
 
+        fun setReaderAimModeEnabled(state: Boolean): Builder {
+            this.aimModeEnabled = state
+            return this
+        }
+
+        fun setReaderAimType(readerAimType: BarcodeReaderAimType): Builder {
+            this.readerAimType = readerAimType
+            return this
+        }
+
+        fun setReaderAimTimer(value: Int): Builder {
+            if (value < 0) this.aimTimer = 0
+            if (value > 60000) this.aimTimer = 60000
+            this.aimTimer = value
+
+            return this
+        }
+
         fun enableSymbology(symbology: BarcodeSymbology): Builder {
             symbologiesToEnable.add(symbology)
             return this
@@ -334,7 +355,11 @@ class BarcodePlugin private constructor(builder: Builder) {
         // Misc Reader Parameters
         private const val PRESENTATION_MODE_SENSITIVITY_KEY = "presentation_mode_sensitivity"
         private const val QUIET_ZONE_LEVEL_1D_KEY = "1d_marginless_decode_effort_level"
+
+        private const val READER_AIM_ENABLED_KEY = "aim_mode"
         private const val READER_AIM_TYPE_KEY = "aim_type"
+        private const val READER_AIM_TIMER_KEY = "aim_timer"
+
         private const val SCANNER_ILLUMINATION_MODE_KEY = "illumination_mode"
         private const val SCANNER_ILLUMINATION_BRIGHTNESS_KEY = "illumination_brightness"
 
