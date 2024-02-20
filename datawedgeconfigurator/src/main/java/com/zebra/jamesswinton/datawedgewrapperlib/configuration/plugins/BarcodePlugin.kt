@@ -90,6 +90,7 @@ class BarcodePlugin private constructor(builder: Builder) {
         )
         paramList.putString(READER_AIM_TIMER_KEY, builder.aimTimer.toString())
 
+        paramList.putString(BEAM_TIMER_KEY, builder.beamTimer.toString())
         paramList.putString(SCANNER_ILLUMINATION_MODE_KEY, builder.scannerIlluminationMode.name)
         paramList.putString(
             SCANNER_ILLUMINATION_BRIGHTNESS_KEY,
@@ -167,6 +168,7 @@ class BarcodePlugin private constructor(builder: Builder) {
         internal var readerAimType = BarcodeReaderAimType.TRIGGER
         internal var aimTimer = 500
 
+        internal var beamTimer = 5000
         internal var scannerIlluminationMode = BarcodeScannerIlluminationMode.OFF
         internal var scannerIlluminationBrightness = 0
         internal var decodeHapticFeedback = false
@@ -286,6 +288,23 @@ class BarcodePlugin private constructor(builder: Builder) {
             return this
         }
 
+        fun setBeamTimer(value: Int): Builder {
+            if (value < 0) this.beamTimer = 0
+            if (value > 60000) this.beamTimer = 60000
+            this.beamTimer = value
+
+            return this
+        }
+
+        fun setScannerIlluminationBrightness(illuminationBrightness: Int): Builder {
+            var scannerIlluminationBrightness = illuminationBrightness
+            if (scannerIlluminationBrightness < 0) scannerIlluminationBrightness = 0
+            if (scannerIlluminationBrightness > 10) scannerIlluminationBrightness = 10
+            this.scannerIlluminationBrightness = scannerIlluminationBrightness
+
+            return this
+        }
+
         fun enableSymbology(symbology: BarcodeSymbology): Builder {
             symbologiesToEnable.add(symbology)
             return this
@@ -303,15 +322,6 @@ class BarcodePlugin private constructor(builder: Builder) {
 
         fun disableSymbologies(symbologies: Array<BarcodeSymbology>): Builder {
             symbologiesToDisable.addAll(symbologies)
-            return this
-        }
-
-        fun setScannerIlluminationBrightness(illuminationBrightness: Int): Builder {
-            var scannerIlluminationBrightness = illuminationBrightness
-            if (scannerIlluminationBrightness < 0) scannerIlluminationBrightness = 0
-            if (scannerIlluminationBrightness > 10) scannerIlluminationBrightness = 10
-            this.scannerIlluminationBrightness = scannerIlluminationBrightness
-
             return this
         }
 
@@ -360,6 +370,7 @@ class BarcodePlugin private constructor(builder: Builder) {
         private const val READER_AIM_TYPE_KEY = "aim_type"
         private const val READER_AIM_TIMER_KEY = "aim_timer"
 
+        private const val BEAM_TIMER_KEY = "beam_timer"
         private const val SCANNER_ILLUMINATION_MODE_KEY = "illumination_mode"
         private const val SCANNER_ILLUMINATION_BRIGHTNESS_KEY = "illumination_brightness"
 
