@@ -14,6 +14,7 @@ import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.BarcodeSymbolog
 import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.Inverse1DMode
 import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.QuietZone1DLevel
 import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.ReaderLCDMode
+import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.ReaderLinearSecurityLevel
 import java.util.Locale
 
 // TODO: OCR
@@ -116,6 +117,11 @@ class BarcodePlugin private constructor(builder: Builder) {
             builder.lcdMode.mode.toString()
         )
         paramList.putString(
+            LINEAR_SECURITY_LEVEL_KEY,
+            String.format(Locale.getDefault(), "%d", builder.linearSecurityLevel.ordinal + 1)
+        )
+
+        paramList.putString(
             DECODE_HAPTIC_FEEDBACK_KEY,
             if (builder.decodeHapticFeedback) "true" else "false"
         )
@@ -199,6 +205,8 @@ class BarcodePlugin private constructor(builder: Builder) {
 
         internal var inverse1DMode = Inverse1DMode.DISABLE
         internal var lcdMode = ReaderLCDMode.DISABLED
+        internal var linearSecurityLevel = ReaderLinearSecurityLevel.SHORT_OR_CODABAR
+
         internal var decodeHapticFeedback = false
 
         //Symbologies
@@ -364,6 +372,11 @@ class BarcodePlugin private constructor(builder: Builder) {
             return this
         }
 
+        fun setLinearSecurityLevel(level: ReaderLinearSecurityLevel): Builder {
+            this.linearSecurityLevel = level
+            return this
+        }
+
         fun enableSymbology(symbology: BarcodeSymbology): Builder {
             symbologiesToEnable.add(symbology)
             return this
@@ -441,6 +454,7 @@ class BarcodePlugin private constructor(builder: Builder) {
 
         private const val INVERSE_1D_MODE_KEY = "inverse_1d_mode"
         private const val LCD_MODE_KEY = "lcd_mode"
+        private const val LINEAR_SECURITY_LEVEL_KEY = "linear_security_level"
 
         // Other
         private const val DECODE_HAPTIC_FEEDBACK_KEY = "decode_haptic_feedback"
