@@ -120,6 +120,10 @@ class BarcodePlugin private constructor(builder: Builder) {
             LINEAR_SECURITY_LEVEL_KEY,
             String.format(Locale.getDefault(), "%d", builder.linearSecurityLevel.ordinal + 1)
         )
+        paramList.putString(
+            HW_LOW_POWER_TIMEOUT,
+            builder.hwEngineLowPowerTimeout.toString()
+        )
 
         paramList.putString(
             DECODE_HAPTIC_FEEDBACK_KEY,
@@ -206,6 +210,7 @@ class BarcodePlugin private constructor(builder: Builder) {
         internal var inverse1DMode = Inverse1DMode.DISABLE
         internal var lcdMode = ReaderLCDMode.DISABLED
         internal var linearSecurityLevel = ReaderLinearSecurityLevel.SHORT_OR_CODABAR
+        internal var hwEngineLowPowerTimeout = 250
 
         internal var decodeHapticFeedback = false
 
@@ -377,6 +382,11 @@ class BarcodePlugin private constructor(builder: Builder) {
             return this
         }
 
+        fun setHwEngineLowPowerTimeout(value: Int): Builder {
+            this.hwEngineLowPowerTimeout = value
+            return this
+        }
+
         fun enableSymbology(symbology: BarcodeSymbology): Builder {
             symbologiesToEnable.add(symbology)
             return this
@@ -455,6 +465,7 @@ class BarcodePlugin private constructor(builder: Builder) {
         private const val INVERSE_1D_MODE_KEY = "inverse_1d_mode"
         private const val LCD_MODE_KEY = "lcd_mode"
         private const val LINEAR_SECURITY_LEVEL_KEY = "linear_security_level"
+        private const val HW_LOW_POWER_TIMEOUT = "low_power_timeout"
 
         // Other
         private const val DECODE_HAPTIC_FEEDBACK_KEY = "decode_haptic_feedback"
