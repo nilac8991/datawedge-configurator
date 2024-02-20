@@ -7,9 +7,12 @@ import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.BarcodeAutoSwit
 import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.BarcodeReaderAimType
 import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.BarcodeScannerIdentifier
 import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.BarcodeScannerIlluminationMode
+import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.BarcodeScanningMode
 import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.BarcodeSymbology
 import java.util.Locale
 
+// TODO: OCR
+// TODO: NG SimulScan Support
 class BarcodePlugin private constructor(builder: Builder) {
 
     private val plugin = Bundle()
@@ -62,6 +65,10 @@ class BarcodePlugin private constructor(builder: Builder) {
         paramList.putString(
             QR_CODE_LAUNCH_OPTIONS_SHOW_CONFIRMATION,
             if (builder.qrCodeLaunchOptionsShowConfirmation) "true" else "false"
+        )
+        paramList.putString(
+            SCANNING_MODE_KEY,
+            String.format(Locale.getDefault(), "%d", builder.scanningMode.ordinal)
         )
 
         if (builder.symbologiesToEnable.size > 0) {
@@ -122,6 +129,9 @@ class BarcodePlugin private constructor(builder: Builder) {
         internal var qrCodeLaunchOptionsEnable = false
         internal var qrCodeLaunchOptionsEnableDecoder = false
         internal var qrCodeLaunchOptionsShowConfirmation = true
+
+        //Scanning Mode
+        internal var scanningMode = BarcodeScanningMode.SINGLE
 
         //Symbologies
         internal var symbologiesToEnable = ArrayList<BarcodeSymbology>()
@@ -195,6 +205,11 @@ class BarcodePlugin private constructor(builder: Builder) {
             return this
         }
 
+        fun setScanningMode(mode: BarcodeScanningMode): Builder {
+            this.scanningMode = mode
+            return this
+        }
+
         fun enableSymbology(symbology: BarcodeSymbology): Builder {
             symbologiesToEnable.add(symbology)
             return this
@@ -240,10 +255,21 @@ class BarcodePlugin private constructor(builder: Builder) {
     }
 
     companion object {
-        // Plugin Parameter Names
         private const val PLUGIN_NAME = "BARCODE"
+
         private const val SCANNER_ENABLED_KEY = "scanner_input_enabled"
         private const val SCANNER_SELECTION_KEY = "scanner_selection_by_identifier"
+        private const val AUTO_SWITCH_TO_DEFAULT_ON_EVENT = "auto_switch_to_default_on_event"
+        private const val SCAN_HARDWARE_TRIGGER = "barcode_trigger_mode"
+
+        //QRCode Launch Options
+        private const val QR_CODE_LAUNCH_OPTIONS_ENABLE = "qr_launch_enable"
+        private const val QR_CODE_LAUNCH_OPTIONS_ENABLE_DECODER = "qr_launch_enable_qr_decoder"
+        private const val QR_CODE_LAUNCH_OPTIONS_SHOW_CONFIRMATION =
+            "qr_launch_show_confirmation_dialog"
+
+        //Scanning Mode
+        private const val SCANNING_MODE_KEY = "scanning_mode"
 
         // Other Scanner Input Parameters
         private const val SCANNER_ILLUMINATION_MODE = "illumination_mode"
@@ -252,19 +278,7 @@ class BarcodePlugin private constructor(builder: Builder) {
         // Reader Parameters
         private const val READER_AIM_TYPE = "aim_type"
 
-        // TODO: DECODERS
-
-        // TODO: OCR
-
         // Other
         private const val DECODE_HAPTIC_FEEDBACK_KEY = "decode_haptic_feedback"
-        private const val SCAN_HARDWARE_TRIGGER = "barcode_trigger_mode"
-        private const val AUTO_SWITCH_TO_DEFAULT_ON_EVENT = "auto_switch_to_default_on_event"
-
-        //QRCode Launch Options
-        private const val QR_CODE_LAUNCH_OPTIONS_ENABLE = "qr_launch_enable"
-        private const val QR_CODE_LAUNCH_OPTIONS_ENABLE_DECODER = "qr_launch_enable_qr_decoder"
-        private const val QR_CODE_LAUNCH_OPTIONS_SHOW_CONFIRMATION =
-            "qr_launch_show_confirmation_dialog"
     }
 }
