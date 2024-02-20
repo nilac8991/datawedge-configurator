@@ -4,6 +4,7 @@ import android.os.Bundle
 import com.zebra.jamesswinton.datawedgewrapperlib.configuration.params.BarcodeHighlightingParams
 import com.zebra.jamesswinton.datawedgewrapperlib.configuration.params.UPCEANParams
 import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.BarcodeAutoSwitchEventMode
+import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.BarcodeCharsetName
 import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.BarcodeReaderAimType
 import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.BarcodeScannerIdentifier
 import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.BarcodeScannerIlluminationMode
@@ -66,9 +67,22 @@ class BarcodePlugin private constructor(builder: Builder) {
             QR_CODE_LAUNCH_OPTIONS_SHOW_CONFIRMATION,
             if (builder.qrCodeLaunchOptionsShowConfirmation) "true" else "false"
         )
+
+        //Scanning Mode
         paramList.putString(
             SCANNING_MODE_KEY,
             String.format(Locale.getDefault(), "%d", builder.scanningMode.ordinal)
+        )
+
+        //Character Set Configuration
+        paramList.putString(CHARACTER_SET_SELECTION_KEY, builder.charsetName.charset)
+        paramList.putString(
+            AUTO_CHARACTER_SET_PREFERRED_ORDER_KEY,
+            builder.autoCharsetPreferredOrder.joinToString(separator = ";")
+        )
+        paramList.putString(
+            AUTO_CHARSET_FAILURE_OPTION_KEY,
+            builder.autoCharsetFailureOption.charset
         )
 
         if (builder.symbologiesToEnable.size > 0) {
@@ -109,21 +123,17 @@ class BarcodePlugin private constructor(builder: Builder) {
         // Config
         internal var resetConfig = true
 
-        // Params
         internal var mEnabled = false
         internal var scannerIdentifier = BarcodeScannerIdentifier.AUTO
+        internal var hardwareTrigger = true
 
-        // Reader Params
-        internal var readerAimType = BarcodeReaderAimType.TRIGGER
+        //FIXME Weird issue when listening for DW responses returning wrongly results after setting this param even if the value is being set correctly. Keep it null unless it's being used.
+        internal var autoSwitchToDefaultOnEvent: BarcodeAutoSwitchEventMode? = null
 
         // Other
         internal var decodeHapticFeedback = false
         internal var scannerIlluminationMode = BarcodeScannerIlluminationMode.OFF
         internal var scannerIlluminationBrightness = 0
-        internal var hardwareTrigger = true
-
-        //FIXME Weird issue when listening for DW responses returning wrongly results after setting this param even if the value is being set correctly. Keep it null unless it's being used.
-        internal var autoSwitchToDefaultOnEvent: BarcodeAutoSwitchEventMode? = null
 
         //QRCode Launch Options
         internal var qrCodeLaunchOptionsEnable = false
@@ -132,6 +142,14 @@ class BarcodePlugin private constructor(builder: Builder) {
 
         //Scanning Mode
         internal var scanningMode = BarcodeScanningMode.SINGLE
+
+        //Character Set Configuration
+        internal var charsetName = BarcodeCharsetName.UTF_8
+        internal var autoCharsetPreferredOrder = arrayOf("UTF-8", "GB2312")
+        internal var autoCharsetFailureOption = BarcodeCharsetName.UTF_8
+
+        //Misc Reader Params
+        internal var readerAimType = BarcodeReaderAimType.TRIGGER
 
         //Symbologies
         internal var symbologiesToEnable = ArrayList<BarcodeSymbology>()
@@ -210,6 +228,21 @@ class BarcodePlugin private constructor(builder: Builder) {
             return this
         }
 
+        fun setCharset(charsetName: BarcodeCharsetName): Builder {
+            this.charsetName = charsetName
+            return this
+        }
+
+        fun setCharsetsPreferredOrder(charsets: Array<String>): Builder {
+            this.autoCharsetPreferredOrder = charsets
+            return this
+        }
+
+        fun setCharsetFailureOption(charsetName: BarcodeCharsetName): Builder {
+            this.autoCharsetFailureOption = charsetName
+            return this
+        }
+
         fun enableSymbology(symbology: BarcodeSymbology): Builder {
             symbologiesToEnable.add(symbology)
             return this
@@ -271,12 +304,15 @@ class BarcodePlugin private constructor(builder: Builder) {
         //Scanning Mode
         private const val SCANNING_MODE_KEY = "scanning_mode"
 
-        // Other Scanner Input Parameters
+        // Character Set Configuration
+        private const val CHARACTER_SET_SELECTION_KEY = "charset_name"
+        private const val AUTO_CHARACTER_SET_PREFERRED_ORDER_KEY = "auto_charset_preferred_order"
+        private const val AUTO_CHARSET_FAILURE_OPTION_KEY = "auto_charset_failure_option"
+
+        // Misc Reader Parameters
+        private const val READER_AIM_TYPE = "aim_type"
         private const val SCANNER_ILLUMINATION_MODE = "illumination_mode"
         private const val SCANNER_ILLUMINATION_BRIGHTNESS = "illumination_brightness"
-
-        // Reader Parameters
-        private const val READER_AIM_TYPE = "aim_type"
 
         // Other
         private const val DECODE_HAPTIC_FEEDBACK_KEY = "decode_haptic_feedback"
