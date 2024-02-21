@@ -3,15 +3,13 @@ apply plugin: 'kotlin-android'
 apply plugin: 'maven-publish'
 
 android {
-    compileSdkVersion 31
+    compileSdk 33
 
     defaultConfig {
-        minSdkVersion 19
-        targetSdkVersion 31
+        minSdk 26
+        targetSdk 33
         versionCode 173
         versionName "1.7.3"
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles 'consumer-rules.pro'
     }
 
     buildTypes {
@@ -26,8 +24,8 @@ project.afterEvaluate {
     publishing {
         publications {
             release(MavenPublication) {
-                groupId = 'com.zebra.jamesswinton'
-                artifactId = 'datawedgewrapper-lib'
+                groupId = 'com.zebra.nilac'
+                artifactId = 'dwconfigurator'
                 version = '1.7.3'
 
                 afterEvaluate {
@@ -39,17 +37,13 @@ project.afterEvaluate {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    apply plugin: 'kotlin-android'
+    apply plugin: 'kotlin-kapt'
 
     implementation "androidx.core:core-ktx:1.7.0"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
 }
+
 repositories {
     mavenCentral()
 }
