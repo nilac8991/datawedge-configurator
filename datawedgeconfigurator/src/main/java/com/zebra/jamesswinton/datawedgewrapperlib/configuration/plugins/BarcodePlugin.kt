@@ -15,6 +15,7 @@ import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.Inverse1DMode
 import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.QuietZone1DLevel
 import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.ReaderLCDMode
 import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.ReaderLinearSecurityLevel
+import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.ReaderPickListMode
 import java.util.Locale
 
 // TODO: OCR
@@ -128,6 +129,10 @@ class BarcodePlugin private constructor(builder: Builder) {
             TIMED_CONTINUOUS_BEAM_TIMER_KEY,
             builder.timedContinuousBeamTimer.toString()
         )
+        paramList.putString(
+            PICKLIST_KEY,
+            String.format(Locale.getDefault(), "%d", builder.pickListMode.ordinal)
+        )
 
         paramList.putString(
             DECODE_HAPTIC_FEEDBACK_KEY,
@@ -216,6 +221,7 @@ class BarcodePlugin private constructor(builder: Builder) {
         internal var linearSecurityLevel = ReaderLinearSecurityLevel.SHORT_OR_CODABAR
         internal var hwEngineLowPowerTimeout = 250
         internal var timedContinuousBeamTimer: Int = 180000
+        internal var pickListMode = ReaderPickListMode.DISABLED
 
         internal var decodeHapticFeedback = false
 
@@ -397,6 +403,11 @@ class BarcodePlugin private constructor(builder: Builder) {
             return this
         }
 
+        fun setPickListMode(mode: ReaderPickListMode): Builder {
+            this.pickListMode = mode
+            return this
+        }
+
         fun enableSymbology(symbology: BarcodeSymbology): Builder {
             symbologiesToEnable.add(symbology)
             return this
@@ -477,6 +488,7 @@ class BarcodePlugin private constructor(builder: Builder) {
         private const val LINEAR_SECURITY_LEVEL_KEY = "linear_security_level"
         private const val HW_LOW_POWER_TIMEOUT_KEY = "low_power_timeout"
         private const val TIMED_CONTINUOUS_BEAM_TIMER_KEY = "nodecode_timer"
+        private const val PICKLIST_KEY = "picklist"
 
         // Other
         private const val DECODE_HAPTIC_FEEDBACK_KEY = "decode_haptic_feedback"
