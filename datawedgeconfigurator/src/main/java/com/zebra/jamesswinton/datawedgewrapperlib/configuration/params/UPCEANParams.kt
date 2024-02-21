@@ -2,10 +2,10 @@ package com.zebra.jamesswinton.datawedgewrapperlib.configuration.params
 
 import android.os.Bundle
 import android.util.Log
-import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.UPCEANBookLandFormat
-import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.UPCEANCouponReportMode
-import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.UPCEANSecurityLevel
-import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.UPCEANSupplementalMode
+import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.upcean.UPCEANBookLandFormat
+import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.upcean.UPCEANCouponReportMode
+import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.upcean.UPCEANSecurityLevel
+import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.upcean.UPCEANSupplementalMode
 import java.util.Locale
 
 class UPCEANParams private constructor(builder: Builder) {

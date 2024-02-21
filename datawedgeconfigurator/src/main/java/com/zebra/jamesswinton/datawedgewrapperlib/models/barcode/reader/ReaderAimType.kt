@@ -1,6 +1,6 @@
-package com.zebra.jamesswinton.datawedgewrapperlib.models.barcode
+package com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.reader
 
-enum class BarcodeReaderAimType {
+enum class ReaderAimType {
     TRIGGER,
     TIMED_HOLD,
     TIMED_RELEASE,

@@ -4,19 +4,19 @@ import android.os.Bundle
 import com.zebra.jamesswinton.datawedgewrapperlib.configuration.params.BarcodeHighlightingParams
 import com.zebra.jamesswinton.datawedgewrapperlib.configuration.params.UPCEANParams
 import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.BarcodeAutoSwitchEventMode
-import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.BarcodeCharsetName
-import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.BarcodePresentationModeSensitivity
-import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.BarcodeReaderAimType
 import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.BarcodeScannerIdentifier
-import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.BarcodeScannerIlluminationMode
 import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.BarcodeScanningMode
 import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.BarcodeSymbology
-import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.Inverse1DMode
-import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.QuietZone1DLevel
-import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.ReaderLCDMode
-import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.ReaderLinearSecurityLevel
-import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.ReaderPickListMode
-import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.ReaderPoorQualityDecodeEffortLevel
+import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.reader.ReaderAimType
+import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.reader.ReaderCharsetName
+import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.reader.ReaderIlluminationMode
+import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.reader.ReaderInverse1DMode
+import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.reader.ReaderLCDMode
+import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.reader.ReaderLinearSecurityLevel
+import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.reader.ReaderPickListMode
+import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.reader.ReaderPoorQualityDecodeEffortLevel
+import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.reader.ReaderPresentationModeSensitivity
+import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.reader.ReaderQuietZone1DLevel
 import java.util.Locale
 
 // TODO: OCR
@@ -203,16 +203,16 @@ class BarcodePlugin private constructor(builder: Builder) {
         internal var scanningMode = BarcodeScanningMode.SINGLE
 
         //Character Set Configuration
-        internal var charsetName = BarcodeCharsetName.UTF_8
+        internal var charsetName = ReaderCharsetName.UTF_8
         internal var autoCharsetPreferredOrder = arrayOf("UTF-8", "GB2312")
-        internal var autoCharsetFailureOption = BarcodeCharsetName.UTF_8
+        internal var autoCharsetFailureOption = ReaderCharsetName.UTF_8
 
         //Misc Reader Params
-        internal var presentationModeSensitivity = BarcodePresentationModeSensitivity.MEDIUM
-        internal var quietZone1DLevel = QuietZone1DLevel.LEVEL_1
+        internal var presentationModeSensitivity = ReaderPresentationModeSensitivity.MEDIUM
+        internal var quietZone1DLevel = ReaderQuietZone1DLevel.LEVEL_1
 
         internal var aimModeEnabled = true
-        internal var readerAimType = BarcodeReaderAimType.TRIGGER
+        internal var readerAimType = ReaderAimType.TRIGGER
         internal var aimTimer = 500
 
         internal var beamTimer = 5000
@@ -222,10 +222,10 @@ class BarcodePlugin private constructor(builder: Builder) {
 
         internal var digimarcDecodingEnabled = true
 
-        internal var scannerIlluminationMode = BarcodeScannerIlluminationMode.OFF
+        internal var scannerIlluminationMode = ReaderIlluminationMode.OFF
         internal var scannerIlluminationBrightness = 0
 
-        internal var inverse1DMode = Inverse1DMode.DISABLE
+        internal var inverse1DMode = ReaderInverse1DMode.DISABLE
         internal var lcdMode = ReaderLCDMode.DISABLED
         internal var linearSecurityLevel = ReaderLinearSecurityLevel.SHORT_OR_CODABAR
         internal var hwEngineLowPowerTimeout = 250
@@ -267,7 +267,7 @@ class BarcodePlugin private constructor(builder: Builder) {
         }
 
         fun setScannerIlluminationMode(
-            scannerIlluminationMode: BarcodeScannerIlluminationMode
+            scannerIlluminationMode: ReaderIlluminationMode
         ): Builder {
             this.scannerIlluminationMode = scannerIlluminationMode
             return this
@@ -308,7 +308,7 @@ class BarcodePlugin private constructor(builder: Builder) {
             return this
         }
 
-        fun setCharset(charsetName: BarcodeCharsetName): Builder {
+        fun setCharset(charsetName: ReaderCharsetName): Builder {
             this.charsetName = charsetName
             return this
         }
@@ -318,17 +318,17 @@ class BarcodePlugin private constructor(builder: Builder) {
             return this
         }
 
-        fun setCharsetFailureOption(charsetName: BarcodeCharsetName): Builder {
+        fun setCharsetFailureOption(charsetName: ReaderCharsetName): Builder {
             this.autoCharsetFailureOption = charsetName
             return this
         }
 
-        fun setPresentationModeSensitivity(sensitivity: BarcodePresentationModeSensitivity): Builder {
+        fun setPresentationModeSensitivity(sensitivity: ReaderPresentationModeSensitivity): Builder {
             this.presentationModeSensitivity = sensitivity
             return this
         }
 
-        fun set1DQuietZoneLevel(level: QuietZone1DLevel): Builder {
+        fun set1DQuietZoneLevel(level: ReaderQuietZone1DLevel): Builder {
             this.quietZone1DLevel = level
             return this
         }
@@ -338,7 +338,7 @@ class BarcodePlugin private constructor(builder: Builder) {
             return this
         }
 
-        fun setReaderAimType(readerAimType: BarcodeReaderAimType): Builder {
+        fun setReaderAimType(readerAimType: ReaderAimType): Builder {
             this.readerAimType = readerAimType
             return this
         }
@@ -389,7 +389,7 @@ class BarcodePlugin private constructor(builder: Builder) {
             return this
         }
 
-        fun setInverse1DMode(mode: Inverse1DMode): Builder {
+        fun setInverse1DMode(mode: ReaderInverse1DMode): Builder {
             this.inverse1DMode = mode
             return this
         }
