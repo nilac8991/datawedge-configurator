@@ -138,6 +138,10 @@ class BarcodePlugin private constructor(builder: Builder) {
             POOR_QUALITY_DECODE_EFFORT_KEY,
             String.format(Locale.getDefault(), "%d", builder.poorQualityDecodeEffortLevel.ordinal)
         )
+        paramList.putString(
+            TRIGGER_WAKEUP_SCAN_KEY,
+            if (builder.triggerWakeUpScanEnabled) "true" else "false"
+        )
 
         paramList.putString(
             DECODE_HAPTIC_FEEDBACK_KEY,
@@ -228,6 +232,7 @@ class BarcodePlugin private constructor(builder: Builder) {
         internal var timedContinuousBeamTimer: Int = 180000
         internal var pickListMode = ReaderPickListMode.DISABLED
         internal var poorQualityDecodeEffortLevel = ReaderPoorQualityDecodeEffortLevel.LEVEL_0
+        internal var triggerWakeUpScanEnabled = false
 
         internal var decodeHapticFeedback = false
 
@@ -419,6 +424,11 @@ class BarcodePlugin private constructor(builder: Builder) {
             return this
         }
 
+        fun setTriggerWakeUpEnabled(state: Boolean): Builder {
+            this.triggerWakeUpScanEnabled = state
+            return this
+        }
+
         fun enableSymbology(symbology: BarcodeSymbology): Builder {
             symbologiesToEnable.add(symbology)
             return this
@@ -501,6 +511,7 @@ class BarcodePlugin private constructor(builder: Builder) {
         private const val TIMED_CONTINUOUS_BEAM_TIMER_KEY = "nodecode_timer"
         private const val PICKLIST_KEY = "picklist"
         private const val POOR_QUALITY_DECODE_EFFORT_KEY = "poor_quality_bcdecode_effort_level"
+        private const val TRIGGER_WAKEUP_SCAN_KEY = "trigger_wakeup_scan"
 
         // Other
         private const val DECODE_HAPTIC_FEEDBACK_KEY = "decode_haptic_feedback"
