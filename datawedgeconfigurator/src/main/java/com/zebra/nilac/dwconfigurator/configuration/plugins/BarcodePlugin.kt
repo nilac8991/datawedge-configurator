@@ -114,7 +114,7 @@ class BarcodePlugin private constructor(builder: Builder) {
         // Config
         internal var resetConfig = true
 
-        internal var mEnabled = false
+        internal var mEnabled = true
         internal var scannerIdentifier = BarcodeScannerIdentifier.AUTO
 
         //FIXME Weird issue when listening for DW responses returning wrongly results after setting this param even if the value is being set correctly. Keep it null unless it's being used.
