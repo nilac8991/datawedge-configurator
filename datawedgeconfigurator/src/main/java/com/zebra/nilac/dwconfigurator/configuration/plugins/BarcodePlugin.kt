@@ -3,6 +3,7 @@ package com.zebra.nilac.dwconfigurator.configuration.plugins
 import android.os.Bundle
 import com.zebra.nilac.dwconfigurator.configuration.params.barcode.HighlightingParams
 import com.zebra.nilac.dwconfigurator.configuration.params.barcode.ReaderParams
+import com.zebra.nilac.dwconfigurator.configuration.params.barcode.ScanParams
 import com.zebra.nilac.dwconfigurator.configuration.params.barcode.UPCEANParams
 import com.zebra.nilac.dwconfigurator.models.barcode.BarcodeAutoSwitchEventMode
 import com.zebra.nilac.dwconfigurator.models.barcode.BarcodeScannerIdentifier
@@ -61,6 +62,12 @@ class BarcodePlugin private constructor(builder: Builder) {
         //Reader Params
         for (key in builder.readerParams.keySet()) {
             val value: String = builder.readerParams.getString(key)!!
+            paramList.putString(key, value)
+        }
+
+        //Scan Params
+        for (key in builder.scanParams.keySet()) {
+            val value: String = builder.scanParams.getString(key)!!
             paramList.putString(key, value)
         }
 
@@ -125,6 +132,9 @@ class BarcodePlugin private constructor(builder: Builder) {
 
         //Reader Params
         internal var readerParams = ReaderParams.Builder().create()
+
+        //Scan Params
+        internal var scanParams = ScanParams.Builder().create()
 
         internal var decodeHapticFeedback = false
 
@@ -195,6 +205,11 @@ class BarcodePlugin private constructor(builder: Builder) {
 
         fun addReaderParams(params: Bundle): Builder {
             this.readerParams = params
+            return this
+        }
+
+        fun addScanParams(params: Bundle): Builder {
+            this.scanParams = params
             return this
         }
 
