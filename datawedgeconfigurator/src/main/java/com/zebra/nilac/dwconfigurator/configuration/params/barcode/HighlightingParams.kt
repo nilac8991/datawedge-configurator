@@ -1,9 +1,9 @@
-package com.zebra.nilac.dwconfigurator.configuration.params
+package com.zebra.nilac.dwconfigurator.configuration.params.barcode
 
 import android.os.Bundle
 import com.zebra.nilac.dwconfigurator.models.barcode.highlight.BarcodeHighlightGenericRule
 
-class BarcodeHighlightingParams private constructor(builder: Builder) {
+class HighlightingParams private constructor(builder: Builder) {
 
     private val params = Bundle()
 
@@ -93,7 +93,7 @@ class BarcodeHighlightingParams private constructor(builder: Builder) {
         }
 
         fun create(): Bundle {
-            return BarcodeHighlightingParams(this).params
+            return HighlightingParams(this).params
         }
     }
 

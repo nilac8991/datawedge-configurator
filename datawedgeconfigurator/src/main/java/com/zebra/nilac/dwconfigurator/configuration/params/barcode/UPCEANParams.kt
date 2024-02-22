@@ -1,4 +1,4 @@
-package com.zebra.nilac.dwconfigurator.configuration.params
+package com.zebra.nilac.dwconfigurator.configuration.params.barcode
 
 import android.os.Bundle
 import android.util.Log

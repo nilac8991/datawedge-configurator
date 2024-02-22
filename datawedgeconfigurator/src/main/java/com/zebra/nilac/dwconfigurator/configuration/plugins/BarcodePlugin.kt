@@ -1,8 +1,8 @@
 package com.zebra.nilac.dwconfigurator.configuration.plugins
 
 import android.os.Bundle
-import com.zebra.nilac.dwconfigurator.configuration.params.BarcodeHighlightingParams
-import com.zebra.nilac.dwconfigurator.configuration.params.UPCEANParams
+import com.zebra.nilac.dwconfigurator.configuration.params.barcode.HighlightingParams
+import com.zebra.nilac.dwconfigurator.configuration.params.barcode.UPCEANParams
 import com.zebra.nilac.dwconfigurator.models.barcode.BarcodeAutoSwitchEventMode
 import com.zebra.nilac.dwconfigurator.models.barcode.BarcodeScannerIdentifier
 import com.zebra.nilac.dwconfigurator.models.barcode.BarcodeScanningMode
@@ -162,12 +162,12 @@ class BarcodePlugin private constructor(builder: Builder) {
 
         //Barcode Highlight
         paramList.putString(
-            BarcodeHighlightingParams.HIGHLIGHT_ENABLE_KEY,
-            builder.barcodeHighlightingParams.getString(BarcodeHighlightingParams.HIGHLIGHT_ENABLE_KEY)
+            HighlightingParams.HIGHLIGHT_ENABLE_KEY,
+            builder.barcodeHighlightingParams.getString(HighlightingParams.HIGHLIGHT_ENABLE_KEY)
         )
         paramList.putParcelableArrayList(
-            BarcodeHighlightingParams.HIGHLIGHT_RULES_KEY,
-            builder.barcodeHighlightingParams.getParcelableArrayList(BarcodeHighlightingParams.HIGHLIGHT_RULES_KEY)
+            HighlightingParams.HIGHLIGHT_RULES_KEY,
+            builder.barcodeHighlightingParams.getParcelableArrayList(HighlightingParams.HIGHLIGHT_RULES_KEY)
         )
 
         //UPC EAN Params
@@ -241,7 +241,7 @@ class BarcodePlugin private constructor(builder: Builder) {
         internal var symbologiesToDisable = ArrayList<BarcodeSymbology>()
 
         //Highlight
-        internal var barcodeHighlightingParams = BarcodeHighlightingParams.Builder().create()
+        internal var barcodeHighlightingParams = HighlightingParams.Builder().create()
 
         //UPC EAN Params
         internal var upcEanParams = UPCEANParams.Builder().create()
