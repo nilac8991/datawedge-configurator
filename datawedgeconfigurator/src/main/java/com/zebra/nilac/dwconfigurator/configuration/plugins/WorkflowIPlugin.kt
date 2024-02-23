@@ -10,6 +10,7 @@ import com.zebra.nilac.dwconfigurator.models.workflow.modules.WorkflowFreeFormCa
 import com.zebra.nilac.dwconfigurator.models.workflow.modules.WorkflowIdentificationDecoderModule
 import com.zebra.nilac.dwconfigurator.models.workflow.modules.WorkflowLicenseDecoderModule
 import com.zebra.nilac.dwconfigurator.models.workflow.modules.WorkflowMeterDecoderModule
+import com.zebra.nilac.dwconfigurator.models.workflow.modules.WorkflowPicklistOCRModule
 import com.zebra.nilac.dwconfigurator.models.workflow.modules.WorkflowTINDecoderModule
 import com.zebra.nilac.dwconfigurator.models.workflow.modules.WorkflowVINDecoderModule
 
@@ -51,6 +52,11 @@ open class WorkflowIPlugin private constructor(builder: Builder) {
 
         private var mFeedbackModule: WorkflowFeedbackModule = WorkflowFeedbackModule()
         private var mFeedbackModuleBundle: Bundle = Bundle()
+
+        //Picklist OCR
+        private var pickListOCRModuleBundle: Bundle = Bundle()
+        private var mPickListOCRModule: WorkflowPicklistOCRModule =
+            WorkflowPicklistOCRModule()
 
         //License Module
         private var licenseDecoderModuleBundle: Bundle = Bundle()
@@ -114,6 +120,11 @@ open class WorkflowIPlugin private constructor(builder: Builder) {
             return this
         }
 
+        fun setPicklistOCRModule(pickListOCRModule: WorkflowPicklistOCRModule): Builder {
+            this.mPickListOCRModule = pickListOCRModule
+            return this
+        }
+
         fun setLicenseDecoderModule(licenseDecoderModule: WorkflowLicenseDecoderModule): Builder {
             this.mLicenseDecoderModule = licenseDecoderModule
             return this
@@ -150,10 +161,53 @@ open class WorkflowIPlugin private constructor(builder: Builder) {
         }
 
         fun create(): Bundle {
+            //Picklist OCR
+            pickListOCRModuleBundle.apply {
+                putString("module", mPickListOCRModule.name)
+                putBundle("module_params", Bundle().apply {
+                    putString("session_timeout", mPickListOCRModule.sessionTimeOut.toString())
+                    putString("illumination", mPickListOCRModule.illumination.mode)
+                    putString("output_image", mPickListOCRModule.outputImage.modeValue.toString())
+                    putString("script", mPickListOCRModule.script.ordinal.toString())
+                    putString("confidence_level", mPickListOCRModule.confidenceLevel.toString())
+
+                    val reportDataRuleList: ArrayList<Bundle> = ArrayList()
+                    for (reportDataRule in mPickListOCRModule.rules) {
+                        val ruleBundle = Bundle().apply {
+                            putString("rule_name", reportDataRule.name)
+                            putBundle("criteria", Bundle().apply {
+                                putParcelableArrayList(
+                                    "identifier",
+                                    reportDataRule.getIdentifiersListBundle()
+                                )
+                            })
+                            putParcelableArrayList(
+                                "actions",
+                                reportDataRule.getActionListBundle()
+                            )
+                        }
+                        reportDataRuleList.add(ruleBundle)
+                    }
+
+                    putParcelableArrayList("rules",
+                        arrayListOf(
+                            Bundle().apply {
+                                putParcelableArrayList("rule_list", reportDataRuleList)
+                                putString("rule_param_id", "report_data")
+                            }
+                        )
+                    )
+                })
+            }
+
+            //OCR Wedge
             licenseDecoderModuleBundle.apply {
                 putString("module", mLicenseDecoderModule.name)
                 putBundle("module_params", Bundle().apply {
-                    putString("session_timeout", mLicenseDecoderModule.sessionTimeOut.toString())
+                    putString(
+                        "session_timeout",
+                        mLicenseDecoderModule.sessionTimeOut.toString()
+                    )
                     putString("output_image", mLicenseDecoderModule.outputImage.mode)
                     putString("scanMode", mLicenseDecoderModule.scanMode.mode)
                 })
@@ -199,7 +253,10 @@ open class WorkflowIPlugin private constructor(builder: Builder) {
             containerDecoderModuleBundle.apply {
                 putString("module", mContainerDecoderModule.name)
                 putBundle("module_params", Bundle().apply {
-                    putString("session_timeout", mContainerDecoderModule.sessionTimeOut.toString())
+                    putString(
+                        "session_timeout",
+                        mContainerDecoderModule.sessionTimeOut.toString()
+                    )
                     putString("output_image", mContainerDecoderModule.outputImage.mode)
                     putString("scanMode", mContainerDecoderModule.orientation.type)
                 })
@@ -234,7 +291,10 @@ open class WorkflowIPlugin private constructor(builder: Builder) {
                         "decode_haptic_feedback",
                         mFeedbackModule.decodeHapticFeedback.toString()
                     )
-                    putString("decode_audio_feedback_uri", mFeedbackModule.decodeAudioFeedbackUri)
+                    putString(
+                        "decode_audio_feedback_uri",
+                        mFeedbackModule.decodeAudioFeedbackUri
+                    )
                     putString(
                         "volume_slider_type",
                         mFeedbackModule.volumeSliderType.ordinal.toString()
@@ -244,6 +304,10 @@ open class WorkflowIPlugin private constructor(builder: Builder) {
 
             workflowParams.apply {
                 when (mWorkflowMode) {
+                    WorkflowMode.PICKLIST_OCR -> {
+                        add(pickListOCRModuleBundle)
+                    }
+
                     WorkflowMode.LICENSE_PLATE -> {
                         add(licenseDecoderModuleBundle)
                     }

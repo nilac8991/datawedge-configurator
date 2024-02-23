@@ -1,6 +1,7 @@
 package com.zebra.nilac.dwconfigurator.models.workflow
 
 enum class WorkflowMode(val mode: String = "") {
+    PICKLIST_OCR("picklist_ocr"),
     LICENSE_PLATE("license_plate"),
     ID("id_scanning"),
     VIN("vin_number"),
