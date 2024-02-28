@@ -7,6 +7,7 @@ import com.zebra.nilac.dwconfigurator.models.workflow.modules.WorkflowCameraModu
 import com.zebra.nilac.dwconfigurator.models.workflow.modules.WorkflowContainerDecoderModule
 import com.zebra.nilac.dwconfigurator.models.workflow.modules.WorkflowFeedbackModule
 import com.zebra.nilac.dwconfigurator.models.workflow.modules.WorkflowFreeFormCaptureDecoderModule
+import com.zebra.nilac.dwconfigurator.models.workflow.modules.WorkflowFreeFormOCRModule
 import com.zebra.nilac.dwconfigurator.models.workflow.modules.WorkflowIdentificationDecoderModule
 import com.zebra.nilac.dwconfigurator.models.workflow.modules.WorkflowLicenseDecoderModule
 import com.zebra.nilac.dwconfigurator.models.workflow.modules.WorkflowMeterDecoderModule
@@ -52,6 +53,11 @@ open class WorkflowIPlugin private constructor(builder: Builder) {
 
         private var mFeedbackModule: WorkflowFeedbackModule = WorkflowFeedbackModule()
         private var mFeedbackModuleBundle: Bundle = Bundle()
+
+        //Free Form OCR
+        private var freeFormOCRModuleBundle: Bundle = Bundle()
+        private var mFreeFormOCRModule: WorkflowFreeFormOCRModule =
+            WorkflowFreeFormOCRModule()
 
         //Picklist OCR
         private var pickListOCRModuleBundle: Bundle = Bundle()
@@ -120,6 +126,11 @@ open class WorkflowIPlugin private constructor(builder: Builder) {
             return this
         }
 
+        fun setFreeFormOCRModule(freeFormOCRModule: WorkflowFreeFormOCRModule): Builder {
+            this.mFreeFormOCRModule = freeFormOCRModule
+            return this
+        }
+
         fun setPicklistOCRModule(pickListOCRModule: WorkflowPicklistOCRModule): Builder {
             this.mPickListOCRModule = pickListOCRModule
             return this
@@ -161,6 +172,17 @@ open class WorkflowIPlugin private constructor(builder: Builder) {
         }
 
         fun create(): Bundle {
+            //Free Form OCR
+            freeFormOCRModuleBundle.apply {
+                putString("module", mFreeFormOCRModule.name)
+                putBundle("module_params", Bundle().apply {
+                    putString("session_timeout", mFreeFormOCRModule.sessionTimeOut.toString())
+                    putString("illumination", mFreeFormOCRModule.illumination.mode)
+                    putString("output_image", mFreeFormOCRModule.outputImage.ordinal.toString())
+                    putString("script", mFreeFormOCRModule.script.ordinal.toString())
+                })
+            }
+
             //Picklist OCR
             pickListOCRModuleBundle.apply {
                 putString("module", mPickListOCRModule.name)
@@ -304,6 +326,10 @@ open class WorkflowIPlugin private constructor(builder: Builder) {
 
             workflowParams.apply {
                 when (mWorkflowMode) {
+                    WorkflowMode.FREE_FORM_OCR -> {
+                        add(freeFormOCRModuleBundle)
+                    }
+
                     WorkflowMode.PICKLIST_OCR -> {
                         add(pickListOCRModuleBundle)
                     }

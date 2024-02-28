@@ -10,9 +10,8 @@ class WorkflowPicklistOCRModule() : WorkflowOCRGenericModule() {
     internal var rules: ArrayList<WorkflowPicklistOCRGenericRule> = arrayListOf()
 
     init {
-        name = "MlKitExModule"
-        sessionTimeOut = 1500
-        outputImage = WorkflowOCROutputImageMode.CROPPED
+        this.name = "MlKitExModule"
+        this.outputImage = WorkflowOCROutputImageMode.CROPPED
     }
 
     constructor(
