@@ -1,21 +1,39 @@
 package com.zebra.nilac.dwconfigurator.models.workflow.modules
 
+import com.zebra.nilac.dwconfigurator.models.workflow.ocrwedge.WorkflowOCRLanguageScript
+import com.zebra.nilac.dwconfigurator.models.workflow.ocrwedge.WorkflowOCROutputImageMode
 import com.zebra.nilac.dwconfigurator.models.workflow.ocrwedge.WorkflowPicklistOCRGenericRule
 
-class WorkflowPicklistOCRModule(
-    var sessionTimeOut: Int = 1500,
-    var confidenceLevel: Int = 75,
-    var illumination: WorkflowCameraModule.Illumination = WorkflowCameraModule.Illumination.OFF,
-    var outputImage: OutputImage = OutputImage.CROPPED,
-    var script: LanguageScript = LanguageScript.LATIN,
-    var rules: ArrayList<WorkflowPicklistOCRGenericRule> = arrayListOf()
-) {
+class WorkflowPicklistOCRModule() : WorkflowOCRGenericModule() {
 
-    internal val name = "MlKitExModule"
+    internal var confidenceLevel: Int = 75
+    internal var rules: ArrayList<WorkflowPicklistOCRGenericRule> = arrayListOf()
+
+    init {
+        name = "MlKitExModule"
+        sessionTimeOut = 1500
+        outputImage = WorkflowOCROutputImageMode.CROPPED
+    }
 
     constructor(
-        sessionTimeOut: Int,
-        script: LanguageScript,
+        sessionTimeOut: Long,
+        confidenceLevel: Int,
+        illumination: WorkflowCameraModule.Illumination,
+        outputImage: WorkflowOCROutputImageMode,
+        script: WorkflowOCRLanguageScript = WorkflowOCRLanguageScript.LATIN,
+        rules: ArrayList<WorkflowPicklistOCRGenericRule> = arrayListOf()
+    ) : this() {
+        this.sessionTimeOut = sessionTimeOut
+        this.confidenceLevel = confidenceLevel
+        this.illumination = illumination
+        this.outputImage = outputImage
+        this.script = script
+        this.rules = rules
+    }
+
+    constructor(
+        sessionTimeOut: Long,
+        script: WorkflowOCRLanguageScript,
         rules: ArrayList<WorkflowPicklistOCRGenericRule>
     ) : this() {
         this.sessionTimeOut = sessionTimeOut
@@ -24,8 +42,8 @@ class WorkflowPicklistOCRModule(
     }
 
     constructor(
-        outputImage: OutputImage,
-        script: LanguageScript,
+        outputImage: WorkflowOCROutputImageMode,
+        script: WorkflowOCRLanguageScript,
         rules: ArrayList<WorkflowPicklistOCRGenericRule>
     ) : this() {
         this.outputImage = outputImage
@@ -34,7 +52,7 @@ class WorkflowPicklistOCRModule(
     }
 
     constructor(
-        script: LanguageScript,
+        script: WorkflowOCRLanguageScript,
         rules: ArrayList<WorkflowPicklistOCRGenericRule>
     ) : this() {
         this.script = script
@@ -43,13 +61,5 @@ class WorkflowPicklistOCRModule(
 
     constructor(rules: ArrayList<WorkflowPicklistOCRGenericRule>) : this() {
         this.rules = rules
-    }
-
-    enum class OutputImage(val modeValue: Int = 0) {
-        DISABLED(0), CROPPED(2)
-    }
-
-    enum class LanguageScript() {
-        LATIN, LATIN_CHINESE, LATIN_KOREAN, LATIN_DEVANAGARI
     }
 }

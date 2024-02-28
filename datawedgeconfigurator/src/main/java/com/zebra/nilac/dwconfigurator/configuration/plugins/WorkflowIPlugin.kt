@@ -167,7 +167,7 @@ open class WorkflowIPlugin private constructor(builder: Builder) {
                 putBundle("module_params", Bundle().apply {
                     putString("session_timeout", mPickListOCRModule.sessionTimeOut.toString())
                     putString("illumination", mPickListOCRModule.illumination.mode)
-                    putString("output_image", mPickListOCRModule.outputImage.modeValue.toString())
+                    putString("output_image", mPickListOCRModule.outputImage.ordinal.toString())
                     putString("script", mPickListOCRModule.script.ordinal.toString())
                     putString("confidence_level", mPickListOCRModule.confidenceLevel.toString())
 
