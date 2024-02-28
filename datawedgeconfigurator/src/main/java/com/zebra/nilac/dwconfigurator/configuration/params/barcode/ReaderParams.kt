@@ -20,7 +20,10 @@ class ReaderParams private constructor(builder: Builder) {
     init {
         params.apply {
             //Character Set Configuration
-            putString(CHARACTER_SET_SELECTION_KEY, builder.charsetName.charset)
+            putString(
+                CHARACTER_SET_SELECTION_KEY,
+                builder.charsetName.charset
+            )
             putString(
                 AUTO_CHARACTER_SET_PREFERRED_ORDER_KEY,
                 builder.autoCharsetPreferredOrder.joinToString(separator = ";")
@@ -40,23 +43,41 @@ class ReaderParams private constructor(builder: Builder) {
                 String.format(Locale.getDefault(), "%d", builder.quietZone1DLevel.ordinal)
             )
 
-            putString(READER_AIM_ENABLED_KEY, if (builder.aimModeEnabled) "on" else "off")
+            putString(
+                READER_AIM_ENABLED_KEY,
+                if (builder.aimModeEnabled) "on" else "off"
+            )
             putString(
                 READER_AIM_TYPE_KEY,
                 String.format(Locale.getDefault(), "%d", builder.readerAimType.ordinal)
             )
-            putString(READER_AIM_TIMER_KEY, builder.aimTimer.toString())
+            putString(
+                READER_AIM_TIMER_KEY,
+                builder.aimTimer.toString()
+            )
 
-            putString(BEAM_TIMER_KEY, builder.beamTimer.toString())
+            putString(
+                BEAM_TIMER_KEY,
+                builder.beamTimer.toString()
+            )
 
-            putString(DIFFERENT_SYMBOL_TIMEOUT_KEY, builder.differentSymbolTimeout.toString())
-            putString(SAME_SYMBOL_TIMEOUT_KEY, builder.sameSymbolTimeout.toString())
+            putString(
+                DIFFERENT_SYMBOL_TIMEOUT_KEY,
+                builder.differentSymbolTimeout.toString()
+            )
+            putString(
+                SAME_SYMBOL_TIMEOUT_KEY,
+                builder.sameSymbolTimeout.toString()
+            )
 
             putString(
                 DIGIMARC_DECODING_KEY,
                 if (builder.digimarcDecodingEnabled) "true" else "false"
             )
-            putString(SCANNER_ILLUMINATION_MODE_KEY, builder.scannerIlluminationMode.name)
+            putString(
+                SCANNER_ILLUMINATION_MODE_KEY,
+                builder.scannerIlluminationMode.name
+            )
             putString(
                 SCANNER_ILLUMINATION_BRIGHTNESS_KEY,
                 builder.scannerIlluminationBrightness.toString()
@@ -134,131 +155,92 @@ class ReaderParams private constructor(builder: Builder) {
         internal var poorQualityDecodeEffortLevel = ReaderPoorQualityDecodeEffortLevel.LEVEL_0
         internal var triggerWakeUpScanEnabled = false
 
-        fun setCharset(charsetName: ReaderCharsetName): Builder {
-            this.charsetName = charsetName
-            return this
-        }
+        fun setCharset(charsetName: ReaderCharsetName): Builder =
+            apply { this.charsetName = charsetName }
 
-        fun setCharsetsPreferredOrder(charsets: Array<String>): Builder {
-            this.autoCharsetPreferredOrder = charsets
-            return this
-        }
+        fun setCharsetsPreferredOrder(charsets: Array<String>): Builder =
+            apply { this.autoCharsetPreferredOrder = charsets }
 
-        fun setCharsetFailureOption(charsetName: ReaderCharsetName): Builder {
-            this.autoCharsetFailureOption = charsetName
-            return this
-        }
+        fun setCharsetFailureOption(charsetName: ReaderCharsetName): Builder =
+            apply { this.autoCharsetFailureOption = charsetName }
 
-        fun setPresentationModeSensitivity(sensitivity: ReaderPresentationModeSensitivity): Builder {
-            this.presentationModeSensitivity = sensitivity
-            return this
-        }
+        fun setPresentationModeSensitivity(sensitivity: ReaderPresentationModeSensitivity): Builder =
+            apply { this.presentationModeSensitivity = sensitivity }
 
-        fun set1DQuietZoneLevel(level: ReaderQuietZone1DLevel): Builder {
-            this.quietZone1DLevel = level
-            return this
-        }
+        fun set1DQuietZoneLevel(level: ReaderQuietZone1DLevel): Builder =
+            apply { this.quietZone1DLevel = level }
 
-        fun setReaderAimModeEnabled(state: Boolean): Builder {
-            this.aimModeEnabled = state
-            return this
-        }
+        fun setReaderAimModeEnabled(state: Boolean): Builder =
+            apply { this.aimModeEnabled = state }
 
-        fun setReaderAimType(readerAimType: ReaderAimType): Builder {
-            this.readerAimType = readerAimType
-            return this
-        }
+        fun setReaderAimType(readerAimType: ReaderAimType): Builder =
+            apply { this.readerAimType = readerAimType }
 
-        fun setReaderAimTimer(value: Int): Builder {
-            if (value < 0) this.aimTimer = 0
-            if (value > 60000) this.aimTimer = 60000
-            this.aimTimer = value
+        fun setReaderAimTimer(value: Int): Builder =
+            apply {
+                if (value < 0) this.aimTimer = 0
+                if (value > 60000) this.aimTimer = 60000
+                this.aimTimer = value
+            }
 
-            return this
-        }
+        fun setBeamTimer(value: Int): Builder =
+            apply {
+                if (value < 0) this.beamTimer = 0
+                if (value > 60000) this.beamTimer = 60000
+                this.beamTimer = value
+            }
 
-        fun setBeamTimer(value: Int): Builder {
-            if (value < 0) this.beamTimer = 0
-            if (value > 60000) this.beamTimer = 60000
-            this.beamTimer = value
+        fun setDifferentSymbolBarcodeTimeout(value: Int): Builder =
+            apply {
+                if (value < 0) this.differentSymbolTimeout = 0
+                if (value > 5000) this.differentSymbolTimeout = 5000
+                this.differentSymbolTimeout = value
+            }
 
-            return this
-        }
+        fun setDigimarcDecodingEnabled(state: Boolean): Builder =
+            apply { this.digimarcDecodingEnabled = state }
 
-        fun setDifferentSymbolBarcodeTimeout(value: Int): Builder {
-            if (value < 0) this.differentSymbolTimeout = 0
-            if (value > 5000) this.differentSymbolTimeout = 5000
-            this.differentSymbolTimeout = value
+        fun setSameSymbolBarcodeTimeout(value: Int): Builder =
+            apply {
+                if (value < 0) this.sameSymbolTimeout = 0
+                if (value > 5000) this.sameSymbolTimeout = 5000
+                this.sameSymbolTimeout = value
+            }
 
-            return this
-        }
+        fun setScannerIlluminationMode(scannerIlluminationMode: ReaderIlluminationMode): Builder =
+            apply { this.scannerIlluminationMode = scannerIlluminationMode }
 
-        fun setDigimarcDecodingEnabled(state: Boolean): Builder {
-            this.digimarcDecodingEnabled = state
-            return this
-        }
+        fun setScannerIlluminationBrightness(illuminationBrightness: Int): Builder =
+            apply {
+                var scannerIlluminationBrightness = illuminationBrightness
+                if (scannerIlluminationBrightness < 0) scannerIlluminationBrightness = 0
+                if (scannerIlluminationBrightness > 10) scannerIlluminationBrightness = 10
+                this.scannerIlluminationBrightness = scannerIlluminationBrightness
+            }
 
-        fun setSameSymbolBarcodeTimeout(value: Int): Builder {
-            if (value < 0) this.sameSymbolTimeout = 0
-            if (value > 5000) this.sameSymbolTimeout = 5000
-            this.sameSymbolTimeout = value
+        fun setInverse1DMode(mode: ReaderInverse1DMode): Builder =
+            apply { this.inverse1DMode = mode }
 
-            return this
-        }
+        fun setLCDMode(mode: ReaderLCDMode): Builder =
+            apply { this.lcdMode = mode }
 
-        fun setScannerIlluminationMode(scannerIlluminationMode: ReaderIlluminationMode): Builder {
-            this.scannerIlluminationMode = scannerIlluminationMode
-            return this
-        }
+        fun setLinearSecurityLevel(level: ReaderLinearSecurityLevel): Builder =
+            apply { this.linearSecurityLevel = level }
 
-        fun setScannerIlluminationBrightness(illuminationBrightness: Int): Builder {
-            var scannerIlluminationBrightness = illuminationBrightness
-            if (scannerIlluminationBrightness < 0) scannerIlluminationBrightness = 0
-            if (scannerIlluminationBrightness > 10) scannerIlluminationBrightness = 10
-            this.scannerIlluminationBrightness = scannerIlluminationBrightness
+        fun setHwEngineLowPowerTimeout(value: Int): Builder =
+            apply { this.hwEngineLowPowerTimeout = value }
 
-            return this
-        }
+        fun setTimedContinuousBeamTimer(value: Int): Builder =
+            apply { this.timedContinuousBeamTimer = value }
 
-        fun setInverse1DMode(mode: ReaderInverse1DMode): Builder {
-            this.inverse1DMode = mode
-            return this
-        }
+        fun setPickListMode(mode: ReaderPickListMode): Builder =
+            apply { this.pickListMode = mode }
 
-        fun setLCDMode(mode: ReaderLCDMode): Builder {
-            this.lcdMode = mode
-            return this
-        }
+        fun setPoorQualityDecodeEffortLevel(level: ReaderPoorQualityDecodeEffortLevel): Builder =
+            apply { this.poorQualityDecodeEffortLevel = level }
 
-        fun setLinearSecurityLevel(level: ReaderLinearSecurityLevel): Builder {
-            this.linearSecurityLevel = level
-            return this
-        }
-
-        fun setHwEngineLowPowerTimeout(value: Int): Builder {
-            this.hwEngineLowPowerTimeout = value
-            return this
-        }
-
-        fun setTimedContinuousBeamTimer(value: Int): Builder {
-            this.timedContinuousBeamTimer = value
-            return this
-        }
-
-        fun setPickListMode(mode: ReaderPickListMode): Builder {
-            this.pickListMode = mode
-            return this
-        }
-
-        fun setPoorQualityDecodeEffortLevel(level: ReaderPoorQualityDecodeEffortLevel): Builder {
-            this.poorQualityDecodeEffortLevel = level
-            return this
-        }
-
-        fun setTriggerWakeUpEnabled(state: Boolean): Builder {
-            this.triggerWakeUpScanEnabled = state
-            return this
-        }
+        fun setTriggerWakeUpEnabled(state: Boolean): Builder =
+            apply { this.triggerWakeUpScanEnabled = state }
 
         fun create(): Bundle {
             return ReaderParams(this).params

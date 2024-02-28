@@ -13,13 +13,12 @@ import java.util.Locale
 
 // TODO: OCR
 // TODO: NG SimulScan Support
-class BarcodePlugin private constructor(builder: Builder) {
-
-    private val plugin = Bundle()
+class BarcodePlugin private constructor(builder: Builder) : GenericPlugin() {
 
     init {
+        this.pluginName = PLUGIN_NAME
+
         // Build Params
-        val paramList = Bundle()
         paramList.putString(SCANNER_ENABLED_KEY, if (builder.mEnabled) "true" else "false")
         paramList.putString(SCANNER_SELECTION_KEY, builder.scannerIdentifier.name)
 
@@ -36,7 +35,7 @@ class BarcodePlugin private constructor(builder: Builder) {
 
         paramList.putString(
             SCAN_HARDWARE_TRIGGER_KEY,
-            if (builder.hardwareTrigger) "1" else "0"
+            if (builder.hardwareTriggerEnabled) "1" else "0"
         )
 
         //QRCode Launch Options
@@ -104,10 +103,8 @@ class BarcodePlugin private constructor(builder: Builder) {
             paramList.putString(key, value)
         }
 
-        // Build Plugin
-        plugin.putString("PLUGIN_NAME", PLUGIN_NAME)
-        plugin.putString("RESET_CONFIG", if (builder.resetConfig) "true" else "false")
-        plugin.putBundle("PARAM_LIST", paramList)
+        plugin.putString(PLUGIN_NAME_KEY, pluginName)
+        plugin.putString(RESET_CONFIG_KEY, if (builder.resetConfig) "true" else "false")
     }
 
     class Builder {
@@ -120,7 +117,7 @@ class BarcodePlugin private constructor(builder: Builder) {
         //FIXME Weird issue when listening for DW responses returning wrongly results after setting this param even if the value is being set correctly. Keep it null unless it's being used.
         internal var autoSwitchToDefaultOnEvent: BarcodeAutoSwitchEventMode? = null
 
-        internal var hardwareTrigger = true
+        internal var hardwareTriggerEnabled = true
 
         //QRCode Launch Options
         internal var qrCodeLaunchOptionsEnable = false
@@ -148,100 +145,59 @@ class BarcodePlugin private constructor(builder: Builder) {
         //UPC EAN Params
         internal var upcEanParams = UPCEANParams.Builder().create()
 
-        fun resetConfig(resetConfig: Boolean): Builder {
-            this.resetConfig = resetConfig
-            return this
-        }
+        fun resetConfig(resetConfig: Boolean): Builder =
+            apply { this.resetConfig = resetConfig }
 
-        fun setEnabled(enabled: Boolean): Builder {
-            this.mEnabled = enabled
-            return this
-        }
+        fun setEnabled(enabled: Boolean): Builder =
+            apply { this.mEnabled = enabled }
 
-        fun setScannerIdentifier(scannerIdentifier: BarcodeScannerIdentifier): Builder {
-            this.scannerIdentifier = scannerIdentifier
-            return this
-        }
+        fun setScannerIdentifier(scannerIdentifier: BarcodeScannerIdentifier): Builder =
+            apply { this.scannerIdentifier = scannerIdentifier }
 
-        fun setDecodeHapticFeedback(decodeHapticFeedback: Boolean): Builder {
-            this.decodeHapticFeedback = decodeHapticFeedback
-            return this
-        }
+        fun setDecodeHapticFeedback(decodeHapticFeedback: Boolean): Builder =
+            apply { this.decodeHapticFeedback = decodeHapticFeedback }
 
-        fun enableScanHardwareTrigger(): Builder {
-            this.hardwareTrigger = true
-            return this
-        }
+        fun setScanHardwareTriggerEnabled(state: Boolean): Builder =
+            apply { this.hardwareTriggerEnabled = state }
 
-        fun disableScanHardwareTrigger(): Builder {
-            this.hardwareTrigger = false
-            return this
-        }
+        fun setAutoSwitchToDefaultOnEvent(autoSwitchEventMode: BarcodeAutoSwitchEventMode): Builder =
+            apply { this.autoSwitchToDefaultOnEvent = autoSwitchEventMode }
 
-        fun setAutoSwitchToDefaultOnEvent(autoSwitchEventMode: BarcodeAutoSwitchEventMode): Builder {
-            this.autoSwitchToDefaultOnEvent = autoSwitchEventMode
-            return this
-        }
+        fun setQRCodeLaunchState(state: Boolean): Builder =
+            apply { qrCodeLaunchOptionsEnable = state }
 
-        fun setQRCodeLaunchState(state: Boolean): Builder {
-            qrCodeLaunchOptionsEnable = state
-            return this
-        }
+        fun setQRCodeForceDecoderState(state: Boolean): Builder =
+            apply { qrCodeLaunchOptionsEnableDecoder = state }
 
-        fun setQRCodeForceDecoderState(state: Boolean): Builder {
-            qrCodeLaunchOptionsEnableDecoder = state
-            return this
-        }
+        fun setQRCodeLaunchConfirmationState(state: Boolean): Builder =
+            apply { qrCodeLaunchOptionsShowConfirmation = state }
 
-        fun setQRCodeLaunchConfirmationState(state: Boolean): Builder {
-            qrCodeLaunchOptionsShowConfirmation = state
-            return this
-        }
+        fun setScanningMode(mode: BarcodeScanningMode): Builder =
+            apply { this.scanningMode = mode }
 
-        fun setScanningMode(mode: BarcodeScanningMode): Builder {
-            this.scanningMode = mode
-            return this
-        }
+        fun addReaderParams(params: Bundle): Builder =
+            apply { this.readerParams = params }
 
-        fun addReaderParams(params: Bundle): Builder {
-            this.readerParams = params
-            return this
-        }
+        fun addScanParams(params: Bundle): Builder =
+            apply { this.scanParams = params }
 
-        fun addScanParams(params: Bundle): Builder {
-            this.scanParams = params
-            return this
-        }
+        fun enableSymbology(symbology: BarcodeSymbology): Builder =
+            apply { symbologiesToEnable.add(symbology) }
 
-        fun enableSymbology(symbology: BarcodeSymbology): Builder {
-            symbologiesToEnable.add(symbology)
-            return this
-        }
+        fun enableSymbologies(symbologies: Array<BarcodeSymbology>): Builder =
+            apply { symbologiesToEnable.addAll(symbologies) }
 
-        fun enableSymbologies(symbologies: Array<BarcodeSymbology>): Builder {
-            symbologiesToEnable.addAll(symbologies)
-            return this
-        }
+        fun disableSymbology(symbology: BarcodeSymbology): Builder =
+            apply { symbologiesToDisable.add(symbology) }
 
-        fun disableSymbology(symbology: BarcodeSymbology): Builder {
-            symbologiesToDisable.add(symbology)
-            return this
-        }
+        fun disableSymbologies(symbologies: Array<BarcodeSymbology>): Builder =
+            apply { symbologiesToDisable.addAll(symbologies) }
 
-        fun disableSymbologies(symbologies: Array<BarcodeSymbology>): Builder {
-            symbologiesToDisable.addAll(symbologies)
-            return this
-        }
+        fun addBarcodeHighlightingParams(params: Bundle): Builder =
+            apply { this.barcodeHighlightingParams = params }
 
-        fun addBarcodeHighlightingParams(params: Bundle): Builder {
-            this.barcodeHighlightingParams = params
-            return this
-        }
-
-        fun addUpcEanParams(params: Bundle): Builder {
-            this.upcEanParams = params
-            return this
-        }
+        fun addUpcEanParams(params: Bundle): Builder =
+            apply { this.upcEanParams = params }
 
         fun create(): Bundle {
             return BarcodePlugin(this).plugin

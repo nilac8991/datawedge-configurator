@@ -100,75 +100,51 @@ class UPCEANParams private constructor(builder: Builder) {
         internal var enableCoupon = false
         internal var couponReportMode = UPCEANCouponReportMode.BOTH_COUPON_MODES
 
-        fun enableDatabarToUpcEan(state: Boolean): Builder {
-            this.dataBarToUpcEan = state
-            return this
-        }
+        fun enableDatabarToUpcEan(state: Boolean): Builder =
+            apply { this.dataBarToUpcEan = state }
 
-        fun enableMarginlessDecode(state: Boolean): Builder {
-            this.enableMarginlessDecode = false
-            return this
-        }
+        fun enableMarginlessDecode(state: Boolean): Builder =
+            apply { this.enableMarginlessDecode = false }
 
-        fun setSecurityLevel(securityLevel: UPCEANSecurityLevel): Builder {
-            this.securityLevel = securityLevel
-            return this
-        }
+        fun setSecurityLevel(securityLevel: UPCEANSecurityLevel): Builder =
+            apply { this.securityLevel = securityLevel }
 
-        fun enableSupplemental2(state: Boolean): Builder {
-            this.enableSupplemental2 = state
-            return this
-        }
+        fun enableSupplemental2(state: Boolean): Builder =
+            apply { this.enableSupplemental2 = state }
 
-        fun enableSupplemental5(state: Boolean): Builder {
-            this.enableSupplemental5 = state
-            return this
-        }
+        fun enableSupplemental5(state: Boolean): Builder =
+            apply { this.enableSupplemental5 = state }
 
-        fun setSupplementalMode(supplementalMode: UPCEANSupplementalMode): Builder {
-            this.supplementalMode = supplementalMode
-            return this
-        }
+        fun setSupplementalMode(supplementalMode: UPCEANSupplementalMode): Builder =
+            apply { this.supplementalMode = supplementalMode }
 
-        fun setRetryCount(retryCount: Int): Builder {
-            this.retryCount = if (retryCount > 20) {
-                Log.w(TAG, "Warning invalid retry count number, setting to 20")
-                20
-            } else {
-                retryCount
+        fun setRetryCount(retryCount: Int): Builder =
+            apply {
+                this.retryCount = if (retryCount > 20) {
+                    Log.w(TAG, "Warning invalid retry count number, setting to 20")
+                    20
+                } else {
+                    retryCount
+                }
             }
-            return this
-        }
 
-        fun enableLinearDecode(state: Boolean): Builder {
-            this.enableLinearDecode = state
-            return this
-        }
+        fun enableLinearDecode(state: Boolean): Builder =
+            apply { this.enableLinearDecode = state }
 
-        fun enableZeroEanExtend(state: Boolean): Builder {
-            this.enableEanZeroExtend = state
-            return this
-        }
+        fun enableZeroEanExtend(state: Boolean): Builder =
+            apply { this.enableEanZeroExtend = state }
 
-        fun enableBookLand(state: Boolean): Builder {
-            this.enableBookLand = state
-            return this
-        }
+        fun enableBookLand(state: Boolean): Builder =
+            apply { this.enableBookLand = state }
 
-        fun setBookLandFormat(format: UPCEANBookLandFormat): Builder {
-            this.bookLandFormat = format
-            return this
-        }
+        fun setBookLandFormat(format: UPCEANBookLandFormat): Builder =
+            apply { this.bookLandFormat = format }
 
-        fun enableCoupon(state: Boolean): Builder {
-            this.enableCoupon = state
-            return this
-        }
+        fun enableCoupon(state: Boolean): Builder =
+            apply { this.enableCoupon = state }
 
-        fun enableCouponReportMode(reportMode: UPCEANCouponReportMode): Builder {
-            this.couponReportMode = reportMode
-            return this
-        }
+        fun enableCouponReportMode(reportMode: UPCEANCouponReportMode): Builder =
+            apply { this.couponReportMode = reportMode }
 
         fun create(): Bundle {
             return UPCEANParams(this).params

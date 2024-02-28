@@ -4,12 +4,12 @@ import android.os.Bundle
 import android.util.Log
 import com.zebra.nilac.dwconfigurator.models.ip.IPOutputProtocol
 
-class IPOutputPlugin private constructor(builder: Builder) {
-
-    private val plugin = Bundle()
+class IPOutputPlugin private constructor(builder: Builder) : GenericPlugin() {
 
     init {
-        val paramList = Bundle().apply {
+        this.pluginName = PLUGIN_NAME
+
+        paramList.apply {
             putString(IP_OUTPUT_ENABLE, if (builder.ipOutputEnabled) "true" else "false")
             putString(
                 IP_OUTPUT_ENABLE_REMOTE_WEDGE,
@@ -20,9 +20,8 @@ class IPOutputPlugin private constructor(builder: Builder) {
             putString(IP_OUTPUT_PORT, builder.ipOutputPort.toString())
         }
 
-        plugin.putString("PLUGIN_NAME", PLUGIN_NAME)
-        plugin.putString("RESET_CONFIG", if (builder.resetConfig) "true" else "false")
-        plugin.putBundle("PARAM_LIST", paramList)
+        plugin.putString(PLUGIN_NAME_KEY, pluginName)
+        plugin.putString(RESET_CONFIG_KEY, if (builder.resetConfig) "true" else "false")
     }
 
     class Builder {
@@ -36,35 +35,27 @@ class IPOutputPlugin private constructor(builder: Builder) {
         internal var ipOutputAddress = "127.0.0.1"
         internal var ipOutputPort = 80
 
-        fun setEnabled(state: Boolean): Builder {
-            this.ipOutputEnabled = state
-            return this
-        }
+        fun setEnabled(state: Boolean): Builder =
+            apply { this.ipOutputEnabled = state }
 
-        fun setRemoteWedgeEnabled(state: Boolean): Builder {
-            this.ipOutputRemoteWedgeEnabled = state
-            return this
-        }
+        fun setRemoteWedgeEnabled(state: Boolean): Builder =
+            apply { this.ipOutputRemoteWedgeEnabled = state }
 
-        fun setProtocol(protocol: IPOutputProtocol): Builder {
-            this.ipOutputProtocol = protocol
-            return this
-        }
+        fun setProtocol(protocol: IPOutputProtocol): Builder =
+            apply { this.ipOutputProtocol = protocol }
 
-        fun setAddress(address: String): Builder {
-            this.ipOutputAddress = address
-            return this
-        }
+        fun setAddress(address: String): Builder =
+            apply { this.ipOutputAddress = address }
 
-        fun setPort(port: Int): Builder {
-            this.ipOutputPort = if (port > 65535) {
-                Log.w(TAG, "Warning invalid port number, setting to 65534")
-                65534
-            } else {
-                port
+        fun setPort(port: Int): Builder =
+            apply {
+                this.ipOutputPort = if (port > 65535) {
+                    Log.w(TAG, "Warning invalid port number, setting to 65534")
+                    65534
+                } else {
+                    port
+                }
             }
-            return this
-        }
 
         fun create(): Bundle {
             return IPOutputPlugin(this).plugin

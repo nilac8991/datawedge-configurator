@@ -3,13 +3,13 @@ package com.zebra.nilac.dwconfigurator.configuration.plugins
 import android.os.Bundle
 import com.zebra.nilac.dwconfigurator.models.bdf.OutputPluginName
 
-class BDFPlugin private constructor(builder: Builder) {
-
-    private val plugin = Bundle()
+class BDFPlugin private constructor(builder: Builder) : GenericPlugin() {
 
     init {
+        this.pluginName = PLUGIN_NAME
+
         // Build Params
-        val paramList = Bundle().apply {
+        paramList.apply {
             putString(BDF_ENABLED_KEY, if (builder.enabled) "true" else "false")
             putString(BDF_PREFIX_KEY, builder.prefix)
             putString(BDF_SUFFIX_KEY, builder.suffix)
@@ -20,10 +20,9 @@ class BDFPlugin private constructor(builder: Builder) {
         }
 
         // Build Plugin
-        plugin.putString("PLUGIN_NAME", PLUGIN_NAME)
-        plugin.putString("RESET_CONFIG", if (builder.resetConfig) "true" else "false")
-        plugin.putBundle("PARAM_LIST", paramList)
-        plugin.putString("OUTPUT_PLUGIN_NAME", builder.outputPluginName.name)
+        plugin.putString(PLUGIN_NAME_KEY, pluginName)
+        plugin.putString(RESET_CONFIG_KEY, if (builder.resetConfig) "true" else "false")
+        plugin.putString(OUTPUT_PLUGIN_NAME_KEY, builder.outputPluginName.name)
     }
 
     class Builder {
@@ -40,50 +39,32 @@ class BDFPlugin private constructor(builder: Builder) {
         internal var sendTab = false
         internal var sendEnter = false
 
-        fun resetConfig(resetConfig: Boolean): Builder {
-            this.resetConfig = resetConfig
-            return this
-        }
+        fun resetConfig(resetConfig: Boolean): Builder =
+            apply { this.resetConfig = resetConfig }
 
-        fun setOutputPluginName(outputPluginName: OutputPluginName): Builder {
-            this.outputPluginName = outputPluginName
-            return this
-        }
+        fun setOutputPluginName(outputPluginName: OutputPluginName): Builder =
+            apply { this.outputPluginName = outputPluginName }
 
-        fun setEnabled(enabled: Boolean): Builder {
-            this.enabled = enabled
-            return this
-        }
+        fun setEnabled(enabled: Boolean): Builder =
+            apply { this.enabled = enabled }
 
-        fun setPrefix(prefix: String): Builder {
-            this.prefix = prefix
-            return this
-        }
+        fun setPrefix(prefix: String): Builder =
+            apply { this.prefix = prefix }
 
-        fun setSuffix(suffix: String): Builder {
-            this.suffix = suffix
-            return this
-        }
+        fun setSuffix(suffix: String): Builder =
+            apply { this.suffix = suffix }
 
-        fun sendData(sendData: Boolean): Builder {
-            this.sendData = sendData
-            return this
-        }
+        fun sendData(sendData: Boolean): Builder =
+            apply { this.sendData = sendData }
 
-        fun sendHex(sendHex: Boolean): Builder {
-            this.sendHex = sendHex
-            return this
-        }
+        fun sendHex(sendHex: Boolean): Builder =
+            apply { this.sendHex = sendHex }
 
-        fun sendTab(sendTab: Boolean): Builder {
-            this.sendTab = sendTab
-            return this
-        }
+        fun sendTab(sendTab: Boolean): Builder =
+            apply { this.sendTab = sendTab }
 
-        fun sendEnter(sendEnter: Boolean): Builder {
-            this.sendEnter = sendEnter
-            return this
-        }
+        fun sendEnter(sendEnter: Boolean): Builder =
+            apply { this.sendEnter = sendEnter }
 
         fun create(): Bundle {
             return BDFPlugin(this).plugin
@@ -92,6 +73,8 @@ class BDFPlugin private constructor(builder: Builder) {
 
     companion object {
         private const val PLUGIN_NAME = "BDF"
+
+        private const val OUTPUT_PLUGIN_NAME_KEY = "OUTPUT_PLUGIN_NAME"
 
         private const val BDF_ENABLED_KEY = "bdf_enabled"
         private const val BDF_PREFIX_KEY = "bdf_prefix"

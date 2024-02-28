@@ -67,50 +67,32 @@ class ScanParams private constructor(builder: Builder) {
         internal var decodeLedNotificationFeedbackTimer = 75
         internal var beepVolumeChannelType = ScanBeepVolumeChannelType.NOTIFICATIONS
 
-        fun setCodeIdType(type: ScanCodeIdType): Builder {
-            this.codeIdType = type
-            return this
-        }
+        fun setCodeIdType(type: ScanCodeIdType): Builder =
+            apply { this.codeIdType = type }
 
-        fun setDecodeHapticFeedbackEnabled(state: Boolean): Builder {
-            this.decodeHapticFeedback = state
-            return this
-        }
+        fun setDecodeHapticFeedbackEnabled(state: Boolean): Builder =
+            apply { this.decodeHapticFeedback = state }
 
-        fun setDecodeHapticFeedbackAudioUri(dwAudioUri: String): Builder {
-            this.decodeHapticFeedbackAudioUri = dwAudioUri
-            return this
-        }
+        fun setDecodeHapticFeedbackAudioUri(dwAudioUri: String): Builder =
+            apply { this.decodeHapticFeedbackAudioUri = dwAudioUri }
 
-        fun setDecodeScreenNotificationEnabled(state: Boolean): Builder {
-            this.decodeScreenNotificationEnabled = state
-            return this
-        }
+        fun setDecodeScreenNotificationEnabled(state: Boolean): Builder =
+            apply { this.decodeScreenNotificationEnabled = state }
 
-        fun setDecodeScreenNotificationTimer(value: Int): Builder {
-            this.decodeScreenNotificationTimer = value
-            return this
-        }
+        fun setDecodeScreenNotificationTimer(value: Int): Builder =
+            apply { this.decodeScreenNotificationTimer = value }
 
-        fun setDecodeScreenTranslucencyLevel(level: Int): Builder {
-            this.decodeScreenTranslucencyLevel = level
-            return this
-        }
+        fun setDecodeScreenTranslucencyLevel(level: Int): Builder =
+            apply { this.decodeScreenTranslucencyLevel = level }
 
-        fun setDecodeLedNotificationEnabled(state: Boolean): Builder {
-            this.decodeLedNotificationEnabled = state
-            return this
-        }
+        fun setDecodeLedNotificationEnabled(state: Boolean): Builder =
+            apply { this.decodeLedNotificationEnabled = state }
 
-        fun setDecodeLedNotificationFeedbackTimer(value: Int): Builder {
-            this.decodeLedNotificationFeedbackTimer = value
-            return this
-        }
+        fun setDecodeLedNotificationFeedbackTimer(value: Int): Builder =
+            apply { this.decodeLedNotificationFeedbackTimer = value }
 
-        fun setBeepVolumeChannelType(type: ScanBeepVolumeChannelType): Builder {
-            this.beepVolumeChannelType = type
-            return this
-        }
+        fun setBeepVolumeChannelType(type: ScanBeepVolumeChannelType): Builder =
+            apply { this.beepVolumeChannelType = type }
 
         fun create(): Bundle {
             return ScanParams(this).params

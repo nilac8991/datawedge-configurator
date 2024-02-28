@@ -5,12 +5,12 @@ import com.zebra.nilac.dwconfigurator.models.intent.IntentOutputComponentInfo
 import com.zebra.nilac.dwconfigurator.models.intent.IntentOutputDelivery
 import java.util.Locale
 
-class IntentOutputPlugin private constructor(builder: Builder) {
-
-    private val plugin = Bundle()
+class IntentOutputPlugin private constructor(builder: Builder) : GenericPlugin() {
 
     init {
-        val paramList = Bundle().apply {
+        this.pluginName = PLUGIN_NAME
+
+        paramList.apply {
             putString(INTENT_OUTPUT_ENABLE, if (builder.intentOutputEnabled) "true" else "false")
             putString(INTENT_OUTPUT_ACTION, builder.intentAction)
             putString(INTENT_OUTPUT_CATEGORY, builder.intentCategory)
@@ -34,9 +34,8 @@ class IntentOutputPlugin private constructor(builder: Builder) {
             putParcelableArrayList(INTENT_OUTPUT_COMPONENT_INFO, bundleList)
         }
 
-        plugin.putString("PLUGIN_NAME", PLUGIN_NAME)
-        plugin.putString("RESET_CONFIG", if (builder.resetConfig) "true" else "false")
-        plugin.putBundle("PARAM_LIST", paramList)
+        plugin.putString(PLUGIN_NAME_KEY, pluginName)
+        plugin.putString(RESET_CONFIG_KEY, if (builder.resetConfig) "true" else "false")
     }
 
     class Builder {
@@ -54,40 +53,31 @@ class IntentOutputPlugin private constructor(builder: Builder) {
 
         internal val intentComponentsInfo = ArrayList<IntentOutputComponentInfo>()
 
-        fun setEnabled(state: Boolean): Builder {
-            this.intentOutputEnabled = state
-            return this
-        }
+        fun resetConfig(resetConfig: Boolean): Builder =
+            apply { this.resetConfig = resetConfig }
 
-        fun setIntentAction(action: String): Builder {
-            this.intentAction = action
-            return this
-        }
+        fun setEnabled(state: Boolean): Builder =
+            apply { this.intentOutputEnabled = state }
 
-        fun setIntentCategory(category: String): Builder {
-            this.intentCategory = category
-            return this
-        }
+        fun setIntentAction(action: String): Builder =
+            apply { this.intentAction = action }
 
-        fun setIntentOutputDelivery(outputDelivery: IntentOutputDelivery): Builder {
-            this.intentOutputDelivery = outputDelivery
-            return this
-        }
+        fun setIntentCategory(category: String): Builder =
+            apply { this.intentCategory = category }
+
+        fun setIntentOutputDelivery(outputDelivery: IntentOutputDelivery): Builder =
+            apply { this.intentOutputDelivery = outputDelivery }
 
         fun setIntentOutputReceiverForegroundFlagEnabled(state: Boolean): Builder {
             this.intentOutputReceiverForegroundFlag = state
             return this
         }
 
-        fun setUseContentProviderEnabled(state: Boolean): Builder {
-            this.intentOutputUseContentProvider = state
-            return this
-        }
+        fun setUseContentProviderEnabled(state: Boolean): Builder =
+            apply { this.intentOutputUseContentProvider = state }
 
-        fun addNewIntentComponentInfoObject(componentInfoObject: IntentOutputComponentInfo): Builder {
-            intentComponentsInfo.add(componentInfoObject)
-            return this
-        }
+        fun addNewIntentComponentInfoObject(componentInfoObject: IntentOutputComponentInfo): Builder =
+            apply { intentComponentsInfo.add(componentInfoObject) }
 
         fun create(): Bundle {
             return IntentOutputPlugin(this).plugin

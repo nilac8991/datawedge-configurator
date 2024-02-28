@@ -2,32 +2,29 @@ package com.zebra.nilac.dwconfigurator.configuration.plugins
 
 import android.os.Bundle
 
-class EKBPlugin private constructor(builder: Builder) {
-
-    private val plugin = Bundle()
+class EKBPlugin private constructor(builder: Builder) : GenericPlugin() {
 
     init {
-        plugin.putString(EKB_ENABLED_KEY, if (builder.enabled) "true" else "false")
-        plugin.putBundle(EKB_LAYOUT_KEY, builder.layout)
+        plugin.apply {
+            putString(EKB_ENABLED_KEY, if (builder.enabled) "true" else "false")
+            putBundle(EKB_LAYOUT_KEY, builder.layout)
+        }
     }
 
     class Builder {
-
         internal var enabled = false
         internal var layout: Bundle? = null
 
-        fun setEnabled(enabled: Boolean): Builder {
-            this.enabled = enabled
-            return this
-        }
+        fun setEnabled(enabled: Boolean): Builder =
+            apply { this.enabled = enabled }
 
-        fun setLayout(layoutGroup: String, layoutName: String): Builder {
-            val layoutBundle = Bundle()
-            layoutBundle.putString("layout_group", layoutGroup)
-            layoutBundle.putString("layout_name ", layoutName)
-            layout = layoutBundle
-            return this
-        }
+        fun setLayout(layoutGroup: String, layoutName: String): Builder =
+            apply {
+                this.layout = Bundle().apply {
+                    putString("layout_group", layoutGroup)
+                    putString("layout_name ", layoutName)
+                }
+            }
 
         fun create(): Bundle {
             return EKBPlugin(this).plugin

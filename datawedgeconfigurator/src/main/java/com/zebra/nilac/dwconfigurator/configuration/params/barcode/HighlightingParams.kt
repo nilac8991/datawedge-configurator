@@ -54,43 +54,32 @@ class HighlightingParams private constructor(builder: Builder) {
         }
 
         val highlightingRules: ArrayList<Bundle> = ArrayList<Bundle>().apply {
-            add(
-                Bundle().apply {
-                    putString(HIGHLIGHT_RULE_PARAM_KEY, "barcode_overlay")
-                    putParcelableArrayList(HIGHLIGHT_RULE_LIST_KEY, barcodeOverlayRuleList)
-                }
-            )
-            add(
-                Bundle().apply {
-                    putString(HIGHLIGHT_RULE_PARAM_KEY, "report_data")
-                    putParcelableArrayList(HIGHLIGHT_RULE_LIST_KEY, reportDataRuleList)
-                }
-            )
+            add(Bundle().apply {
+                putString(HIGHLIGHT_RULE_PARAM_KEY, "barcode_overlay")
+                putParcelableArrayList(HIGHLIGHT_RULE_LIST_KEY, barcodeOverlayRuleList)
+            })
+            add(Bundle().apply {
+                putString(HIGHLIGHT_RULE_PARAM_KEY, "report_data")
+                putParcelableArrayList(HIGHLIGHT_RULE_LIST_KEY, reportDataRuleList)
+            })
         }
         params.putParcelableArrayList(HIGHLIGHT_RULES_KEY, highlightingRules)
     }
 
     class Builder {
-
         //Highlight
         internal var enableBarcodeHighlight = false
         internal val overlayRules = ArrayList<BarcodeHighlightGenericRule>()
         internal val reportDataRules = ArrayList<BarcodeHighlightGenericRule>()
 
-        fun setEnabled(state: Boolean): Builder {
-            this.enableBarcodeHighlight = state
-            return this
-        }
+        fun setEnabled(state: Boolean): Builder =
+            apply { this.enableBarcodeHighlight = state }
 
-        fun addNewBarcodeHighlightOverlayRule(rule: BarcodeHighlightGenericRule): Builder {
-            overlayRules.add(rule)
-            return this
-        }
+        fun addNewBarcodeHighlightOverlayRule(rule: BarcodeHighlightGenericRule): Builder =
+            apply { overlayRules.add(rule) }
 
-        fun addNewBarcodeHighlightReportDataRule(rule: BarcodeHighlightGenericRule): Builder {
-            reportDataRules.add(rule)
-            return this
-        }
+        fun addNewBarcodeHighlightReportDataRule(rule: BarcodeHighlightGenericRule): Builder =
+            apply { reportDataRules.add(rule) }
 
         fun create(): Bundle {
             return HighlightingParams(this).params

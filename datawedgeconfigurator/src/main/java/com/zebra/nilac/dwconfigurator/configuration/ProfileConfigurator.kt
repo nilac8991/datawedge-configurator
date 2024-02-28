@@ -25,80 +25,66 @@ class ProfileConfigurator private constructor(builder: Builder) {
 
     class Builder {
         internal var profileName = ""
-        internal var configMode = ConfigMode.CREATE_IF_NOT_EXIST
         internal var profileEnabled = true
+
+        internal var configMode = ConfigMode.CREATE_IF_NOT_EXIST
         internal var pluginBundles = ArrayList<Bundle>()
         internal var appList = arrayOfNulls<Bundle>(0)
         internal var dcpPlugin: Bundle? = null
 
-        fun setProfileName(profileName: String): Builder {
-            this.profileName = profileName
-            return this
-        }
+        fun setProfileName(profileName: String): Builder =
+            apply { this.profileName = profileName }
 
-        fun setConfigMode(configMode: ConfigMode): Builder {
-            this.configMode = configMode
-            return this
-        }
+        fun setConfigMode(configMode: ConfigMode): Builder =
+            apply { this.configMode = configMode }
 
-        fun setProfileEnabled(profileEnabled: Boolean): Builder {
-            this.profileEnabled = profileEnabled
-            return this
-        }
+        fun setProfileEnabled(profileEnabled: Boolean): Builder =
+            apply { this.profileEnabled = profileEnabled }
 
-        fun addPlugin(plugin: Bundle): Builder {
-            pluginBundles.add(plugin)
-            return this
-        }
+        fun addPlugin(plugin: Bundle): Builder =
+            apply { pluginBundles.add(plugin) }
 
-        fun addArrayOfPlugins(pluginBundles: ArrayList<Bundle>): Builder {
-            this.pluginBundles = pluginBundles
-            return this
-        }
+        fun addArrayOfPlugins(pluginBundles: ArrayList<Bundle>): Builder =
+            apply { this.pluginBundles = pluginBundles }
 
-        fun addAppAssociation(packageName: String, activityPath: String): Builder {
-            val newAppAssociation = Bundle().apply {
-                putString(PACKAGE_NAME_KEY, packageName)
-                putStringArray(ACTIVITY_LIST_KEY, arrayOf(activityPath))
+        fun addAppAssociation(packageName: String, activityPath: String): Builder =
+            apply {
+                val newAppAssociation = Bundle().apply {
+                    putString(PACKAGE_NAME_KEY, packageName)
+                    putStringArray(ACTIVITY_LIST_KEY, arrayOf(activityPath))
+                }
+
+                val appAssociationsList = appList.copyOf(appList.size + 1)
+                appAssociationsList[appAssociationsList.size - 1] = newAppAssociation
+                this.appList = appAssociationsList
             }
 
-            val appAssociationsList = appList.copyOf(appList.size + 1)
-            appAssociationsList[appAssociationsList.size - 1] = newAppAssociation
-            this.appList = appAssociationsList
+        fun addAppAssociation(packageName: String, activitiesPaths: Array<String>): Builder =
+            apply {
+                val newAppAssociation = Bundle().apply {
+                    putString(PACKAGE_NAME_KEY, packageName)
+                    putStringArray(ACTIVITY_LIST_KEY, activitiesPaths)
+                }
 
-            return this
-        }
-
-        fun addAppAssociation(packageName: String, activitiesPaths: Array<String>): Builder {
-            val newAppAssociation = Bundle().apply {
-                putString(PACKAGE_NAME_KEY, packageName)
-                putStringArray(ACTIVITY_LIST_KEY, activitiesPaths)
+                val appAssociationsList = appList.copyOf(appList.size + 1)
+                appAssociationsList[appAssociationsList.size - 1] = newAppAssociation
+                this.appList = appAssociationsList
             }
 
-            val appAssociationsList = appList.copyOf(appList.size + 1)
-            appAssociationsList[appAssociationsList.size - 1] = newAppAssociation
-            this.appList = appAssociationsList
+        fun addAppAssociation(packageName: String): Builder =
+            apply {
+                val newAppAssociation = Bundle().apply {
+                    putString(PACKAGE_NAME_KEY, packageName)
+                    putStringArray(ACTIVITY_LIST_KEY, arrayOf("*"))
+                }
 
-            return this
-        }
-
-        fun addAppAssociation(packageName: String): Builder {
-            val newAppAssociation = Bundle().apply {
-                putString(PACKAGE_NAME_KEY, packageName)
-                putStringArray(ACTIVITY_LIST_KEY, arrayOf("*"))
+                val appAssociationsList = appList.copyOf(appList.size + 1)
+                appAssociationsList[appAssociationsList.size - 1] = newAppAssociation
+                this.appList = appAssociationsList
             }
 
-            val appAssociationsList = appList.copyOf(appList.size + 1)
-            appAssociationsList[appAssociationsList.size - 1] = newAppAssociation
-            this.appList = appAssociationsList
-
-            return this
-        }
-
-        fun setDataCapturePlus(dcpPlugin: Bundle): Builder {
-            this.dcpPlugin = dcpPlugin
-            return this
-        }
+        fun setDataCapturePlus(dcpPlugin: Bundle): Builder =
+            apply { this.dcpPlugin = dcpPlugin }
 
         fun create(): Bundle {
             return ProfileConfigurator(this).plugin
@@ -117,6 +103,7 @@ class ProfileConfigurator private constructor(builder: Builder) {
         private const val PACKAGE_NAME_KEY = "PACKAGE_NAME"
         private const val ACTIVITY_LIST_KEY = "ACTIVITY_LIST"
 
+        //Data Capture Plus
         private const val DCP_SUPPORT = "DCP"
     }
 }

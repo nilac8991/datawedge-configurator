@@ -3,13 +3,13 @@ package com.zebra.nilac.dwconfigurator.configuration.plugins
 import android.os.Bundle
 import com.zebra.nilac.dwconfigurator.models.keystroke.KeystrokeActionChar
 
-class KeystrokeOutputPlugin private constructor(builder: Builder) {
-
-    private val plugin = Bundle()
+class KeystrokeOutputPlugin private constructor(builder: Builder) : GenericPlugin() {
 
     init {
+        this.pluginName = PLUGIN_NAME
+
         // Build Params
-        val paramList = Bundle().apply {
+        paramList.apply {
             putString(KEYSTROKE_OUTPUT_ENABLED_KEY, if (builder.enabled) "true" else "false")
             putString(KEYSTROKE_ACTION_CHAR_KEY, builder.actionChar.name)
             putString(KEYSTROKE_DELAY_CONTROL_KEY, builder.delayControlChar.toString())
@@ -32,10 +32,8 @@ class KeystrokeOutputPlugin private constructor(builder: Builder) {
             )
         }
 
-        // Build Plugin
-        plugin.putString("PLUGIN_NAME", PLUGIN_NAME)
-        plugin.putString("RESET_CONFIG", if (builder.resetConfig) "true" else "false")
-        plugin.putBundle("PARAM_LIST", paramList)
+        plugin.putString(PLUGIN_NAME_KEY, pluginName)
+        plugin.putString(RESET_CONFIG_KEY, if (builder.resetConfig) "true" else "false")
     }
 
     class Builder {
@@ -53,50 +51,32 @@ class KeystrokeOutputPlugin private constructor(builder: Builder) {
         internal var sendTabAsString = false
 
         // Builders
-        fun resetConfig(resetConfig: Boolean): Builder {
-            this.resetConfig = resetConfig
-            return this
-        }
+        fun resetConfig(resetConfig: Boolean): Builder =
+            apply { this.resetConfig = resetConfig }
 
-        fun setEnabled(enabled: Boolean): Builder {
-            this.enabled = enabled
-            return this
-        }
+        fun setEnabled(enabled: Boolean): Builder =
+            apply { this.enabled = enabled }
 
-        fun setKeystrokeActionChar(actionChar: KeystrokeActionChar): Builder {
-            this.actionChar = actionChar
-            return this
-        }
+        fun setKeystrokeActionChar(actionChar: KeystrokeActionChar): Builder =
+            apply { this.actionChar = actionChar }
 
-        fun setDelayControlChar(delayControlChar: Int): Builder {
-            this.delayControlChar = delayControlChar
-            return this
-        }
+        fun setDelayControlChar(delayControlChar: Int): Builder =
+            apply { this.delayControlChar = delayControlChar }
 
-        fun setCharacterDelay(characterDelay: Int): Builder {
-            this.characterDelay = characterDelay
-            return this
-        }
+        fun setCharacterDelay(characterDelay: Int): Builder =
+            apply { this.characterDelay = characterDelay }
 
-        fun setDelayMultiByteCharsOnly(delayMultiByteCharsOnly: Boolean): Builder {
-            this.delayMultiByteCharsOnly = delayMultiByteCharsOnly
-            return this
-        }
+        fun setDelayMultiByteCharsOnly(delayMultiByteCharsOnly: Boolean): Builder =
+            apply { this.delayMultiByteCharsOnly = delayMultiByteCharsOnly }
 
-        fun setSendCharsAsEvents(sendCharsAsEvents: Boolean): Builder {
-            this.sendCharsAsEvents = sendCharsAsEvents
-            return this
-        }
+        fun setSendCharsAsEvents(sendCharsAsEvents: Boolean): Builder =
+            apply { this.sendCharsAsEvents = sendCharsAsEvents }
 
-        fun setSendControlCharsAsEvents(sendControlCharsAsEvents: Boolean): Builder {
-            this.sendControlCharsAsEvents = sendControlCharsAsEvents
-            return this
-        }
+        fun setSendControlCharsAsEvents(sendControlCharsAsEvents: Boolean): Builder =
+            apply { this.sendControlCharsAsEvents = sendControlCharsAsEvents }
 
-        fun setSendTabAsString(sendTabAsString: Boolean): Builder {
-            this.sendTabAsString = sendTabAsString
-            return this
-        }
+        fun setSendTabAsString(sendTabAsString: Boolean): Builder =
+            apply { this.sendTabAsString = sendTabAsString }
 
         fun create(): Bundle {
             return KeystrokeOutputPlugin(this).plugin

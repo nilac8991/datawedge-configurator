@@ -5,13 +5,13 @@ import com.zebra.nilac.dwconfigurator.models.voice.VoiceDataCaptureStartOption
 import com.zebra.nilac.dwconfigurator.models.voice.VoiceDataType
 import java.util.Locale
 
-class VoicePlugin private constructor(builder: Builder) {
-
-    private val plugin = Bundle()
+class VoicePlugin private constructor(builder: Builder) : GenericPlugin() {
 
     init {
+        this.pluginName = PLUGIN_NAME
+
         // Build Params
-        val paramList = Bundle().apply {
+        paramList.apply {
             putString(
                 VOICE_INPUT_ENABLED_KEY,
                 if (builder.enabled) "true" else "false"
@@ -90,10 +90,8 @@ class VoicePlugin private constructor(builder: Builder) {
             )
         }
 
-        // Build Plugin
-        plugin.putString("PLUGIN_NAME", PLUGIN_NAME)
-        plugin.putString("RESET_CONFIG", if (builder.resetConfig) "true" else "false")
-        plugin.putBundle("PARAM_LIST", paramList)
+        plugin.putString(PLUGIN_NAME_KEY, pluginName)
+        plugin.putString(RESET_CONFIG_KEY, if (builder.resetConfig) "true" else "false")
     }
 
     class Builder {
@@ -123,109 +121,71 @@ class VoicePlugin private constructor(builder: Builder) {
         internal var commandClearEnabled = false
         internal var commandClearPhrase = "clear"
 
-        fun resetConfig(resetConfig: Boolean): Builder {
-            this.resetConfig = resetConfig
-            return this
-        }
+        fun resetConfig(resetConfig: Boolean): Builder =
+            apply { this.resetConfig = resetConfig }
 
-        fun setEnabled(enabled: Boolean): Builder {
-            this.enabled = enabled
-            return this
-        }
+        fun setEnabled(enabled: Boolean): Builder =
+            apply { this.enabled = enabled }
 
-        fun setDataCaptureStartOption(voiceDataCaptureStartOption: VoiceDataCaptureStartOption): Builder {
-            this.dataCaptureStartOption = voiceDataCaptureStartOption
-            return this
-        }
+        fun setDataCaptureStartOption(voiceDataCaptureStartOption: VoiceDataCaptureStartOption): Builder =
+            apply { this.dataCaptureStartOption = voiceDataCaptureStartOption }
 
-        fun setEndDetectionTimeout(timeout: Int): Builder {
-            this.endDetectionTimeout = if (timeout > 30) {
-                30
-            } else {
-                timeout
+        fun setEndDetectionTimeout(timeout: Int): Builder =
+            apply {
+                this.endDetectionTimeout = if (timeout > 30) {
+                    30
+                } else {
+                    timeout
+                }
             }
-            return this
-        }
 
-        fun setVoiceDataType(voiceDataType: VoiceDataType): Builder {
-            this.voiceDataType = voiceDataType
-            return this
-        }
+        fun setVoiceDataType(voiceDataType: VoiceDataType): Builder =
+            apply { this.voiceDataType = voiceDataType }
 
-        fun setDataCaptureWaitingTone(state: Boolean): Builder {
-            this.dataCaptureWaitingTone = state
-            return this
-        }
+        fun setDataCaptureWaitingTone(state: Boolean): Builder =
+            apply { this.dataCaptureWaitingTone = state }
 
-        fun setValidationWindow(state: Boolean): Builder {
-            this.validationWindow = state
-            return this
-        }
+        fun setValidationWindow(state: Boolean): Builder =
+            apply { this.validationWindow = state }
 
-        fun setOfflineSpeech(state: Boolean): Builder {
-            this.offlineSpeech = state
-            return this
-        }
+        fun setOfflineSpeech(state: Boolean): Builder =
+            apply { this.offlineSpeech = state }
 
-        fun setCommandTabEnabled(state: Boolean): Builder {
-            this.commandTabEnabled = state
-            return this
-        }
+        fun setCommandTabEnabled(state: Boolean): Builder =
+            apply { this.commandTabEnabled = state }
 
-        fun setCommandTabPhrase(phrase: String): Builder {
-            this.commandTabPhrase = phrase
-            return this
-        }
+        fun setCommandTabPhrase(phrase: String): Builder =
+            apply { this.commandTabPhrase = phrase }
 
-        fun setCommandEnterEnabled(state: Boolean): Builder {
-            this.commandEnterEnabled = state
-            return this
-        }
+        fun setCommandEnterEnabled(state: Boolean): Builder =
+            apply { this.commandEnterEnabled = state }
 
-        fun setCommandEnterPhrase(phrase: String): Builder {
-            this.commandEnterPhrase = phrase
-            return this
-        }
+        fun setCommandEnterPhrase(phrase: String): Builder =
+            apply { this.commandEnterPhrase = phrase }
 
-        fun setCommandMoveNextEnabled(state: Boolean): Builder {
-            this.commandMoveNextEnabled = state
-            return this
-        }
+        fun setCommandMoveNextEnabled(state: Boolean): Builder =
+            apply { this.commandMoveNextEnabled = state }
 
-        fun setCommandMoveNextPhrase(phrase: String): Builder {
-            this.commandMoveNextPhrase = phrase
-            return this
-        }
+        fun setCommandMoveNextPhrase(phrase: String): Builder =
+            apply { this.commandMoveNextPhrase = phrase }
 
-        fun setCommandMovePreviousEnabled(state: Boolean): Builder {
-            this.commandMovePreviousEnabled = state
-            return this
-        }
+        fun setCommandMovePreviousEnabled(state: Boolean): Builder =
+            apply { this.commandMovePreviousEnabled = state }
 
-        fun setCommandMovePreviousPhrase(phrase: String): Builder {
-            this.commandMovePreviousPhrase = phrase
-            return this
-        }
+        fun setCommandMovePreviousPhrase(phrase: String): Builder =
+            apply { this.commandMovePreviousPhrase = phrase }
 
-        fun setCommandEscapeEnabled(state: Boolean): Builder {
-            this.commandEscapeEnabled = state
-            return this
-        }
+        fun setCommandEscapeEnabled(state: Boolean): Builder =
+            apply { this.commandEscapeEnabled = state }
 
-        fun setCommandEscapePhrase(phrase: String): Builder {
-            this.commandEscapePhrase = phrase
-            return this
-        }
+        fun setCommandEscapePhrase(phrase: String): Builder =
+            apply { this.commandEscapePhrase = phrase }
 
-        fun setCommandClearEnabled(state: Boolean): Builder {
-            this.commandClearEnabled = state
-            return this
-        }
+        fun setCommandClearEnabled(state: Boolean): Builder =
+            apply { this.commandClearEnabled = state }
 
-        fun setCommandClearPhrase(phrase: String): Builder {
-            this.commandClearPhrase = phrase
-            return this
-        }
+        fun setCommandClearPhrase(phrase: String): Builder =
+            apply { this.commandClearPhrase = phrase }
 
         fun create(): Bundle {
             return VoicePlugin(this).plugin
