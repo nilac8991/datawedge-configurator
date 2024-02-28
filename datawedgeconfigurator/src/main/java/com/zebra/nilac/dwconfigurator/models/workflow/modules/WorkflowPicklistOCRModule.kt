@@ -9,6 +9,8 @@ class WorkflowPicklistOCRModule() : WorkflowOCRGenericModule() {
     internal var confidenceLevel: Int = 75
     internal var rules: ArrayList<WorkflowPicklistOCRGenericRule> = arrayListOf()
 
+    internal var viewFinderEnabled = false
+
     init {
         this.name = "MlKitExModule"
         this.outputImage = WorkflowOCROutputImageMode.CROPPED
@@ -60,5 +62,12 @@ class WorkflowPicklistOCRModule() : WorkflowOCRGenericModule() {
 
     constructor(rules: ArrayList<WorkflowPicklistOCRGenericRule>) : this() {
         this.rules = rules
+    }
+
+    /**
+     * ONLY use it if you're planning to use the imager of the device as input source, otherwise the param will be ignored
+     */
+    fun setViewFinderEnabled(state: Boolean) {
+        this.viewFinderEnabled = state
     }
 }

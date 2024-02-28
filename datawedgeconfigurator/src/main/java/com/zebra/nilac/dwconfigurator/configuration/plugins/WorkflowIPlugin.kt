@@ -14,6 +14,7 @@ import com.zebra.nilac.dwconfigurator.models.workflow.modules.WorkflowMeterDecod
 import com.zebra.nilac.dwconfigurator.models.workflow.modules.WorkflowPicklistOCRModule
 import com.zebra.nilac.dwconfigurator.models.workflow.modules.WorkflowTINDecoderModule
 import com.zebra.nilac.dwconfigurator.models.workflow.modules.WorkflowVINDecoderModule
+import com.zebra.nilac.dwconfigurator.models.workflow.ocrwedge.WorkflowOCRViewFinderEnablerState
 
 open class WorkflowIPlugin private constructor(builder: Builder) {
 
@@ -332,6 +333,19 @@ open class WorkflowIPlugin private constructor(builder: Builder) {
 
                     WorkflowMode.PICKLIST_OCR -> {
                         add(pickListOCRModuleBundle)
+                        if (mWorkflowInputMode == WorkflowInputMode.IMAGER) {
+                            val workflowOCRViewFinderEnablerBundle = Bundle().apply {
+                                putString("module", "AdvancedViewfinderModule")
+                                putBundle("module_params", Bundle().apply {
+                                    putString(
+                                        "viewfinder_enablement",
+                                        if (mPickListOCRModule.viewFinderEnabled) (WorkflowOCRViewFinderEnablerState.ON.ordinal + 1).toString() else
+                                            (WorkflowOCRViewFinderEnablerState.OFF.ordinal + 1).toString()
+                                    )
+                                })
+                            }
+                            add(workflowOCRViewFinderEnablerBundle)
+                        }
                     }
 
                     WorkflowMode.LICENSE_PLATE -> {
