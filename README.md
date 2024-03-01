@@ -16,18 +16,18 @@ This requires that you already know how DataWedge works on the Zebra devices. If
 Top level build.gradle
 ```groovy
 dependencyResolutionManagement {
-  repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-  repositories {
-    mavenCentral()
-    maven { url 'https://jitpack.io' }
-  }
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        mavenCentral()
+        maven { url 'https://jitpack.io' }
+    }
 }
 ```
 
 Module level build.gradle
 ```groovy
 dependencies {
-  implementation "com.github.nilac8991:datawedge-configurator:1.7.3"
+    implementation "com.github.nilac8991:datawedge-configurator:1.7.3"
 }
 ```
 
@@ -77,6 +77,140 @@ You will find available most of the features that developers typically use when 
 Working with the library is very simple, if you had previous experience with DataWedge, you will notice that the methods are following almost everytime the names associated with the original parameters.
 At the same time whenever you're planning to work on a specific category of settings such as Barcode Input, you will then have to use the BarcodePlugin from the library and same goes also for other plugins such as IntentOutput, Keystroke and others...
 
+### Listening for scanning events
+
+```kotlin
+DataWedgeWrapper.registerScanReceiver(this, "YourIntentAction",
+    object : OnScanIntentListener {
+        override fun onScanEvent(intent: Intent) {
+            //...
+        }
+    })
+
+//
+DataWedgeWrapper.unregisterScanReceiver(this)
+```
+
+### Sending Data
+
+Sending data and listening for last result
+```kotlin
+DataWedgeWrapper.sendIntentWithLastResult(
+    this, Constants.IntentType.SET_CONFIG,
+    mainBundle, CommandIdentifier.SET_CONFIG
+) { wasSuccessful, resultInfo, resultString, command, profileName ->
+    //...
+}
+```
+
+Sending data and listening for complete result
+```kotlin
+DataWedgeWrapper.sendIntentWithCompleteResult(
+    this, Constants.IntentType.SET_CONFIG,
+    mainBundle, CommandIdentifier.SET_CONFIG
+) { resultInfo, resultString, command, profileName ->
+    //...
+}
+```
+
+Sending data without listening for any result
+```kotlin
+DataWedgeWrapper.sendIntent(this, Constants.IntentType.SET_CONFIG, mainBundle)
+```
+
+### Disable/Suspend/Enable/Resume Scanner
+
+```kotlin
+//Disable
+ScannerConfigurator.disableScanner(this)
+
+//Suspend
+ScannerConfigurator.suspendScanner(this)
+
+//Enable
+ScannerConfigurator.enableScanner(this)
+
+//Resume
+ScannerConfigurator.resumeScanner(this)
+```
+
+### Create new profile with default configurations
+
+```kotlin
+val barcodePlugin = BarcodePlugin.Builder()
+    .setEnabled(true)
+    .create()
+
+val configuratorObj = ProfileConfigurator.Builder()
+    .setProfileName("TestProfile")
+    .setProfileEnabled(true)
+    .addAppAssociation(
+        "com.example",
+        "com.example.MainActivity"
+    )
+    .addPlugin(barcodePlugin)
+    .setConfigMode(ConfigMode.CREATE_IF_NOT_EXIST)
+    .create()
+
+DataWedgeWrapper.sendIntent(this, Constants.IntentType.SET_CONFIG, configuratorObj)
+```
+
+### Create new profile with intent output enabled
+
+```kotlin
+val barcodePlugin = BarcodePlugin.Builder()
+    .setEnabled(true)
+    .create()
+
+val intentPlugin = IntentOutputPlugin.Builder()
+    .setIntentAction("com.jamesswinton.datawedgewrapper.TEST")
+    .setIntentOutputDelivery(IntentOutputDelivery.BROADCAST)
+    .setEnabled(true)
+    .create()
+
+val keystrokeOutputPlugin = KeystrokeOutputPlugin.Builder()
+    .setEnabled(false)
+    .create()
+
+val configuratorObj = ProfileConfigurator.Builder()
+    .setProfileName("TestProfile")
+    .setProfileEnabled(true)
+    .addAppAssociation(
+        "com.example",
+        "com.example.MainActivity"
+    )
+    .addPlugin(barcodePlugin)
+    .addPlugin(intentPlugin)
+    .addPlugin(keystrokeOutputPlugin)
+    .setConfigMode(ConfigMode.CREATE_IF_NOT_EXIST)
+    .create()
+
+DataWedgeWrapper.sendIntent(this, Constants.IntentType.SET_CONFIG, configuratorObj)
+```
+
+### Modify symbologies
+
+```kotlin
+val barcodePlugin = BarcodePlugin.Builder()
+    .enableSymbologies(
+        arrayOf(
+            BarcodeSymbology.UPC_A,
+            BarcodeSymbology.EAN_13,
+            BarcodeSymbology.EAN_8,
+            BarcodeSymbology.DATAMATRIX
+        )
+    )
+    .create()
+
+// Create Main Bundle
+val configuratorObj = ProfileConfigurator.Builder()
+    .setProfileName("TestProfile")
+    .addPlugin(barcodePlugin)
+    .setConfigMode(ConfigMode.OVERWRITE)
+    .create()
+
+DataWedgeWrapper.sendIntent(this, Constants.IntentType.SET_CONFIG, configuratorObj)
+```
 
 ## Authors
 
