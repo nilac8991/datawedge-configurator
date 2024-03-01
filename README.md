@@ -27,7 +27,7 @@ dependencyResolutionManagement {
 Module level build.gradle
 ```groovy
 dependencies {
-    implementation "com.github.nilac8991:datawedge-configurator:1.7.3"
+    implementation "com.github.nilac8991:datawedge-configurator:2.0.0"
 }
 ```
 

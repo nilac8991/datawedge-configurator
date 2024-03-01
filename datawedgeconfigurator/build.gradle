@@ -8,8 +8,8 @@ android {
     defaultConfig {
         minSdk 26
         targetSdk 33
-        versionCode 173
-        versionName "1.7.3"
+        versionCode 200
+        versionName "2.0.0"
     }
 
     buildTypes {
@@ -26,7 +26,7 @@ project.afterEvaluate {
             release(MavenPublication) {
                 groupId = 'com.zebra.nilac'
                 artifactId = 'dwconfigurator'
-                version = '1.7.3'
+                version = '2.0.0'
 
                 afterEvaluate {
                     from components.release
