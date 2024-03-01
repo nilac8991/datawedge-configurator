@@ -3,6 +3,8 @@ apply plugin: 'kotlin-android'
 apply plugin: 'maven-publish'
 
 android {
+    namespace 'com.zebra.nilac.dwconfigurator'
+
     compileSdk 33
 
     defaultConfig {
@@ -40,8 +42,7 @@ dependencies {
     apply plugin: 'kotlin-android'
     apply plugin: 'kotlin-kapt'
 
-    implementation "androidx.core:core-ktx:1.7.0"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'androidx.core:core-ktx:1.9.0'
 }
 
 repositories {

@@ -2,16 +2,16 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion 31
-    buildToolsVersion "31.0.0"
+    namespace 'com.zebra.nilac.dwconfigurator'
+
+    compileSdk 33
 
     defaultConfig {
-        applicationId "com.jamesswinton.datawedgewrapper"
-        minSdkVersion 19
-        targetSdkVersion 31
+        applicationId "com.zebra.nilac.dwconfigurator.test"
+        minSdkVersion 26
+        targetSdkVersion 33
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -29,12 +29,10 @@ android {
 dependencies {
     implementation project(path: ':datawedgeconfigurator')
 
-    implementation "androidx.core:core-ktx:1.7.0"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'com.google.android.material:material:1.4.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.2'
+    implementation 'androidx.core:core-ktx:1.9.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.9.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 }
 
 repositories {

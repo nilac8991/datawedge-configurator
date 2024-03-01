@@ -1,4 +1,4 @@
-package com.jamesswinton.datawedgewrapper
+package com.zebra.nilac.dwconfigurator
 
 import android.os.Bundle
 import android.util.Log
@@ -6,20 +6,27 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.jamesswinton.datawedgewrapper.databinding.TestActivityBinding
-import com.zebra.jamesswinton.datawedgewrapperlib.DataWedgeWrapper
-import com.zebra.jamesswinton.datawedgewrapperlib.configuration.MainBundle
-import com.zebra.jamesswinton.datawedgewrapperlib.configuration.plugins.BarcodePlugin
-import com.zebra.jamesswinton.datawedgewrapperlib.configuration.plugins.WorkflowIPlugin
-import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.BarcodeHighlightGenericRule
-import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.BarcodeHighlightRuleAction
-import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.BarcodeHighlightRuleCriteria
-import com.zebra.jamesswinton.datawedgewrapperlib.models.barcode.BarcodeHighlightSymbology
-import com.zebra.jamesswinton.datawedgewrapperlib.models.workflow.WorkflowInputMode
-import com.zebra.jamesswinton.datawedgewrapperlib.models.workflow.WorkflowMode
-import com.zebra.jamesswinton.datawedgewrapperlib.models.workflow.WorkflowOutputImageMode
-import com.zebra.jamesswinton.datawedgewrapperlib.models.workflow.modules.*
-import com.zebra.jamesswinton.datawedgewrapperlib.utilities.Constants
+import com.zebra.nilac.dwconfigurator.configuration.ProfileConfigurator
+import com.zebra.nilac.dwconfigurator.configuration.params.barcode.HighlightingParams
+import com.zebra.nilac.dwconfigurator.configuration.plugins.BarcodePlugin
+import com.zebra.nilac.dwconfigurator.configuration.plugins.WorkflowIPlugin
+import com.zebra.nilac.dwconfigurator.databinding.TestActivityBinding
+import com.zebra.nilac.dwconfigurator.models.CommandIdentifier
+import com.zebra.nilac.dwconfigurator.models.barcode.BarcodeSymbology
+import com.zebra.nilac.dwconfigurator.models.barcode.highlight.BarcodeHighlightGenericRule
+import com.zebra.nilac.dwconfigurator.models.barcode.highlight.BarcodeHighlightRuleAction
+import com.zebra.nilac.dwconfigurator.models.barcode.highlight.BarcodeHighlightRuleCriteria
+import com.zebra.nilac.dwconfigurator.models.workflow.WorkflowInputMode
+import com.zebra.nilac.dwconfigurator.models.workflow.WorkflowMode
+import com.zebra.nilac.dwconfigurator.models.workflow.WorkflowOutputImageMode
+import com.zebra.nilac.dwconfigurator.models.workflow.modules.WorkflowCameraModule
+import com.zebra.nilac.dwconfigurator.models.workflow.modules.WorkflowContainerDecoderModule
+import com.zebra.nilac.dwconfigurator.models.workflow.modules.WorkflowFreeFormCaptureDecoderModule
+import com.zebra.nilac.dwconfigurator.models.workflow.modules.WorkflowIdentificationDecoderModule
+import com.zebra.nilac.dwconfigurator.models.workflow.modules.WorkflowLicenseDecoderModule
+import com.zebra.nilac.dwconfigurator.models.workflow.modules.WorkflowMeterDecoderModule
+import com.zebra.nilac.dwconfigurator.models.workflow.modules.WorkflowTINDecoderModule
+import com.zebra.nilac.dwconfigurator.models.workflow.modules.WorkflowVINDecoderModule
 
 class TestActivity : AppCompatActivity() {
 
@@ -50,27 +57,35 @@ class TestActivity : AppCompatActivity() {
                 0 -> {
                     updateProfileWithBarcodeHighlightDemo()
                 }
+
                 1 -> {
                     updateProfileWithWorkflowLicenseDemo()
                 }
+
                 2 -> {
                     updateProfileWithWorkflowIdDemo()
                 }
+
                 3 -> {
                     updateProfileWithWorkflowVinDemo()
                 }
+
                 4 -> {
                     updateProfileWithWorkflowTinDemo()
                 }
+
                 5 -> {
                     updateProfileWithWorkflowAnalogMeterDemo()
                 }
+
                 6 -> {
                     updateProfileWithWorkflowDialMeterDemo()
                 }
+
                 7 -> {
                     updateProfileWithWorkflowContainerDemo()
                 }
+
                 8 -> {
                     updateProfileWithWorkflowFreeFormCaptureDemo()
                 }
@@ -125,8 +140,8 @@ class TestActivity : AppCompatActivity() {
         }
 
 
-        val symbologies = ArrayList<BarcodeHighlightSymbology>().apply {
-            add(BarcodeHighlightSymbology.QRCODE)
+        val symbologies = ArrayList<BarcodeSymbology>().apply {
+            add(BarcodeSymbology.QRCODE)
         }
         val rule3 = BarcodeHighlightGenericRule("QRCode Rule").apply {
             actionList.add(
@@ -156,21 +171,25 @@ class TestActivity : AppCompatActivity() {
             actionList.add(BarcodeHighlightRuleAction(BarcodeHighlightRuleAction.Action.REPORT))
         }
 
-        // Create Plugin Bundles
-        val barcodeBundle = BarcodePlugin.Builder()
-            .setEnabled(true)
-            .setEnableBarcodeHighlight()
+        val barcodeHighlightingParams = HighlightingParams.Builder()
             .addNewBarcodeHighlightOverlayRule(rule1)
             .addNewBarcodeHighlightOverlayRule(rule2)
             .addNewBarcodeHighlightOverlayRule(rule3)
             .addNewBarcodeHighlightReportDataRule(reportRule)
+            .setEnabled(true)
+            .create()
+
+        // Create Plugin Bundles
+        val barcodeBundle = BarcodePlugin.Builder()
+            .addBarcodeHighlightingParams(barcodeHighlightingParams)
+            .setEnabled(true)
             .create()
 
         // Create Main Bundle
-        val mainBundle = MainBundle.Builder()
+        val mainBundle = ProfileConfigurator.Builder()
             .setProfileName("DWDemo")
             .setProfileEnabled(true)
-            .addPluginBundle(barcodeBundle)
+            .addPlugin(barcodeBundle)
             .create()
 
         sendDataWedgeUpdatedProfile(mainBundle)
@@ -191,10 +210,10 @@ class TestActivity : AppCompatActivity() {
             .create()
 
         // Create Main Bundle
-        val mainBundle = MainBundle.Builder()
+        val mainBundle = ProfileConfigurator.Builder()
             .setProfileName("DWDemo")
             .setProfileEnabled(true)
-            .addPluginBundle(workflowBundle)
+            .addPlugin(workflowBundle)
             .create()
 
         sendDataWedgeUpdatedProfile(mainBundle)
@@ -214,10 +233,10 @@ class TestActivity : AppCompatActivity() {
             .create()
 
         // Create Main Bundle
-        val mainBundle = MainBundle.Builder()
+        val mainBundle = ProfileConfigurator.Builder()
             .setProfileName("DWDemo")
             .setProfileEnabled(true)
-            .addPluginBundle(workflowBundle)
+            .addPlugin(workflowBundle)
             .create()
 
         sendDataWedgeUpdatedProfile(mainBundle)
@@ -237,10 +256,10 @@ class TestActivity : AppCompatActivity() {
             .create()
 
         // Create Main Bundle
-        val mainBundle = MainBundle.Builder()
+        val mainBundle = ProfileConfigurator.Builder()
             .setProfileName("DWDemo")
             .setProfileEnabled(true)
-            .addPluginBundle(workflowBundle)
+            .addPlugin(workflowBundle)
             .create()
 
         sendDataWedgeUpdatedProfile(mainBundle)
@@ -251,6 +270,7 @@ class TestActivity : AppCompatActivity() {
             .setWorkflowMode(WorkflowMode.TIN)
             .setTINDecoderModule(
                 WorkflowTINDecoderModule(
+                    WorkflowTINDecoderModule.ScanMode.UNIVERSAL,
                     17000,
                     WorkflowOutputImageMode.FULL
                 )
@@ -260,10 +280,10 @@ class TestActivity : AppCompatActivity() {
             .create()
 
         // Create Main Bundle
-        val mainBundle = MainBundle.Builder()
+        val mainBundle = ProfileConfigurator.Builder()
             .setProfileName("DWDemo")
             .setProfileEnabled(true)
-            .addPluginBundle(workflowBundle)
+            .addPlugin(workflowBundle)
             .create()
 
         sendDataWedgeUpdatedProfile(mainBundle)
@@ -284,10 +304,10 @@ class TestActivity : AppCompatActivity() {
             .create()
 
         // Create Main Bundle
-        val mainBundle = MainBundle.Builder()
+        val mainBundle = ProfileConfigurator.Builder()
             .setProfileName("DWDemo")
             .setProfileEnabled(true)
-            .addPluginBundle(workflowBundle)
+            .addPlugin(workflowBundle)
             .create()
 
         sendDataWedgeUpdatedProfile(mainBundle)
@@ -308,10 +328,10 @@ class TestActivity : AppCompatActivity() {
             .create()
 
         // Create Main Bundle
-        val mainBundle = MainBundle.Builder()
+        val mainBundle = ProfileConfigurator.Builder()
             .setProfileName("DWDemo")
             .setProfileEnabled(true)
-            .addPluginBundle(workflowBundle)
+            .addPlugin(workflowBundle)
             .create()
 
         sendDataWedgeUpdatedProfile(mainBundle)
@@ -331,10 +351,10 @@ class TestActivity : AppCompatActivity() {
             .create()
 
         // Create Main Bundle
-        val mainBundle = MainBundle.Builder()
+        val mainBundle = ProfileConfigurator.Builder()
             .setProfileName("DWDemo")
             .setProfileEnabled(true)
-            .addPluginBundle(workflowBundle)
+            .addPlugin(workflowBundle)
             .create()
 
         sendDataWedgeUpdatedProfile(mainBundle)
@@ -355,10 +375,10 @@ class TestActivity : AppCompatActivity() {
             .create()
 
         // Create Main Bundle
-        val mainBundle = MainBundle.Builder()
+        val mainBundle = ProfileConfigurator.Builder()
             .setProfileName("DWDemo")
             .setProfileEnabled(true)
-            .addPluginBundle(workflowBundle)
+            .addPlugin(workflowBundle)
             .create()
 
         sendDataWedgeUpdatedProfile(mainBundle)
@@ -368,7 +388,7 @@ class TestActivity : AppCompatActivity() {
         // Send Intent With Result
         DataWedgeWrapper.sendIntentWithLastResult(
             this, Constants.IntentType.SET_CONFIG,
-            mainBundle, "CREATE_PROFILE"
+            mainBundle, CommandIdentifier.CREATE_PROFILE
         ) { wasSuccessful, resultInfo, resultString, command, profileName ->
             Log.i(TAG, "Last Result Success: $wasSuccessful")
             Toast.makeText(
