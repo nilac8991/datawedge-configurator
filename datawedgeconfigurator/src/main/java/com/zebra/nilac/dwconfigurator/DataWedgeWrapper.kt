@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import com.zebra.nilac.dwconfigurator.Constants.IntentType
@@ -151,8 +152,12 @@ object DataWedgeWrapper {
         val filter = IntentFilter()
         filter.addAction(intentAction)
         filter.addCategory(INTENT_CATEGORY)
-        context.registerReceiver(scanReceiver, filter)
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            context.registerReceiver(scanReceiver, filter, Context.RECEIVER_EXPORTED)
+        } else {
+            context.registerReceiver(scanReceiver, filter)
+        }
         this.mOnScanIntentListener = onScanIntentListener
     }
 
@@ -234,6 +239,11 @@ object DataWedgeWrapper {
         val filter = IntentFilter()
         filter.addAction(INTENT_ACTION)
         filter.addCategory(INTENT_CATEGORY)
-        context.registerReceiver(resultReceiver, filter)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            context.registerReceiver(resultReceiver, filter, Context.RECEIVER_NOT_EXPORTED)
+        } else {
+            context.registerReceiver(resultReceiver, filter)
+        }
     }
 }
