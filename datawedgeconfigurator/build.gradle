@@ -1,17 +1,20 @@
-apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
-apply plugin: 'maven-publish'
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+    id 'maven-publish'
+}
 
 android {
     namespace 'com.zebra.nilac.dwconfigurator'
 
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         minSdk 26
-        targetSdk 33
-        versionCode 201
-        versionName "2.0.1"
+        targetSdk 34
+
+        versionCode 202
+        versionName "2.0.2"
     }
 
     buildTypes {
@@ -28,7 +31,7 @@ project.afterEvaluate {
             release(MavenPublication) {
                 groupId = 'com.zebra.nilac'
                 artifactId = 'dwconfigurator'
-                version = '2.0.1'
+                version = '2.0.2'
 
                 afterEvaluate {
                     from components.release
@@ -42,7 +45,7 @@ dependencies {
     apply plugin: 'kotlin-android'
     apply plugin: 'kotlin-kapt'
 
-    implementation 'androidx.core:core-ktx:1.9.0'
+    implementation 'androidx.core:core-ktx:1.13.1'
 }
 
 repositories {
