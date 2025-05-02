@@ -1,4 +1,4 @@
-package com.zebra.nilac.dwconfigurator
+package com.zebra.nilac.dwconfiguratortest
 
 import android.os.Bundle
 import android.util.Log
@@ -6,11 +6,12 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.zebra.nilac.dwconfigurator.Constants
+import com.zebra.nilac.dwconfigurator.DataWedgeWrapper
 import com.zebra.nilac.dwconfigurator.configuration.ProfileConfigurator
 import com.zebra.nilac.dwconfigurator.configuration.params.barcode.HighlightingParams
 import com.zebra.nilac.dwconfigurator.configuration.plugins.BarcodePlugin
 import com.zebra.nilac.dwconfigurator.configuration.plugins.WorkflowIPlugin
-import com.zebra.nilac.dwconfigurator.databinding.TestActivityBinding
 import com.zebra.nilac.dwconfigurator.models.CommandIdentifier
 import com.zebra.nilac.dwconfigurator.models.barcode.BarcodeSymbology
 import com.zebra.nilac.dwconfigurator.models.barcode.highlight.BarcodeHighlightGenericRule
@@ -27,6 +28,7 @@ import com.zebra.nilac.dwconfigurator.models.workflow.modules.WorkflowLicenseDec
 import com.zebra.nilac.dwconfigurator.models.workflow.modules.WorkflowMeterDecoderModule
 import com.zebra.nilac.dwconfigurator.models.workflow.modules.WorkflowTINDecoderModule
 import com.zebra.nilac.dwconfigurator.models.workflow.modules.WorkflowVINDecoderModule
+import com.zebra.nilac.dwconfiguratortest.databinding.TestActivityBinding
 
 class TestActivity : AppCompatActivity() {
 

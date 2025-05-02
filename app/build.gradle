@@ -4,14 +4,16 @@ plugins {
 }
 
 android {
+    namespace 'com.zebra.nilac.dwconfiguratortest'
+
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.zebra.nilac.dwconfigurator.test"
+        applicationId "com.zebra.nilac.dwconfiguratortest"
         minSdk 26
         targetSdk 34
-        versionCode 1
-        versionName "1.0"
+        versionCode 101
+        versionName "1.1"
     }
 
     buildTypes {
@@ -33,8 +35,6 @@ android {
     buildFeatures {
         viewBinding true
     }
-
-    namespace 'com.zebra.nilac.dwconfigurator'
 }
 
 dependencies {
